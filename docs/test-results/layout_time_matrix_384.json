@@ -1,0 +1,3074 @@
+[
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "cards",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "horizontal",
+    "variant": "bands",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "balanced",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "table",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "tiles",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A3",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A4",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "A5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "portrait",
+    "mode": "nhk",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "japanese",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "canadian",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "fischer",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "absolute",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "byoyomi",
+    "ok": true
+  },
+  {
+    "direction": "vertical",
+    "variant": "focus",
+    "paper": "B5",
+    "orientation": "landscape",
+    "mode": "nhk",
+    "ok": true
+  }
+]

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>棋譜作成 | Kifu Print Web v2.0.0</title>
+  <meta name="description" content="SGFから印刷用の棋譜PDF・PNG・JPGを作成。棋譜の解析と出力はブラウザ内で完結。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <link rel="stylesheet" href="./css/styles.css?v=2.0.0">
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <div id="bootNotice" class="boot-notice" role="status">アプリを読み込み中。表示が続く場合は、ファイルの配置と通信を確認して再読み込みしてね。</div>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div><h1>棋譜作成</h1><span class="brand-sub">KIFU PRINT WEB · v2.0.0</span></div></div>
+    <div class="workflow" aria-label="作成の流れ"><span id="step1" class="active">1 選択</span><b>—</b><span id="step2">2 検査</span><b>—</b><span id="step3">3 調整</span><b>—</b><span id="step4">4 出力</span></div>
+    <div class="header-actions"><button id="chooseTop" class="secondary" type="button">SGFを選択</button><button id="downloadButton" class="primary" type="button" disabled>PDFをダウンロード</button><button id="cancelExport" class="danger" type="button" hidden>中止</button></div>
+  </header>
+  <input id="fileInput" type="file" accept=".sgf,application/x-go-sgf" hidden>
+  <div id="workspace" class="workspace">
+    <aside id="leftPanel" class="panel left-panel" aria-label="表示設定">
+      <div class="panel-heading"><h2>表示設定</h2><button id="toggleLeft" type="button" class="collapse-button" aria-expanded="true" aria-controls="settingsBody" title="表示設定を収納">‹</button></div>
+      <button id="leftRail" class="rail" type="button" aria-label="表示設定を開く" hidden>表示設定</button>
+      <div id="settingsBody" class="panel-body">
+        <details><summary>SGFファイル</summary><div class="section-content">
+          <button id="dropMini" class="drop-mini" type="button"><span>SGFを選択</span><small>または、ここへドロップ</small></button>
+          <div id="fileSummary" class="file-summary">まだファイルが選ばれていないよ。</div>
+          <label class="field-label" for="encoding">文字コード</label><select id="encoding"><option value="auto">自動（CA／BOMを優先）</option><option value="utf-8">UTF-8</option><option value="shift_jis">Shift_JIS / CP932</option><option value="gb18030">GB18030 / GBK / GB2312</option><option value="big5">Big5</option><option value="euc-jp">EUC-JP</option><option value="euc-kr">EUC-KR</option><option value="windows-1252">ISO-8859-1 相当</option><option value="utf-16le">UTF-16 LE</option><option value="utf-16be">UTF-16 BE</option></select>
+          <div id="gameWrap" hidden><label class="field-label" for="gameSelect">対局を選択</label><select id="gameSelect"></select></div>
+          <div id="branchWrap" hidden><label class="field-label" for="branchSelect">印刷する分岐</label><select id="branchSelect"></select><p class="help">対局・分岐の変更時は対局情報をSGFから読み直すよ。</p></div>
+          <details id="validationDetails" class="validation-details" hidden><summary id="validationTitle">検査結果</summary><div id="validationBody"></div></details>
+        </div></details>
+        <fieldset id="settingsFields" disabled><div id="settingsForm"></div></fieldset>
+        <button id="resetSettings" type="button" class="text-button" disabled>表示設定を初期値に戻す</button>
+        <p class="privacy-note">SGF・対局情報・所感・作成画像は、このブラウザ内で処理するよ。棋譜内容のサーバー送信なし。ログイン不要。</p>
+      </div>
+      <div id="settingsSaveBar" class="settings-save-bar">
+        <button id="saveSettings" type="button" class="primary">表示設定を保存</button>
+        <p id="settingsSaveStatus" class="help" role="status" aria-live="polite">このブラウザに保存。対局情報・所感の本文は保存しない。</p>
+        <div class="settings-transfer"><button id="exportSettings" type="button" class="text-button">設定を書き出す</button><button id="importSettings" type="button" class="text-button">設定を読み込む</button></div>
+        <input id="settingsFile" type="file" accept=".json,application/json" hidden>
+      </div>
+    </aside>
+    <main id="center" class="center" aria-label="棋譜プレビュー">
+      <div class="preview-toolbar"><div class="status-wrap"><span id="statusDot" class="status-dot"></span><span id="status" role="status" aria-live="polite">SGFを選んで、棋譜を作ろう。</span></div><label class="zoom-label">表示 <select id="zoom"><option value="fit">全体</option><option value="width">幅に合わせる</option><option value="100">100%</option><option value="150">150%</option><option value="200">200%</option></select></label></div>
+      <div id="stage" class="stage">
+        <section id="empty" class="empty-state"><div class="empty-board" aria-hidden="true"><i></i><b></b></div><p class="eyebrow">FROM SGF TO PAPER</p><h2>一局を、手元に残そう。</h2><p>SGFファイルをここへドロップ。<br>棋譜を検査して、印刷用のPDF・画像を作成するよ。</p><button id="chooseCenter" class="primary" type="button">SGFファイルを選択</button><p class="small-note">.sgf ／ 最大5 MiB ／ 9・13・19路ほか対応</p></section>
+        <div id="paperWrap" class="paper-wrap" hidden><canvas id="previewCanvas" aria-label="完成棋譜プレビュー"></canvas><div id="previewWarning" class="preview-warning" hidden></div></div>
+        <div id="dropOverlay" class="drop-overlay" hidden>SGFファイルをドロップ</div>
+      </div>
+      <footer class="preview-footer"><div class="pager"><button id="prevPage" type="button" aria-label="前のページ" disabled>‹</button><select id="pageSelect" aria-label="プレビューページ" disabled><option>—</option></select><button id="nextPage" type="button" aria-label="次のページ" disabled>›</button></div><span id="pageSummary">プレビューは読み込み後に表示</span></footer>
+      <div id="progressWrap" class="progress-wrap" hidden><progress id="progress" max="100" value="0"></progress><span id="progressLabel"></span></div>
+      <div id="downloadResult" class="download-result" hidden></div>
+      <div id="errorBar" class="error-bar" role="alert" hidden></div>
+    </main>
+    <aside id="rightPanel" class="panel right-panel" aria-label="対局情報">
+      <div class="panel-heading"><button id="toggleRight" class="collapse-button" type="button" aria-expanded="true" aria-controls="infoBody" title="対局情報を収納">›</button><h2>対局情報</h2><span class="required-hint">※ 必須</span></div>
+      <button id="rightRail" class="rail" type="button" aria-label="対局情報を開く" hidden>対局情報</button>
+      <div id="infoBody" class="panel-body"><p class="intro">SGFから読み取った内容も、自由に編集できるよ。チェックを外した項目は印刷されない。</p><div id="missingFields" class="missing-fields" hidden></div><fieldset id="infoFields" disabled><div id="infoForm"></div></fieldset></div>
+    </aside>
+  </div>
+  <noscript><p>このページはJavaScriptを有効にして使用してください。</p></noscript>
+  <script src="./js/config.js?v=2.0.0" defer></script>
+  <script src="./js/platform.js?v=2.0.0" defer></script>
+  <script src="./js/core.js?v=2.0.0" defer></script>
+  <script src="./js/assets.js?v=2.0.0" defer></script>
+  <script src="./js/render.js?v=2.0.0" defer></script>
+  <script src="./js/preferences.js?v=2.0.0" defer></script>
+  <script src="./js/font-loader.js?v=2.0.0" defer></script>
+  <script src="./js/export.js?v=2.0.0" defer></script>
+  <script src="./js/ui.js?v=2.0.0" defer></script>
+</body>
+</html>

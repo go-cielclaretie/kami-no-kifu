@@ -1,0 +1,205 @@
+--- v1.3.0/src/shell.html
++++ v2.0.0/index.html
+@@ -4,13 +4,16 @@
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+   <meta name="referrer" content="no-referrer">
+-  <base target="_top">
+-  <title>棋譜作成 WEBフォーム</title>
+-  <style>/*__STYLE__*/</style>
++  <title>棋譜作成 | Kifu Print Web v2.0.0</title>
++  <meta name="description" content="SGFから印刷用の棋譜PDF・PNG・JPGを作成。棋譜の解析と出力はブラウザ内で完結。">
++  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
++  <link rel="stylesheet" href="./css/styles.css?v=2.0.0">
++  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+ </head>
+ <body>
++  <div id="bootNotice" class="boot-notice" role="status">アプリを読み込み中。表示が続く場合は、ファイルの配置と通信を確認して再読み込みしてね。</div>
+   <header class="topbar">
+-    <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div><h1>棋譜作成</h1><span class="brand-sub">KIFU PRINT WEB</span></div></div>
++    <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div><h1>棋譜作成</h1><span class="brand-sub">KIFU PRINT WEB · v2.0.0</span></div></div>
+     <div class="workflow" aria-label="作成の流れ"><span id="step1" class="active">1 選択</span><b>—</b><span id="step2">2 検査</span><b>—</b><span id="step3">3 調整</span><b>—</b><span id="step4">4 出力</span></div>
+     <div class="header-actions"><button id="chooseTop" class="secondary" type="button">SGFを選択</button><button id="downloadButton" class="primary" type="button" disabled>PDFをダウンロード</button><button id="cancelExport" class="danger" type="button" hidden>中止</button></div>
+   </header>
+@@ -30,7 +33,7 @@
+         </div></details>
+         <fieldset id="settingsFields" disabled><div id="settingsForm"></div></fieldset>
+         <button id="resetSettings" type="button" class="text-button" disabled>表示設定を初期値に戻す</button>
+-        <p class="privacy-note">SGFと対局情報は端末内で処理。Google Driveへの保存やSGFのサーバー送信はしないよ。</p>
++        <p class="privacy-note">SGF・対局情報・所感・作成画像は、このブラウザ内で処理するよ。棋譜内容のサーバー送信なし。ログイン不要。</p>
+       </div>
+       <div id="settingsSaveBar" class="settings-save-bar">
+         <button id="saveSettings" type="button" class="primary">表示設定を保存</button>
+@@ -58,11 +61,14 @@
+     </aside>
+   </div>
+   <noscript><p>このページはJavaScriptを有効にして使用してください。</p></noscript>
+-  <script>/*__CORE__*/</script>
+-  <script>/*__ASSETS__*/</script>
+-  <script>/*__RENDER__*/</script>
+-  <script>/*__PREFERENCES__*/</script>
+-  <script>/*__EXPORT__*/</script>
+-  <script>/*__UI__*/</script>
++  <script src="./js/config.js?v=2.0.0" defer></script>
++  <script src="./js/platform.js?v=2.0.0" defer></script>
++  <script src="./js/core.js?v=2.0.0" defer></script>
++  <script src="./js/assets.js?v=2.0.0" defer></script>
++  <script src="./js/render.js?v=2.0.0" defer></script>
++  <script src="./js/preferences.js?v=2.0.0" defer></script>
++  <script src="./js/font-loader.js?v=2.0.0" defer></script>
++  <script src="./js/export.js?v=2.0.0" defer></script>
++  <script src="./js/ui.js?v=2.0.0" defer></script>
+ </body>
+ </html>
+--- v1.3.0/src/render.js
++++ v2.0.0/js/render.js
+@@ -5,12 +5,13 @@
+   'use strict';
+   const K = root.KifuCore;
+   const itameImage = new Image();
++  itameImage.crossOrigin = 'anonymous';
+   let textureError = '';
+   const assetsReady = new Promise(resolve => {
+     itameImage.onload = () => resolve(true);
+     itameImage.onerror = () => { textureError = '板目の画像素材を読み込めません。ページを再読み込みしてください。'; resolve(false); };
+     if (root.KifuAssets && root.KifuAssets.itame) itameImage.src = root.KifuAssets.itame;
+-    else { textureError = '板目の画像素材がありません。完成版HTMLで開いてください。'; resolve(false); }
++    else { textureError = '板目の画像素材がありません。assets/itame-grain.png の配置を確認してください。'; resolve(false); }
+   });
+   const PAPERS = Object.freeze({ A3: [297, 420], A4: [210, 297], A5: [148, 210], B5: [182, 257] });
+   const SANS = '"Noto Sans CJK JP", "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif';
+--- v1.3.0/src/preferences.js
++++ v2.0.0/js/preferences.js
+@@ -2,7 +2,7 @@
+  * game metadata, notes text, fonts, or a Google account identifier. */
+ (function (root) {
+   'use strict';
+-  const K = root.KifuCore, KEY = 'KifuPrintWeb.display.v1';
++  const K = root.KifuCore, KEY = root.KifuPlatform ? root.KifuPlatform.storageKey : 'KifuPrintWeb.display.v2:/';
+   function clean(input) {
+     if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('表示設定の形式が不正です。');
+     const out = {}, base = K.defaults();
+--- v1.3.0/src/ui.js
++++ v2.0.0/js/ui.js
+@@ -3,13 +3,13 @@
+  */
+ (function (root) {
+   'use strict';
+-  const K = root.KifuCore, R = root.KifuRender, E = root.KifuExport, P = root.KifuPreferences;
++  const K = root.KifuCore, R = root.KifuRender, E = root.KifuExport, P = root.KifuPreferences, F = root.KifuFonts;
+   const $ = id => document.getElementById(id);
+   const state = { settings: K.defaults(), meta: K.metadata([]), file: null, collection: null, tree: null,
+     model: null, validation: null, plans: [], page: 0, game: 0, branch: 0, encoding: '',
+     decodeWarnings: [], loadError: '', layoutError: '', exportError: '', busy: false, loading: false,
+     focusNotes: false, seq: 0, raf: 0, controller: null, lastDownload: null };
+-  const fontState = { status: 'idle', name: '', error: '', face: null, pending: null, generation: 0 };
++  const fontState = { status: 'idle', name: '', error: '', face: null, pending: null, generation: 0, controller: null };
+   function esc(s) { return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+   function radio(path, values, columns = 2) {
+     return `<div class="choice-grid ${columns === 3 ? 'three' : columns === 4 ? 'four' : ''}">${values.map(([v, label]) => `<label class="choice"><input type="radio" name="s_${path}" data-setting="${path}" value="${v}"><span>${label}</span></label>`).join('')}</div>`;
+@@ -30,7 +30,7 @@
+         group('表示手数', radio('mode', [['all', '総譜'], ['split', '分割']])) +
+         `<div id="splitOptions" class="subgroup">${group('分割手数', radio('split', [['50', '50手ずつ'], ['100', '100手ずつ'], ['custom', '任意']]))}<div id="customSplitWrap" class="control-group"><label class="field-label" for="customSplit">1枚あたりの手数</label><input id="customSplit" type="number" min="1" max="10000" step="1" data-setting="customSplit"></div><p id="kanjiLock" class="help warning" hidden>漢数字では100手ずつに固定されるよ。</p></div>` +
+         `<div class="control-group">${check('coordinates', '座標を表示する')}<div id="coordinateOptions" class="subgroup">${group('表示位置', ['top', 'bottom', 'right', 'left'].map((p, i) => `<label class="choice"><input type="checkbox" data-setting="positions.${p}"><span>${['上', '下', '右', '左'][i]}</span></label>`).join('').replace(/^/, '<div class="choice-grid four">') + '</div>')}${group('表示形式［縦－横］', radio('coordFormat', [['num-kanji', '数字－漢数字'], ['lower-lower', 'a－a'], ['upper-upper', 'A－A'], ['num-lower', '1－a'], ['num-upper', '1－A']]))}<p class="help">左・右が縦、上・下が横。英字の I / i は省略しない。</p></div></div>` +
+-        `<div class="control-group">${check('numbers', '手数を表示する')}<div id="numberOptions" class="subgroup">${group('手数の表記法', radio('numberStyle', [['arabic', '数字'], ['kanji', '漢数字']]))}<div id="fontBox" class="font-box" hidden><div class="group-label">縦書きの行書体</div><p id="fontStatus" class="help"></p><button id="retryFont" type="button">行書体を再読み込み</button><input id="fontFile" type="file" accept=".ttf,.otf,.woff,.woff2" aria-label="行書体フォントファイルを選択"><p class="help">自動取得できない場合は、手元の行書体フォントを選択。フォントは端末外へ送信しないよ。</p></div></div></div>` +
++        `<div class="control-group">${check('numbers', '手数を表示する')}<div id="numberOptions" class="subgroup">${group('手数の表記法', radio('numberStyle', [['arabic', '数字'], ['kanji', '漢数字']]))}<div id="fontBox" class="font-box" hidden><div class="group-label">縦書きの行書体</div><p id="fontStatus" class="help"></p><button id="retryFont" type="button">行書体を再読み込み</button><input id="fontFile" type="file" accept=".ttf,.otf,.woff,.woff2" aria-label="行書体フォントファイルを選択"><p class="help">読み込めない場合は手元の行書体を選択。フォント本体は配布物に含めていないよ。選択したファイルはアップロードせず、このタブ内だけで使用する。</p></div></div></div>` +
+         group('アゲハマ', radio('captures', [['show', '表示'], ['hide', '非表示']])) +
+         '<p class="help">黒・白は、それぞれが取った石の数。各譜末までの累計。死石の合意処理や地合い計算は含まない。</p>') +
+       section('碁盤',
+@@ -155,7 +155,7 @@
+     if (fontState.status === 'ready') $('fontStatus').textContent = `読込済み：${fontState.name}`;
+     else if (fontState.status === 'loading') $('fontStatus').textContent = '行書体フォントを読み込み中…';
+     else if (fontState.status === 'error') $('fontStatus').textContent = fontState.error;
+-    else $('fontStatus').textContent = '漢数字を選ぶと、端末の行書体、次にGAS経由の衡山毛筆フォント行書を試すよ。';
++    else $('fontStatus').textContent = '漢数字を選ぶと端末の行書体を確認するよ。サイトに行書体が設定されている場合は自動読込。見つからなければフォントファイルを選択してね。';
+     $('retryFont').disabled = state.busy || fontState.status === 'loading';
+   }
+   function missing() {
+@@ -273,48 +273,41 @@
+       if (seq === state.seq) { state.loading = false; updateSelectors(); updateStatus(); requestRender(); }
+     }
+   }
+-  async function installFont(data, name, generation) {
+-    const face = new FontFace('KifuGyosho', data);
+-    await face.load();
++  function installFont(result, generation) {
++    // Ignore an older auto-load after the user has selected another font.
+     if (generation !== fontState.generation) return;
+     if (fontState.face) document.fonts.delete(fontState.face);
+-    document.fonts.add(face); fontState.face = face; fontState.name = name; fontState.status = 'ready'; fontState.error = '';
++    document.fonts.add(result.face);
++    fontState.face = result.face; fontState.name = result.name;
++    fontState.status = 'ready'; fontState.error = '';
+     R.clearFontCache(); syncForms(); requestRender();
+   }
+   async function ensureFont(force = false) {
+     if (fontState.status === 'ready' && !force) return;
+     if (fontState.status === 'loading') return fontState.pending;
+     if (fontState.status === 'error' && !force) return;
+-    fontState.status = 'loading'; fontState.error = ''; const generation = ++fontState.generation;
++    if (fontState.controller) fontState.controller.abort();
++    const controller = new AbortController(), generation = ++fontState.generation;
++    fontState.controller = controller; fontState.status = 'loading'; fontState.error = '';
+     syncForms(); updateStatus();
+     fontState.pending = (async () => {
+-      try {
+-        for (const name of ['衡山毛筆フォント行書', 'KouzanGyousho', 'HGP行書体', 'HGS行書体', 'HG行書体']) {
+-          try { await installFont(`local("${name}")`, name, generation); if (fontState.status === 'ready') return; } catch (_) { /* Try the next installed font. */ }
++      try { installFont(await F.loadAutomatic(controller.signal), generation); }
++      catch (e) {
++        if (generation === fontState.generation) {
++          fontState.status = 'error'; fontState.error = e.message || String(e);
++          syncForms(); requestRender();
+         }
+-        if (!(root.google && root.google.script && root.google.script.run))
+-          throw new Error('単体HTMLでは行書体の自動取得を使えないよ。手元の行書体フォントを選択するか、GAS版を使用してね。');
+-        const response = await new Promise((resolve, reject) => {
+-          const timer = setTimeout(() => reject(new Error('行書体の取得がタイムアウトしたよ。再読込するか、フォントファイルを選択してね。')), 60000);
+-          root.google.script.run.withSuccessHandler(v => { clearTimeout(timer); resolve(v); })
+-            .withFailureHandler(e => { clearTimeout(timer); reject(new Error(`行書体を自動取得できないよ：${e.message || e}`)); }).getGyoshoFont();
+-        });
+-        if (!response || typeof response.base64 !== 'string') throw new Error('フォント取得の応答が不正です。');
+-        const binary = atob(response.base64); const data = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+-        await installFont(data.buffer, response.name || '衡山毛筆フォント行書', generation);
+-      } catch (e) {
+-        if (generation === fontState.generation) { fontState.status = 'error'; fontState.error = e.message || String(e); syncForms(); requestRender(); }
+       } finally { updateStatus(); }
+     })();
+     return fontState.pending;
+   }
+   async function readFont(file) {
+     if (!file || state.busy) return;
+-    const generation = ++fontState.generation; fontState.status = 'loading'; syncForms(); updateStatus();
+-    try {
+-      if (!/\.(ttf|otf|woff2?)$/i.test(file.name) || file.size > 25 * 1024 * 1024) throw new Error('25 MiB以下のTTF・OTF・WOFF・WOFF2を選択してください。');
+-      await installFont(await file.arrayBuffer(), `選択したフォント：${file.name}`, generation);
+-    } catch (e) { if (generation === fontState.generation) { fontState.status = 'error'; fontState.error = e.message; } }
++    if (fontState.controller) fontState.controller.abort();
++    const generation = ++fontState.generation;
++    fontState.status = 'loading'; fontState.error = ''; syncForms(); updateStatus();
++    try { installFont(await F.loadFile(file), generation); }
++    catch (e) { if (generation === fontState.generation) { fontState.status = 'error'; fontState.error = e.message || String(e); } }
+     syncForms(); requestRender(); updateStatus();
+   }
+   function requestRender() {
+@@ -512,7 +505,8 @@
+   if (stored.error) { $('settingsSaveStatus').textContent = stored.error; $('settingsSaveStatus').dataset.error = 'true'; }
+   else if (stored.settings) $('settingsSaveStatus').textContent = '保存済みの表示設定を復元したよ。';
+   R.ready().then(() => requestRender());
++  if ($('bootNotice')) $('bootNotice').hidden = true;
+   if (matchMedia('(max-width:950px)').matches) { state.mobile = true; togglePanel('left', true); togglePanel('right', true); }
+   // Read-only diagnostic access helps reproduce a problem without uploading SGF.
+-  root.KifuApp = { version: '1.3.0', readFile, render, get state() { return state; }, get fontState() { return fontState; } };
++  root.KifuApp = { version: '2.0.0', readFile, render, get state() { return state; }, get fontState() { return fontState; } };
+ })(globalThis);
+--- v1.3.0/src/export.js
++++ v2.0.0/js/export.js
+@@ -97,7 +97,7 @@
+       this.push(new Uint8Array([37, 80, 68, 70, 45, 49, 46, 52, 10, 37, 226, 227, 207, 211, 10]));
+       this.object(1, '<< /Type /Catalog /Pages 2 0 R >>');
+       this.object(2, `<< /Type /Pages /Count ${pages} /Kids [${Array.from({ length: pages }, (_, i) => `${4 + i * 3} 0 R`).join(' ')}] >>`);
+-      this.object(3, `<< /Title ${pdfTitle(title)} /Producer (Kifu Print Web 1.3.0) >>`);
++      this.object(3, `<< /Title ${pdfTitle(title)} /Producer (Kifu Print Web 2.0.0) >>`);
+     }
+     push(data) { const d = typeof data === 'string' ? bytes(data) : data; this.parts.push(d); this.offset += d.length; }
+     object(id, text) { this.offsets[id] = this.offset; this.push(`${id} 0 obj\n${text}\nendobj\n`); }

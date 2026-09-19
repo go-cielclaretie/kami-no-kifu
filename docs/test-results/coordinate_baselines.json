@@ -1,0 +1,22 @@
+[
+  {
+    "format": "num-kanji",
+    "baseline": 40.875
+  },
+  {
+    "format": "lower-lower",
+    "baseline": 40.875
+  },
+  {
+    "format": "upper-upper",
+    "baseline": 40.875
+  },
+  {
+    "format": "num-lower",
+    "baseline": 40.875
+  },
+  {
+    "format": "num-upper",
+    "baseline": 40.875
+  }
+]

@@ -1,0 +1,77 @@
+{
+  "checks": "PDF size/pages, ZIP CRC, JPEG bytes, PNG pixels, resolution, nonblank note area",
+  "results": [
+    {
+      "direction": "horizontal",
+      "page": 1,
+      "size": [
+        2480,
+        3508
+      ],
+      "pdf_jpeg_identical": true,
+      "png_reference_identical": true,
+      "note_region_nonblank": true,
+      "jpeg_sha256": "c93f4641d2faa5671dfc802ba43f80eca35b8ec8ca4b5e12f45473c01a3dc15a"
+    },
+    {
+      "direction": "horizontal",
+      "page": 2,
+      "size": [
+        2480,
+        3508
+      ],
+      "pdf_jpeg_identical": true,
+      "png_reference_identical": true,
+      "note_region_nonblank": true,
+      "jpeg_sha256": "892e09f1a1ffc53381b3626328befa030a71ebbe032ee2d88083731c53a77bd0"
+    },
+    {
+      "direction": "horizontal",
+      "page": 3,
+      "size": [
+        2480,
+        3508
+      ],
+      "pdf_jpeg_identical": true,
+      "png_reference_identical": true,
+      "note_region_nonblank": true,
+      "jpeg_sha256": "1c61c6dff24ccf41c5e2d1f668822531be8fd6530c61aebe11a1b609e1823a1f"
+    },
+    {
+      "direction": "vertical",
+      "page": 1,
+      "size": [
+        2480,
+        3508
+      ],
+      "pdf_jpeg_identical": true,
+      "png_reference_identical": true,
+      "note_region_nonblank": true,
+      "jpeg_sha256": "89d1f1aa93db263b9ce946afba62733af17d0692274feea37439730b55c90b4d"
+    },
+    {
+      "direction": "vertical",
+      "page": 2,
+      "size": [
+        2480,
+        3508
+      ],
+      "pdf_jpeg_identical": true,
+      "png_reference_identical": true,
+      "note_region_nonblank": true,
+      "jpeg_sha256": "b754ed23c5705384e71ab1cfda5aabcb565eed7eaa7817a53616ab6bfef8bc9b"
+    },
+    {
+      "direction": "vertical",
+      "page": 3,
+      "size": [
+        2480,
+        3508
+      ],
+      "pdf_jpeg_identical": true,
+      "png_reference_identical": true,
+      "note_region_nonblank": true,
+      "jpeg_sha256": "43921da917f13356180b52d323f24e226c8a820cbd6ab6dba6923599e5fe65cd"
+    }
+  ]
+}

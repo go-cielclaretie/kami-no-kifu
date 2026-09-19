@@ -1,0 +1,131 @@
+'use strict';
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const K = require('../js/core.js');
+const tree = sgf => K.parse(sgf).games[0];
+const valid = sgf => K.validateGame(tree(sgf));
+const model = (sgf, branch = 0, rule = '') => K.replay(tree(sgf), branch, rule);
+const base = 'FF[4]GM[1]CA[UTF-8]SZ[9]PB[黒]PW[白]RU[Japanese]KM[6.5]RE[B+R]';
+const captures = `(;${base};B[bb];W[ab];B[hh];W[ba];B[hg];W[cb];B[gg];W[bc];B[gh];W[bb])`;
+const koRoot = 'FF[4]GM[1]SZ[9]RU[Japanese]AB[ab][ba][bc]AW[bb][ca][cc][db]PL[B]';
+
+test('SGF sequence and metadata', () => { const m = model(`(;${base};B[dd];W[ee])`); assert.equal(m.total, 2); assert.equal(K.metadata(m.branch.nodes).black, '黒'); });
+test('comments do not become moves', () => { const m = model(`(;${base}C[;B[aa\\] is text (variation)];B[dd])`); assert.equal(m.total, 1); });
+test('escaped bracket, slash and line continuation', () => { const p = tree('(;C[A\\]B\\\\C\\\nD])').nodes[0].props; assert.equal(p.C[0], 'A]B\\CD'); });
+test('unclosed value is rejected', () => assert.throws(() => K.parse('(;C[abc)'), /\]/));
+test('unclosed game tree is rejected', () => assert.throws(() => K.parse('(;B[aa]'), /\)/));
+test('trailing junk is rejected', () => assert.throws(() => K.parse('(;B[aa])garbage'), /余分/));
+test('empty tree is rejected', () => assert.throws(() => K.parse('()'), /空/));
+test('duplicate property in node is rejected', () => assert.throws(() => K.parse('(;PB[A]PB[B])'), /重複/));
+test('invalid mixed-case property is not silently normalized', () => assert.throws(() => K.parse('(;Pb[A])'), /大文字/));
+test('UTF-8 BOM and CRLF', () => { assert.equal(K.parse('\ufeff ( ; C[a\r\nb] ) ').games[0].nodes[0].props.C[0], 'a\nb'); });
+test('collection is preserved', () => assert.equal(K.parse('(;B[aa])(;B[bb])').games.length, 2));
+test('main line and branches are separated', () => { const m = model(`(;${base};B[dd](;W[ee])(;W[ff];B[gg]))`, 1); assert.equal(m.total, 3); assert.equal(m.events[1].p, 50); });
+test('every branch is checked', () => { const v = valid(`(;${base};B[dd](;W[ee])(;W[dd]))`); assert.equal(v.ok, false); assert.match(v.errors.join(' '), /既に石/); });
+test('non-Go game rejected as unsupported', () => { const v = valid('(;GM[2]SZ[19])'); assert.equal(v.ok, false); assert.equal(v.errorKinds[0], 'unsupported'); });
+test('unsupported board size is not labelled illegal move', () => { const v = valid('(;GM[1]SZ[52])'); assert.equal(v.errorKinds[0], 'unsupported'); });
+test('rectangular boards are supported', () => { const m = model('(;GM[1]SZ[9:13];B[im])'); assert.deepEqual(m.size, { w: 9, h: 13 }); });
+test('out-of-board point rejected', () => { const v = valid(`(;${base};B[jj])`); assert.equal(v.ok, false); assert.match(v.errors[0], /盤の外/); });
+test('occupied intersection rejected', () => assert.equal(valid(`(;${base};B[dd];W[dd])`).ok, false));
+test('two consecutive moves of one color rejected', () => assert.equal(valid(`(;${base};B[dd];B[ee])`).ok, false));
+test('two colors in one node rejected', () => assert.equal(valid(`(;${base};B[dd]W[ee])`).ok, false));
+test('multi-valued move rejected', () => assert.equal(valid(`(;${base};B[dd][ee])`).ok, false));
+test('suicide rejected', () => { const v = valid(`(;${base}AW[ab][ba][cb][bc]PL[B];B[bb])`); assert.match(v.errors.join(' '), /自殺手/); });
+test('capture removed from physical position', () => { const m = model(captures); const p = K.point('bb', m.size); assert.equal(m.snapshots[8].board[p], 0); assert.equal(m.snapshots[10].board[p], 2); assert.equal(m.snapshots[8].captures[2], 1); });
+test('capture of multi-stone group', () => { const m = model(`(;${base}AB[aa][ba]AW[ab][bb]PL[W];W[ca])`); assert.equal(m.events[0].captured.length, 2); assert.equal(m.snapshots[1].captures[2], 2); });
+test('same adjacent group is not counted twice', () => { const m = model(`(;${base}AB[ab][ba][ac][bd][db][ca]AW[bb][bc][cb]PL[B];B[cc])`); assert.equal(m.events[0].captured.length, 3); });
+test('capture happens before suicide test', () => { const m = model(`(;${koRoot};B[cb])`); assert.equal(m.events[0].captured.length, 1); });
+test('immediate ko recapture rejected', () => { const v = valid(`(;${koRoot};B[cb];W[bb])`); assert.equal(v.ok, false); assert.match(v.errors[0], /コウ/); });
+test('simple-ko released after passes in Japanese mode', () => { const m = model(`(;${koRoot};B[cb];W[];B[];W[bb])`); assert.equal(m.total, 4); assert.ok(m.warnings.some(s => /同形反復/.test(s))); });
+test('positional repetition rejected in Chinese check mode', () => { const v = K.validateGame(tree(`(;${koRoot};B[cb];W[];B[];W[bb])`), 'chinese'); assert.equal(v.ok, false); assert.match(v.errors.join(' '), /同形反復/); });
+test('passes are allowed despite unchanged board in Chinese mode', () => assert.equal(model(`(;${base};B[];W[])`, 0, 'chinese').total, 2));
+test('legacy tt is a pass on <=19 boards', () => assert.equal(model(`(;${base};B[tt])`).events[0].pass, true));
+test('tt is a real point on 20x20', () => { const m = model('(;FF[4]GM[1]SZ[20];B[tt])'); assert.equal(m.events[0].p, 399); });
+test('handicap AB and white-to-play', () => { const m = model(`(;${base}HA[2]AB[cc][gg];W[ee])`); assert.equal(m.initial.board.filter(x => x === 1).length, 2); });
+test('handicap without AB is rejected', () => { const v = valid(`(;${base}HA[2];W[ee])`); assert.equal(v.ok, false); assert.match(v.errors[0], /AB/); });
+test('compressed setup ranges supported', () => { const m = model(`(;${base}AB[aa:bb]PL[W];W[ee])`); assert.equal(m.initial.board.filter(x => x === 1).length, 4); });
+test('reversed point range rejected', () => assert.equal(valid(`(;${base}AB[bb:aa])`).ok, false));
+test('conflicting setup rejected', () => assert.equal(valid(`(;${base}AB[aa]AW[aa])`).ok, false));
+test('setup and move in same node rejected', () => assert.equal(valid(`(;${base};B[aa]AB[bb])`).ok, false));
+test('midgame editing clearly unsupported', () => { const v = valid(`(;${base};B[aa];AE[aa])`); assert.equal(v.ok, false); assert.equal(v.errorKinds[0], 'unsupported'); });
+test('unknown annotations are warnings', () => { const v = valid(`(;${base}XYZ[text];B[aa])`); assert.equal(v.ok, true); assert.ok(v.warnings.some(t => t.includes('XYZ'))); });
+test('root-only properties checked', () => assert.equal(valid(`(;${base};B[aa]SZ[13])`).ok, false));
+test('bad numeric komi rejected', () => assert.equal(valid('(;GM[1]SZ[19]KM[abc])').ok, false));
+test('negative komi accepted', () => assert.equal(valid('(;GM[1]SZ[19]KM[-0.5])').ok, true));
+test('TB and TW cannot overlap', () => assert.equal(valid(`(;${base}TB[aa]TW[aa])`).ok, false));
+test('safe comment rendering input is preserved literally', () => { const m = K.metadata(tree('(;PB[<img src=x onerror=alert(1)>])').nodes); assert.equal(m.black, '<img src=x onerror=alert(1)>'); });
+test('result is points already; Chinese does not double RE', () => assert.equal(K.parseResult('B+1.5'), '黒1.5目勝ち'));
+test('explicit Chinese unit fraction converted correctly', () => assert.equal(K.parseResult('黒3/4子勝ち'), '黒1.5目勝ち'));
+test('explicit unit for B+3/4子', () => assert.equal(K.parseResult('B+3/4子'), '黒1.5目勝ち'));
+test('plain nonstandard fraction is not guessed', () => assert.equal(K.parseResult('B+3/4'), 'B+3/4'));
+test('winner translations', () => { assert.equal(K.parseResult('W+R'), '白中押し勝ち'); assert.equal(K.parseResult('B+Time'), '黒時間切れ勝ち'); assert.equal(K.parseResult('0'), '持碁'); assert.equal(K.parseResult('Void'), '無勝負'); });
+test('unknown result forces manual input', () => assert.equal(K.parseResult('?'), ''));
+test('komi zero does not invent 定先', () => assert.equal(K.metadata(tree('(;PB[A]PW[B]KM[0])').nodes).handicap, ''));
+test('missing komi is not silently set to zero', () => assert.equal(K.metadata(tree('(;PB[A]PW[B])').nodes).komi, ''));
+test('rank in player name is split', () => { const m = K.metadata(tree('(;PB[chisana(10級)]PW[sample(8k)])').nodes); assert.equal(m.black, 'chisana'); assert.equal(m.blackRank, '10級'); assert.equal(m.whiteRank, '8k'); });
+test('SGF comments never populate 所感', () => assert.equal(K.metadata(tree('(;C[important]GC[game note])').nodes).notes, ''));
+test('time Fischer recognition', () => { const t = K.parseTime('600', 'Fischer 10'); assert.equal(t.mode, 'fischer'); assert.equal(t.minutes, '10'); assert.equal(t.increment, '10'); });
+test('time periods recognition', () => { const t = K.parseTime('1200', '3x30 byo-yomi'); assert.equal(t.mode, 'japanese'); assert.equal(t.periods, '3'); assert.equal(t.seconds, '30'); });
+test('unknown OT is not converted by guess', () => assert.equal(K.parseTime('1200', 'unknown overtime 999').recognized, false));
+test('mandatory metadata enforced', () => { const m = K.metadata([]); assert.ok(K.validateMetadata(m).length >= 6); });
+test('valid metadata passes', () => assert.equal(K.validateMetadata(K.metadata(tree(`(;${base})`).nodes)).length, 0));
+test('selected time mode is mandatory when enabled', () => { const m = K.metadata(tree(`(;${base}TM[600])`).nodes); assert.ok(K.validateMetadata(m).some(s => /方式/.test(s))); });
+test('default UI values match specification', () => { const s = K.defaults(); assert.equal(s.mode, 'all'); assert.equal(s.split, '100'); assert.equal(s.numberStyle, 'arabic'); assert.equal(s.coordinates, true); assert.equal(s.positions.top, true); assert.equal(s.positions.left, true); assert.equal(s.shadow, false); assert.equal(s.repeats, true); });
+test('kanji forces 100-move splits', () => { const s = K.normalizeSettings({ ...K.defaults(), numberStyle: 'kanji', mode: 'all', split: '50' }); assert.equal(s.mode, 'split'); assert.equal(s.split, '100'); });
+test('kanji lock released with move labels off', () => { const s = K.normalizeSettings({ ...K.defaults(), numberStyle: 'kanji', numbers: false, mode: 'all' }); assert.equal(s.mode, 'all'); });
+test('custom kanji notation exactly matches the request', () => { const cases = { 1: '一', 9: '九', 10: '十', 11: '十一', 19: '十九', 20: '二十', 21: '二一', 29: '二九', 30: '三十', 31: '三一', 99: '九九', 100: '百' }; for (const [n, v] of Object.entries(cases)) assert.equal(K.compactKanji(Number(n)), v); });
+test('101 and 201 restart kanji numbering', () => { assert.equal(K.moveLabel(101, 101, 'kanji'), '一'); assert.equal(K.moveLabel(201, 201, 'kanji'), '一'); assert.equal(K.moveLabel(200, 101, 'kanji'), '百'); });
+test('invalid split is rejected', () => { const s = { ...K.defaults(), mode: 'split', split: 'custom', customSplit: 0 }; assert.ok(K.validateSettings(s).length); });
+test('same-coordinate diagram retains first move', () => { const m = model(captures), d = K.diagrams(m, K.defaults())[0]; const st = d.stones.find(s => s.p === K.point('bb', m.size)); assert.equal(st.n, 1); assert.equal(st.color, 1); assert.equal(K.repeatText(d.repeats[0], d, K.defaults()), '10(1)'); });
+test('square replay notation', () => { const s = { ...K.defaults(), repeatBracket: 'square' }, d = K.diagrams(model(captures), s)[0]; assert.equal(K.repeatText(d.repeats[0], d, s), '10[1]'); });
+test('number is suppressed on carry-over stones', () => { const s = { ...K.defaults(), mode: 'split', split: 'custom', customSplit: 8 }, d = K.diagrams(model(captures), s)[1]; assert.equal(d.stones.find(x => x.p === 70).n, 0); });
+test('cross-page replay has previous-page reference and coordinate', () => { const s = { ...K.defaults(), mode: 'split', split: 'custom', customSplit: 8 }, d = K.diagrams(model(captures), s)[1]; assert.equal(d.repeats[0].priorPage, true); assert.equal(K.repeatText(d.repeats[0], d, s), '10(前譜1:bb)'); });
+test('empty game still produces a setup page', () => assert.equal(K.diagrams(model(`(;${base})`), K.defaults()).length, 1));
+test('decode UTF-8 CA', () => { const a = new TextEncoder().encode('(;CA[UTF-8]PB[黒])'); assert.equal(K.decode(a).encoding, 'UTF-8'); });
+test('CA inside a comment does not select an encoding', () => { const a = new TextEncoder().encode('(;C[CA[GB2312\\]]PB[黒])'); assert.equal(K.decode(a).encoding, 'utf-8'); });
+test('decode explicitly selected Shift_JIS', () => { const a = new Uint8Array([40, 59, 80, 66, 91, 0x8d, 0x95, 93, 41]); assert.equal(K.decode(a, 'shift_jis').text, '(;PB[黒])'); });
+test('undecodable input is not silently replaced', () => assert.throws(() => K.decode(new Uint8Array([255, 245, 133])), /文字コード/));
+test('empty bytes rejected', () => assert.throws(() => K.decode(new Uint8Array()), /空/));
+test('node-count limit protects against resource exhaustion', () => assert.throws(() => K.parse('(' + ';'.repeat(K.LIMITS.nodes + 1) + ')'), /ノード数/));
+
+test('player name ending in parenthesized word is preserved', () => { const m = K.metadata(tree('(;PB[Alice(black)]PW[Bob(red)])').nodes); assert.equal(m.black, 'Alice(black)'); assert.equal(m.white, 'Bob(red)'); });
+test('first dan in Japanese parentheses is split from the name', () => { const m = K.metadata(tree('(;PB[黒（初段）])').nodes); assert.equal(m.black, '黒'); assert.equal(m.blackRank, '初段'); });
+
+// v1.2.0: saved pagination is a reversible constraint, not a destructive reset.
+for (const [mode, split, customSplit] of [['all','50',73],['split','50',73],['split','100',41],['split','custom',73]]) {
+  test(`v120 restore pagination ${mode}/${split}/${customSplit}`, () => {
+    const before={...K.defaults(),mode,split,customSplit}, locked=K.normalizeSettings({...before,numberStyle:'kanji'});
+    assert.deepEqual(locked.paginationBeforeKanji,{mode,split,customSplit});
+    assert.equal(locked.mode,'split');assert.equal(locked.split,'100');
+    const twice=K.normalizeSettings(K.normalizeSettings(locked));
+    const restored=K.normalizeSettings({...twice,numberStyle:'arabic'});
+    assert.deepEqual({mode:restored.mode,split:restored.split,customSplit:restored.customSplit},{mode,split,customSplit});
+    assert.equal(restored.paginationBeforeKanji,undefined);assert.equal(before.mode,mode);
+  });
+}
+test('v120 turning off labels restores pagination then re-enabling locks again',()=>{
+  const original={...K.defaults(),mode:'split',split:'custom',customSplit:73,numberStyle:'kanji'};
+  const locked=K.normalizeSettings(original),off=K.normalizeSettings({...locked,numbers:false});
+  assert.equal(off.split,'custom');assert.equal(off.customSplit,73);
+  const again=K.normalizeSettings({...off,numbers:true});assert.equal(again.split,'100');
+  const restored=K.normalizeSettings({...again,numberStyle:'arabic'});assert.equal(restored.customSplit,73);assert.equal(restored.split,'custom');
+});
+test('v120 old repeat stone show/hide settings migrate to checkboxes',()=>{
+ assert.equal(K.normalizeSettings({repeatStones:'show'}).repeatStones,true);
+ assert.equal(K.normalizeSettings({repeatStones:'hide'}).repeatStones,false);
+ assert.equal(K.defaults().repeatStoneStyle,'beside');
+ assert.equal(K.validateSettings({...K.defaults(),repeatStoneStyle:'unknown'}).length>0,true);
+});
+test('v120 fresh notes field starts publishable but does not copy SGF comments',()=>{
+ const m=K.metadata(tree(`(;${base}C[not notes])`).nodes);assert.equal(m.include.notes,true);assert.equal(m.notes,'');
+});
+test('v120 referenced stone color is historical, not assumed opposite',()=>{
+ const m=model(`(;${koRoot};B[cb];W[hh];B[hg];W[bb];B[gh];W[gg];B[cb];W[ii];B[ih];W[bb])`);
+ const d=K.diagrams(m,K.defaults())[0],again=d.repeats.find(e=>e.n===7);
+ assert.equal(again.color,1);assert.equal(again.refColor,1);assert.equal(again.ref,1);
+ const white=d.repeats.find(e=>e.n===10);assert.equal(white.refColor,2);
+});
+test('v120 captured point reference keeps color across pages',()=>{
+ const s={...K.defaults(),mode:'split',split:'custom',customSplit:8};
+ const d=K.diagrams(model(captures),s)[1];assert.equal(d.repeats[0].color,2);assert.equal(d.repeats[0].refColor,1);
+});

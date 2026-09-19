@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "path": "",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "js/platform.js",
+      "status": 200,
+      "mime": "text/javascript"
+    },
+    {
+      "path": "css/styles.css",
+      "status": 200,
+      "mime": "text/css"
+    },
+    {
+      "path": "assets/itame-grain.png",
+      "status": 200,
+      "mime": "image/png"
+    },
+    {
+      "restricted_files_and_missing_resources": 404
+    },
+    {
+      "POST": 405
+    }
+  ],
+  "passed": true
+}

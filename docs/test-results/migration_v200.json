@@ -1,0 +1,325 @@
+{
+  "version": "2.0.0",
+  "browser": "144.0.7559.96",
+  "checks": [
+    "new version / no GAS object / successful initialization",
+    "all display accordions initially closed",
+    "project URL derived from actual external script source",
+    "9 JavaScript modules really loaded over HTTP",
+    "texture loaded over HTTP and relative to repository",
+    "root/project/nested static resources return HTTP 200",
+    "235 moves validated with real split modules",
+    "remote same-site texture is exportable, not a tainted Canvas",
+    "SGF/edit/exports send no network requests after assets are ready",
+    "three distinct page comments retained",
+    "legacy schema-1 settings import in actual UI",
+    "saved settings exclude private match data",
+    "different repository does not restore saved settings",
+    "index.html and directory URL share same settings scope",
+    "restored display settings never restore SGF or text",
+    "no default font download or Google request",
+    "missing gyosho reports a usable local-file fallback",
+    "manually selected test font loads without HTTP",
+    "invalid selected font blocks output with explicit error",
+    "Arabic restoration keeps previous custom split 73",
+    "browser modules boot at /",
+    "browser modules boot at /nested/site/",
+    "mobile save control is visible and page fits width",
+    "no unhandled JavaScript errors",
+    "no Google or external-service requests"
+  ],
+  "count": 25,
+  "errors": [],
+  "mode": "HTTP subresources under synthetic base; CSP bypass and in-memory Storage",
+  "native_storage_verified": false,
+  "public_GitHub_deployment_verified": false,
+  "font_API_with_substitute_verified": true,
+  "actual_gyosho_verified": false,
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/css/styles.css?v=2.0.0",
+      "type": "stylesheet"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/config.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/platform.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/core.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/assets.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/render.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/preferences.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/font-loader.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/export.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/ui.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/assets/itame-grain.png?v=2.0.0",
+      "type": "image"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/assets/favicon.svg",
+      "type": "other"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/css/styles.css?v=2.0.0",
+      "type": "stylesheet"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/config.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/platform.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/core.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/assets.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/render.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/preferences.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/font-loader.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/export.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/js/ui.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/Other/assets/itame-grain.png?v=2.0.0",
+      "type": "image"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/css/styles.css?v=2.0.0",
+      "type": "stylesheet"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/config.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/platform.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/core.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/assets.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/render.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/preferences.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/font-loader.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/export.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/js/ui.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/KifuPrintWeb/assets/itame-grain.png?v=2.0.0",
+      "type": "image"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/css/styles.css?v=2.0.0",
+      "type": "stylesheet"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/config.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/platform.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/core.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/assets.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/render.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/preferences.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/font-loader.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/export.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/js/ui.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/assets/itame-grain.png?v=2.0.0",
+      "type": "image"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/css/styles.css?v=2.0.0",
+      "type": "stylesheet"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/config.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/platform.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/core.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/assets.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/render.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/preferences.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/font-loader.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/export.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/js/ui.js?v=2.0.0",
+      "type": "script"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/assets/itame-grain.png?v=2.0.0",
+      "type": "image"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:35737/nested/site/assets/favicon.svg",
+      "type": "other"
+    }
+  ]
+}

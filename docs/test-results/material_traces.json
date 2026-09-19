@@ -1,0 +1,50 @@
+[
+  {
+    "color": 1,
+    "pattern": "plain",
+    "bezier": 0,
+    "fillCount": 1
+  },
+  {
+    "color": 1,
+    "pattern": "glass",
+    "bezier": 0,
+    "fillCount": 3
+  },
+  {
+    "color": 1,
+    "pattern": "nachi",
+    "bezier": 0,
+    "fillCount": 1241
+  },
+  {
+    "color": 1,
+    "pattern": "agate",
+    "bezier": 0,
+    "fillCount": 3
+  },
+  {
+    "color": 2,
+    "pattern": "plain",
+    "bezier": 0,
+    "fillCount": 1
+  },
+  {
+    "color": 2,
+    "pattern": "glass",
+    "bezier": 0,
+    "fillCount": 4
+  },
+  {
+    "color": 2,
+    "pattern": "shell",
+    "bezier": 21,
+    "fillCount": 1
+  },
+  {
+    "color": 2,
+    "pattern": "agate",
+    "bezier": 0,
+    "fillCount": 3
+  }
+]

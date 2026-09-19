@@ -1,0 +1,8 @@
+{
+  "input": "KifuPrintWeb_v1.3.0.zip",
+  "input_sha256": "40cc9fd9ecbcf0d31d6a90dd00e24e4112be86b3092332955862cedc85d4af1d",
+  "core_js_unchanged": true,
+  "itame_png_unchanged": true,
+  "css_changed_only_for_boot_notice": true,
+  "baseline_documentation_and_test_results_not_reused_as_new_results": true
+}

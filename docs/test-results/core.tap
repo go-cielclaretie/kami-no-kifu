@@ -1,0 +1,1280 @@
+
+> kifu-print-web@2.0.0 test
+> node --test tests/*.test.cjs
+
+TAP version 13
+# Subtest: SGF sequence and metadata
+ok 1 - SGF sequence and metadata
+  ---
+  duration_ms: 7.696539
+  type: 'test'
+  ...
+# Subtest: comments do not become moves
+ok 2 - comments do not become moves
+  ---
+  duration_ms: 0.776667
+  type: 'test'
+  ...
+# Subtest: escaped bracket, slash and line continuation
+ok 3 - escaped bracket, slash and line continuation
+  ---
+  duration_ms: 0.20385
+  type: 'test'
+  ...
+# Subtest: unclosed value is rejected
+ok 4 - unclosed value is rejected
+  ---
+  duration_ms: 0.6555
+  type: 'test'
+  ...
+# Subtest: unclosed game tree is rejected
+ok 5 - unclosed game tree is rejected
+  ---
+  duration_ms: 0.651593
+  type: 'test'
+  ...
+# Subtest: trailing junk is rejected
+ok 6 - trailing junk is rejected
+  ---
+  duration_ms: 0.185573
+  type: 'test'
+  ...
+# Subtest: empty tree is rejected
+ok 7 - empty tree is rejected
+  ---
+  duration_ms: 0.22656
+  type: 'test'
+  ...
+# Subtest: duplicate property in node is rejected
+ok 8 - duplicate property in node is rejected
+  ---
+  duration_ms: 0.182428
+  type: 'test'
+  ...
+# Subtest: invalid mixed-case property is not silently normalized
+ok 9 - invalid mixed-case property is not silently normalized
+  ---
+  duration_ms: 0.435881
+  type: 'test'
+  ...
+# Subtest: UTF-8 BOM and CRLF
+ok 10 - UTF-8 BOM and CRLF
+  ---
+  duration_ms: 0.530171
+  type: 'test'
+  ...
+# Subtest: collection is preserved
+ok 11 - collection is preserved
+  ---
+  duration_ms: 0.218047
+  type: 'test'
+  ...
+# Subtest: main line and branches are separated
+ok 12 - main line and branches are separated
+  ---
+  duration_ms: 2.250443
+  type: 'test'
+  ...
+# Subtest: every branch is checked
+ok 13 - every branch is checked
+  ---
+  duration_ms: 0.592865
+  type: 'test'
+  ...
+# Subtest: non-Go game rejected as unsupported
+ok 14 - non-Go game rejected as unsupported
+  ---
+  duration_ms: 0.177276
+  type: 'test'
+  ...
+# Subtest: unsupported board size is not labelled illegal move
+ok 15 - unsupported board size is not labelled illegal move
+  ---
+  duration_ms: 0.133417
+  type: 'test'
+  ...
+# Subtest: rectangular boards are supported
+ok 16 - rectangular boards are supported
+  ---
+  duration_ms: 1.288706
+  type: 'test'
+  ...
+# Subtest: out-of-board point rejected
+ok 17 - out-of-board point rejected
+  ---
+  duration_ms: 0.360469
+  type: 'test'
+  ...
+# Subtest: occupied intersection rejected
+ok 18 - occupied intersection rejected
+  ---
+  duration_ms: 0.319121
+  type: 'test'
+  ...
+# Subtest: two consecutive moves of one color rejected
+ok 19 - two consecutive moves of one color rejected
+  ---
+  duration_ms: 0.300352
+  type: 'test'
+  ...
+# Subtest: two colors in one node rejected
+ok 20 - two colors in one node rejected
+  ---
+  duration_ms: 0.217039
+  type: 'test'
+  ...
+# Subtest: multi-valued move rejected
+ok 21 - multi-valued move rejected
+  ---
+  duration_ms: 0.19058
+  type: 'test'
+  ...
+# Subtest: suicide rejected
+ok 22 - suicide rejected
+  ---
+  duration_ms: 0.590211
+  type: 'test'
+  ...
+# Subtest: capture removed from physical position
+ok 23 - capture removed from physical position
+  ---
+  duration_ms: 0.955765
+  type: 'test'
+  ...
+# Subtest: capture of multi-stone group
+ok 24 - capture of multi-stone group
+  ---
+  duration_ms: 0.418782
+  type: 'test'
+  ...
+# Subtest: same adjacent group is not counted twice
+ok 25 - same adjacent group is not counted twice
+  ---
+  duration_ms: 0.567967
+  type: 'test'
+  ...
+# Subtest: capture happens before suicide test
+ok 26 - capture happens before suicide test
+  ---
+  duration_ms: 0.56369
+  type: 'test'
+  ...
+# Subtest: immediate ko recapture rejected
+ok 27 - immediate ko recapture rejected
+  ---
+  duration_ms: 0.498198
+  type: 'test'
+  ...
+# Subtest: simple-ko released after passes in Japanese mode
+ok 28 - simple-ko released after passes in Japanese mode
+  ---
+  duration_ms: 0.741883
+  type: 'test'
+  ...
+# Subtest: positional repetition rejected in Chinese check mode
+ok 29 - positional repetition rejected in Chinese check mode
+  ---
+  duration_ms: 1.130705
+  type: 'test'
+  ...
+# Subtest: passes are allowed despite unchanged board in Chinese mode
+ok 30 - passes are allowed despite unchanged board in Chinese mode
+  ---
+  duration_ms: 0.329284
+  type: 'test'
+  ...
+# Subtest: legacy tt is a pass on <=19 boards
+ok 31 - legacy tt is a pass on <=19 boards
+  ---
+  duration_ms: 0.236191
+  type: 'test'
+  ...
+# Subtest: tt is a real point on 20x20
+ok 32 - tt is a real point on 20x20
+  ---
+  duration_ms: 1.223013
+  type: 'test'
+  ...
+# Subtest: handicap AB and white-to-play
+ok 33 - handicap AB and white-to-play
+  ---
+  duration_ms: 3.393622
+  type: 'test'
+  ...
+# Subtest: handicap without AB is rejected
+ok 34 - handicap without AB is rejected
+  ---
+  duration_ms: 0.358221
+  type: 'test'
+  ...
+# Subtest: compressed setup ranges supported
+ok 35 - compressed setup ranges supported
+  ---
+  duration_ms: 0.41855
+  type: 'test'
+  ...
+# Subtest: reversed point range rejected
+ok 36 - reversed point range rejected
+  ---
+  duration_ms: 0.227065
+  type: 'test'
+  ...
+# Subtest: conflicting setup rejected
+ok 37 - conflicting setup rejected
+  ---
+  duration_ms: 0.256161
+  type: 'test'
+  ...
+# Subtest: setup and move in same node rejected
+ok 38 - setup and move in same node rejected
+  ---
+  duration_ms: 0.209677
+  type: 'test'
+  ...
+# Subtest: midgame editing clearly unsupported
+ok 39 - midgame editing clearly unsupported
+  ---
+  duration_ms: 0.282465
+  type: 'test'
+  ...
+# Subtest: unknown annotations are warnings
+ok 40 - unknown annotations are warnings
+  ---
+  duration_ms: 0.247295
+  type: 'test'
+  ...
+# Subtest: root-only properties checked
+ok 41 - root-only properties checked
+  ---
+  duration_ms: 0.295794
+  type: 'test'
+  ...
+# Subtest: bad numeric komi rejected
+ok 42 - bad numeric komi rejected
+  ---
+  duration_ms: 0.201584
+  type: 'test'
+  ...
+# Subtest: negative komi accepted
+ok 43 - negative komi accepted
+  ---
+  duration_ms: 0.194562
+  type: 'test'
+  ...
+# Subtest: TB and TW cannot overlap
+ok 44 - TB and TW cannot overlap
+  ---
+  duration_ms: 0.224804
+  type: 'test'
+  ...
+# Subtest: safe comment rendering input is preserved literally
+ok 45 - safe comment rendering input is preserved literally
+  ---
+  duration_ms: 0.887016
+  type: 'test'
+  ...
+# Subtest: result is points already; Chinese does not double RE
+ok 46 - result is points already; Chinese does not double RE
+  ---
+  duration_ms: 0.338003
+  type: 'test'
+  ...
+# Subtest: explicit Chinese unit fraction converted correctly
+ok 47 - explicit Chinese unit fraction converted correctly
+  ---
+  duration_ms: 0.348816
+  type: 'test'
+  ...
+# Subtest: explicit unit for B+3/4子
+ok 48 - explicit unit for B+3/4子
+  ---
+  duration_ms: 0.308768
+  type: 'test'
+  ...
+# Subtest: plain nonstandard fraction is not guessed
+ok 49 - plain nonstandard fraction is not guessed
+  ---
+  duration_ms: 0.280499
+  type: 'test'
+  ...
+# Subtest: winner translations
+ok 50 - winner translations
+  ---
+  duration_ms: 0.138399
+  type: 'test'
+  ...
+# Subtest: unknown result forces manual input
+ok 51 - unknown result forces manual input
+  ---
+  duration_ms: 0.086586
+  type: 'test'
+  ...
+# Subtest: komi zero does not invent 定先
+ok 52 - komi zero does not invent 定先
+  ---
+  duration_ms: 0.17268
+  type: 'test'
+  ...
+# Subtest: missing komi is not silently set to zero
+ok 53 - missing komi is not silently set to zero
+  ---
+  duration_ms: 0.270381
+  type: 'test'
+  ...
+# Subtest: rank in player name is split
+ok 54 - rank in player name is split
+  ---
+  duration_ms: 0.242417
+  type: 'test'
+  ...
+# Subtest: SGF comments never populate 所感
+ok 55 - SGF comments never populate 所感
+  ---
+  duration_ms: 0.154831
+  type: 'test'
+  ...
+# Subtest: time Fischer recognition
+ok 56 - time Fischer recognition
+  ---
+  duration_ms: 0.11919
+  type: 'test'
+  ...
+# Subtest: time periods recognition
+ok 57 - time periods recognition
+  ---
+  duration_ms: 0.118993
+  type: 'test'
+  ...
+# Subtest: unknown OT is not converted by guess
+ok 58 - unknown OT is not converted by guess
+  ---
+  duration_ms: 0.182531
+  type: 'test'
+  ...
+# Subtest: mandatory metadata enforced
+ok 59 - mandatory metadata enforced
+  ---
+  duration_ms: 0.469706
+  type: 'test'
+  ...
+# Subtest: valid metadata passes
+ok 60 - valid metadata passes
+  ---
+  duration_ms: 0.2287
+  type: 'test'
+  ...
+# Subtest: selected time mode is mandatory when enabled
+ok 61 - selected time mode is mandatory when enabled
+  ---
+  duration_ms: 0.44016
+  type: 'test'
+  ...
+# Subtest: default UI values match specification
+ok 62 - default UI values match specification
+  ---
+  duration_ms: 0.199834
+  type: 'test'
+  ...
+# Subtest: kanji forces 100-move splits
+ok 63 - kanji forces 100-move splits
+  ---
+  duration_ms: 0.40953
+  type: 'test'
+  ...
+# Subtest: kanji lock released with move labels off
+ok 64 - kanji lock released with move labels off
+  ---
+  duration_ms: 0.190728
+  type: 'test'
+  ...
+# Subtest: custom kanji notation exactly matches the request
+ok 65 - custom kanji notation exactly matches the request
+  ---
+  duration_ms: 0.259181
+  type: 'test'
+  ...
+# Subtest: 101 and 201 restart kanji numbering
+ok 66 - 101 and 201 restart kanji numbering
+  ---
+  duration_ms: 0.118995
+  type: 'test'
+  ...
+# Subtest: invalid split is rejected
+ok 67 - invalid split is rejected
+  ---
+  duration_ms: 0.47949
+  type: 'test'
+  ...
+# Subtest: same-coordinate diagram retains first move
+ok 68 - same-coordinate diagram retains first move
+  ---
+  duration_ms: 2.886308
+  type: 'test'
+  ...
+# Subtest: square replay notation
+ok 69 - square replay notation
+  ---
+  duration_ms: 1.325393
+  type: 'test'
+  ...
+# Subtest: number is suppressed on carry-over stones
+ok 70 - number is suppressed on carry-over stones
+  ---
+  duration_ms: 1.041583
+  type: 'test'
+  ...
+# Subtest: cross-page replay has previous-page reference and coordinate
+ok 71 - cross-page replay has previous-page reference and coordinate
+  ---
+  duration_ms: 0.740771
+  type: 'test'
+  ...
+# Subtest: empty game still produces a setup page
+ok 72 - empty game still produces a setup page
+  ---
+  duration_ms: 0.26139
+  type: 'test'
+  ...
+# Subtest: decode UTF-8 CA
+ok 73 - decode UTF-8 CA
+  ---
+  duration_ms: 0.593642
+  type: 'test'
+  ...
+# Subtest: CA inside a comment does not select an encoding
+ok 74 - CA inside a comment does not select an encoding
+  ---
+  duration_ms: 0.190204
+  type: 'test'
+  ...
+# Subtest: decode explicitly selected Shift_JIS
+ok 75 - decode explicitly selected Shift_JIS
+  ---
+  duration_ms: 1.723577
+  type: 'test'
+  ...
+# Subtest: undecodable input is not silently replaced
+ok 76 - undecodable input is not silently replaced
+  ---
+  duration_ms: 0.319678
+  type: 'test'
+  ...
+# Subtest: empty bytes rejected
+ok 77 - empty bytes rejected
+  ---
+  duration_ms: 0.133268
+  type: 'test'
+  ...
+# Subtest: node-count limit protects against resource exhaustion
+ok 78 - node-count limit protects against resource exhaustion
+  ---
+  duration_ms: 8.452363
+  type: 'test'
+  ...
+# Subtest: player name ending in parenthesized word is preserved
+ok 79 - player name ending in parenthesized word is preserved
+  ---
+  duration_ms: 0.193765
+  type: 'test'
+  ...
+# Subtest: first dan in Japanese parentheses is split from the name
+ok 80 - first dan in Japanese parentheses is split from the name
+  ---
+  duration_ms: 0.147608
+  type: 'test'
+  ...
+# Subtest: v120 restore pagination all/50/73
+ok 81 - v120 restore pagination all/50/73
+  ---
+  duration_ms: 0.27992
+  type: 'test'
+  ...
+# Subtest: v120 restore pagination split/50/73
+ok 82 - v120 restore pagination split/50/73
+  ---
+  duration_ms: 0.206209
+  type: 'test'
+  ...
+# Subtest: v120 restore pagination split/100/41
+ok 83 - v120 restore pagination split/100/41
+  ---
+  duration_ms: 0.21592
+  type: 'test'
+  ...
+# Subtest: v120 restore pagination split/custom/73
+ok 84 - v120 restore pagination split/custom/73
+  ---
+  duration_ms: 0.345162
+  type: 'test'
+  ...
+# Subtest: v120 turning off labels restores pagination then re-enabling locks again
+ok 85 - v120 turning off labels restores pagination then re-enabling locks again
+  ---
+  duration_ms: 0.385291
+  type: 'test'
+  ...
+# Subtest: v120 old repeat stone show/hide settings migrate to checkboxes
+ok 86 - v120 old repeat stone show/hide settings migrate to checkboxes
+  ---
+  duration_ms: 0.20528
+  type: 'test'
+  ...
+# Subtest: v120 fresh notes field starts publishable but does not copy SGF comments
+ok 87 - v120 fresh notes field starts publishable but does not copy SGF comments
+  ---
+  duration_ms: 0.197858
+  type: 'test'
+  ...
+# Subtest: v120 referenced stone color is historical, not assumed opposite
+ok 88 - v120 referenced stone color is historical, not assumed opposite
+  ---
+  duration_ms: 1.175654
+  type: 'test'
+  ...
+# Subtest: v120 captured point reference keeps color across pages
+ok 89 - v120 captured point reference keeps color across pages
+  ---
+  duration_ms: 2.711537
+  type: 'test'
+  ...
+# Subtest: v200 base URL: https://example.github.io/js/platform.js?v=2.0.0
+ok 90 - v200 base URL: https://example.github.io/js/platform.js?v=2.0.0
+  ---
+  duration_ms: 1.1586
+  type: 'test'
+  ...
+# Subtest: v200 base URL: https://example.github.io/KifuPrintWeb/js/platform.js?v=2.0.0
+ok 91 - v200 base URL: https://example.github.io/KifuPrintWeb/js/platform.js?v=2.0.0
+  ---
+  duration_ms: 0.173441
+  type: 'test'
+  ...
+# Subtest: v200 base URL: https://example.github.io/other/nested/js/platform.js?v=2.0.0
+ok 92 - v200 base URL: https://example.github.io/other/nested/js/platform.js?v=2.0.0
+  ---
+  duration_ms: 0.128418
+  type: 'test'
+  ...
+# Subtest: v200 base URL: https://example.github.io/KifuPrintWeb/index.html?q=1\#x
+ok 93 - v200 base URL: https://example.github.io/KifuPrintWeb/index.html?q=1\#x
+  ---
+  duration_ms: 0.9531
+  type: 'test'
+  ...
+# Subtest: v200 base URL: https://example.github.io/KifuPrintWeb/
+ok 94 - v200 base URL: https://example.github.io/KifuPrintWeb/
+  ---
+  duration_ms: 0.200218
+  type: 'test'
+  ...
+# Subtest: v200 base URL: file:///tmp/KifuPrintWeb/js/platform.js?v=2.0.0
+ok 95 - v200 base URL: file:///tmp/KifuPrintWeb/js/platform.js?v=2.0.0
+  ---
+  duration_ms: 0.076639
+  type: 'test'
+  ...
+# Subtest: v200 base URL: about:blank
+ok 96 - v200 base URL: about:blank
+  ---
+  duration_ms: 0.130033
+  type: 'test'
+  ...
+# Subtest: v200 relative asset: assets/itame-grain.png
+ok 97 - v200 relative asset: assets/itame-grain.png
+  ---
+  duration_ms: 0.560331
+  type: 'test'
+  ...
+# Subtest: v200 relative asset: ./assets/fonts/a.woff2?v=2.0.0
+ok 98 - v200 relative asset: ./assets/fonts/a.woff2?v=2.0.0
+  ---
+  duration_ms: 0.422496
+  type: 'test'
+  ...
+# Subtest: v200 relative asset: js/../css/styles.css
+ok 99 - v200 relative asset: js/../css/styles.css
+  ---
+  duration_ms: 0.334919
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: 
+ok 100 - v200 rejects external/traversal path: 
+  ---
+  duration_ms: 0.440495
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path:  
+ok 101 - v200 rejects external/traversal path:  
+  ---
+  duration_ms: 0.192608
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: ../other/asset.png
+ok 102 - v200 rejects external/traversal path: ../other/asset.png
+  ---
+  duration_ms: 0.083091
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: ../../asset
+ok 103 - v200 rejects external/traversal path: ../../asset
+  ---
+  duration_ms: 0.069362
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: %2e%2e/secret
+ok 104 - v200 rejects external/traversal path: %2e%2e/secret
+  ---
+  duration_ms: 0.084681
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: /outside.png
+ok 105 - v200 rejects external/traversal path: /outside.png
+  ---
+  duration_ms: 0.03674
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: //other.example/x
+ok 106 - v200 rejects external/traversal path: //other.example/x
+  ---
+  duration_ms: 0.034101
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: https://other.example/font.ttf
+ok 107 - v200 rejects external/traversal path: https://other.example/font.ttf
+  ---
+  duration_ms: 0.034673
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: data:font/ttf,abc
+ok 108 - v200 rejects external/traversal path: data:font/ttf,abc
+  ---
+  duration_ms: 0.080517
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: blob:xx
+ok 109 - v200 rejects external/traversal path: blob:xx
+  ---
+  duration_ms: 0.037483
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: javascript:alert(1)
+ok 110 - v200 rejects external/traversal path: javascript:alert(1)
+  ---
+  duration_ms: 0.035603
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: assets\\x
+ok 111 - v200 rejects external/traversal path: assets\\x
+  ---
+  duration_ms: 0.042163
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: assets%2fx
+ok 112 - v200 rejects external/traversal path: assets%2fx
+  ---
+  duration_ms: 0.033095
+  type: 'test'
+  ...
+# Subtest: v200 rejects external/traversal path: assets%5cx
+ok 113 - v200 rejects external/traversal path: assets%5cx
+  ---
+  duration_ms: 0.032481
+  type: 'test'
+  ...
+# Subtest: v200 separate project settings keys
+ok 114 - v200 separate project settings keys
+  ---
+  duration_ms: 0.090465
+  type: 'test'
+  ...
+# Subtest: v200 keys not tied to changing app version
+ok 115 - v200 keys not tied to changing app version
+  ---
+  duration_ms: 0.043171
+  type: 'test'
+  ...
+# Subtest: v200 settings isolated by project with same Storage backend
+ok 116 - v200 settings isolated by project with same Storage backend
+  ---
+  duration_ms: 3.691939
+  type: 'test'
+  ...
+# Subtest: v200 reads GAS v1.3 exported JSON, not its inaccessible localStorage
+ok 117 - v200 reads GAS v1.3 exported JSON, not its inaccessible localStorage
+  ---
+  duration_ms: 0.831519
+  type: 'test'
+  ...
+# Subtest: v200 default auto-font path makes no external requests
+ok 118 - v200 default auto-font path makes no external requests
+  ---
+  duration_ms: 1.580431
+  type: 'test'
+  ...
+# Subtest: v200 installed font used without HTTP
+ok 119 - v200 installed font used without HTTP
+  ---
+  duration_ms: 1.75809
+  type: 'test'
+  ...
+# Subtest: v200 font signature "OTTO"
+ok 120 - v200 font signature "OTTO"
+  ---
+  duration_ms: 0.776286
+  type: 'test'
+  ...
+# Subtest: v200 font signature "true"
+ok 121 - v200 font signature "true"
+  ---
+  duration_ms: 0.629587
+  type: 'test'
+  ...
+# Subtest: v200 font signature "wOFF"
+ok 122 - v200 font signature "wOFF"
+  ---
+  duration_ms: 0.714139
+  type: 'test'
+  ...
+# Subtest: v200 font signature "wOF2"
+ok 123 - v200 font signature "wOF2"
+  ---
+  duration_ms: 0.702428
+  type: 'test'
+  ...
+# Subtest: v200 font signature "\\u0000\\u0001\\u0000\\u0000"
+ok 124 - v200 font signature "\\u0000\\u0001\\u0000\\u0000"
+  ---
+  duration_ms: 0.529815
+  type: 'test'
+  ...
+# Subtest: v200 invalid font signature <htm
+ok 125 - v200 invalid font signature <htm
+  ---
+  duration_ms: 0.562061
+  type: 'test'
+  ...
+# Subtest: v200 invalid font signature PK
+ok 126 - v200 invalid font signature PK
+  ---
+  duration_ms: 0.589386
+  type: 'test'
+  ...
+# Subtest: v200 invalid font signature ttcf
+ok 127 - v200 invalid font signature ttcf
+  ---
+  duration_ms: 0.455819
+  type: 'test'
+  ...
+# Subtest: v200 font size guarded before file reads
+ok 128 - v200 font size guarded before file reads
+  ---
+  duration_ms: 0.827166
+  type: 'test'
+  ...
+# Subtest: v200 local selected font stays local
+ok 129 - v200 local selected font stays local
+  ---
+  duration_ms: 0.916912
+  type: 'test'
+  ...
+# Subtest: v200 configured same-site font fetch uses no cookies/no referrer
+ok 130 - v200 configured same-site font fetch uses no cookies/no referrer
+  ---
+  duration_ms: 19.627987
+  type: 'test'
+  ...
+# Subtest: v200 disallows third-party font even when operator misconfigures it
+ok 131 - v200 disallows third-party font even when operator misconfigures it
+  ---
+  duration_ms: 1.157212
+  type: 'test'
+  ...
+# Subtest: v200 404 font error is visible, not a silent success
+ok 132 - v200 404 font error is visible, not a silent success
+  ---
+  duration_ms: 1.303637
+  type: 'test'
+  ...
+# Subtest: v200 streamed same-site font enforces body and handles chunks
+ok 133 - v200 streamed same-site font enforces body and handles chunks
+  ---
+  duration_ms: 1.437123
+  type: 'test'
+  ...
+# Subtest: v200 font Content-Length oversized rejection
+ok 134 - v200 font Content-Length oversized rejection
+  ---
+  duration_ms: 1.577532
+  type: 'test'
+  ...
+# Subtest: v200 font fetch timeout exits loading
+ok 135 - v200 font fetch timeout exits loading
+  ---
+  duration_ms: 101.194738
+  type: 'test'
+  ...
+# Subtest: v200 cancellation prevents font request
+ok 136 - v200 cancellation prevents font request
+  ---
+  duration_ms: 1.298872
+  type: 'test'
+  ...
+# Subtest: v200 root site has no inline scripts, GAS bootstrap, or templates
+ok 137 - v200 root site has no inline scripts, GAS bootstrap, or templates
+  ---
+  duration_ms: 0.231948
+  type: 'test'
+  ...
+# Subtest: v200 release uses new version throughout live code
+ok 138 - v200 release uses new version throughout live code
+  ---
+  duration_ms: 0.400651
+  type: 'test'
+  ...
+# Subtest: v130 valid japanese time
+ok 139 - v130 valid japanese time
+  ---
+  duration_ms: 6.979951
+  type: 'test'
+  ...
+# Subtest: v130 validate japanese/minutes
+ok 140 - v130 validate japanese/minutes
+  ---
+  duration_ms: 2.324519
+  type: 'test'
+  ...
+# Subtest: v130 validate japanese/seconds
+ok 141 - v130 validate japanese/seconds
+  ---
+  duration_ms: 0.694126
+  type: 'test'
+  ...
+# Subtest: v130 validate japanese/periods
+ok 142 - v130 validate japanese/periods
+  ---
+  duration_ms: 0.743694
+  type: 'test'
+  ...
+# Subtest: v130 hidden fields ignored japanese
+ok 143 - v130 hidden fields ignored japanese
+  ---
+  duration_ms: 0.499412
+  type: 'test'
+  ...
+# Subtest: v130 valid canadian time
+ok 144 - v130 valid canadian time
+  ---
+  duration_ms: 0.338203
+  type: 'test'
+  ...
+# Subtest: v130 validate canadian/minutes
+ok 145 - v130 validate canadian/minutes
+  ---
+  duration_ms: 1.433511
+  type: 'test'
+  ...
+# Subtest: v130 validate canadian/overtimeMinutes
+ok 146 - v130 validate canadian/overtimeMinutes
+  ---
+  duration_ms: 0.431937
+  type: 'test'
+  ...
+# Subtest: v130 validate canadian/moves
+ok 147 - v130 validate canadian/moves
+  ---
+  duration_ms: 0.737687
+  type: 'test'
+  ...
+# Subtest: v130 hidden fields ignored canadian
+ok 148 - v130 hidden fields ignored canadian
+  ---
+  duration_ms: 0.970499
+  type: 'test'
+  ...
+# Subtest: v130 valid fischer time
+ok 149 - v130 valid fischer time
+  ---
+  duration_ms: 0.32787
+  type: 'test'
+  ...
+# Subtest: v130 validate fischer/minutes
+ok 150 - v130 validate fischer/minutes
+  ---
+  duration_ms: 1.863986
+  type: 'test'
+  ...
+# Subtest: v130 validate fischer/increment
+ok 151 - v130 validate fischer/increment
+  ---
+  duration_ms: 0.516725
+  type: 'test'
+  ...
+# Subtest: v130 hidden fields ignored fischer
+ok 152 - v130 hidden fields ignored fischer
+  ---
+  duration_ms: 0.170306
+  type: 'test'
+  ...
+# Subtest: v130 valid absolute time
+ok 153 - v130 valid absolute time
+  ---
+  duration_ms: 0.148026
+  type: 'test'
+  ...
+# Subtest: v130 validate absolute/minutes
+ok 154 - v130 validate absolute/minutes
+  ---
+  duration_ms: 0.445553
+  type: 'test'
+  ...
+# Subtest: v130 hidden fields ignored absolute
+ok 155 - v130 hidden fields ignored absolute
+  ---
+  duration_ms: 0.20604
+  type: 'test'
+  ...
+# Subtest: v130 valid byoyomi time
+ok 156 - v130 valid byoyomi time
+  ---
+  duration_ms: 0.149602
+  type: 'test'
+  ...
+# Subtest: v130 validate byoyomi/perMoveSeconds
+ok 157 - v130 validate byoyomi/perMoveSeconds
+  ---
+  duration_ms: 0.477823
+  type: 'test'
+  ...
+# Subtest: v130 hidden fields ignored byoyomi
+ok 158 - v130 hidden fields ignored byoyomi
+  ---
+  duration_ms: 0.260013
+  type: 'test'
+  ...
+# Subtest: v130 valid nhk time
+ok 159 - v130 valid nhk time
+  ---
+  duration_ms: 0.168187
+  type: 'test'
+  ...
+# Subtest: v130 validate nhk/perMoveSeconds
+ok 160 - v130 validate nhk/perMoveSeconds
+  ---
+  duration_ms: 0.486665
+  type: 'test'
+  ...
+# Subtest: v130 validate nhk/seconds
+ok 161 - v130 validate nhk/seconds
+  ---
+  duration_ms: 0.417533
+  type: 'test'
+  ...
+# Subtest: v130 validate nhk/periods
+ok 162 - v130 validate nhk/periods
+  ---
+  duration_ms: 1.624764
+  type: 'test'
+  ...
+# Subtest: v130 hidden fields ignored nhk
+ok 163 - v130 hidden fields ignored nhk
+  ---
+  duration_ms: 0.229228
+  type: 'test'
+  ...
+# Subtest: v130 OT 3x30 byo-yomi TM=600
+ok 164 - v130 OT 3x30 byo-yomi TM=600
+  ---
+  duration_ms: 0.184546
+  type: 'test'
+  ...
+# Subtest: v130 OT 30秒×3回 TM=600
+ok 165 - v130 OT 30秒×3回 TM=600
+  ---
+  duration_ms: 0.806889
+  type: 'test'
+  ...
+# Subtest: v130 OT 25/600 Canadian TM=600
+ok 166 - v130 OT 25/600 Canadian TM=600
+  ---
+  duration_ms: 0.20247
+  type: 'test'
+  ...
+# Subtest: v130 OT Canadian 5min/25 moves TM=600
+ok 167 - v130 OT Canadian 5min/25 moves TM=600
+  ---
+  duration_ms: 0.111834
+  type: 'test'
+  ...
+# Subtest: v130 OT Fischer 10 TM=600
+ok 168 - v130 OT Fischer 10 TM=600
+  ---
+  duration_ms: 0.076984
+  type: 'test'
+  ...
+# Subtest: v130 OT absolute TM=600
+ok 169 - v130 OT absolute TM=600
+  ---
+  duration_ms: 0.087727
+  type: 'test'
+  ...
+# Subtest: v130 OT 30s/move TM=
+ok 170 - v130 OT 30s/move TM=
+  ---
+  duration_ms: 0.067939
+  type: 'test'
+  ...
+# Subtest: v130 OT 30s/move TM=600
+ok 171 - v130 OT 30s/move TM=600
+  ---
+  duration_ms: 0.057878
+  type: 'test'
+  ...
+# Subtest: v130 OT NHK 30s + 10x60s TM=
+ok 172 - v130 OT NHK 30s + 10x60s TM=
+  ---
+  duration_ms: 0.070879
+  type: 'test'
+  ...
+# Subtest: v130 TM-only does not imply sudden death
+ok 173 - v130 TM-only does not imply sudden death
+  ---
+  duration_ms: 0.088697
+  type: 'test'
+  ...
+# Subtest: v130 unrecognized OT preserved verbatim
+ok 174 - v130 unrecognized OT preserved verbatim
+  ---
+  duration_ms: 0.0906
+  type: 'test'
+  ...
+# Subtest: v130 swiss legacy migrates to japanese
+ok 175 - v130 swiss legacy migrates to japanese
+  ---
+  duration_ms: 0.087252
+  type: 'test'
+  ...
+# Subtest: v130 page range normalizes and deduplicates
+ok 176 - v130 page range normalizes and deduplicates
+  ---
+  duration_ms: 0.612767
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 
+ok 177 - v130 reject page selector 
+  ---
+  duration_ms: 0.362106
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 0
+ok 178 - v130 reject page selector 0
+  ---
+  duration_ms: 0.170652
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 4
+ok 179 - v130 reject page selector 4
+  ---
+  duration_ms: 0.147424
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 3-2
+ok 180 - v130 reject page selector 3-2
+  ---
+  duration_ms: 0.083885
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 1,,2
+ok 181 - v130 reject page selector 1,,2
+  ---
+  duration_ms: 0.126783
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 1.5
+ok 182 - v130 reject page selector 1.5
+  ---
+  duration_ms: 0.103971
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector -1
+ok 183 - v130 reject page selector -1
+  ---
+  duration_ms: 0.074229
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector 1-99999999999999999
+ok 184 - v130 reject page selector 1-99999999999999999
+  ---
+  duration_ms: 0.072256
+  type: 'test'
+  ...
+# Subtest: v130 reject page selector a
+ok 185 - v130 reject page selector a
+  ---
+  duration_ms: 0.137456
+  type: 'test'
+  ...
+# Subtest: v130 first last custom union
+ok 186 - v130 first last custom union
+  ---
+  duration_ms: 0.513315
+  type: 'test'
+  ...
+# Subtest: v130 all overrides invalid custom range
+ok 187 - v130 all overrides invalid custom range
+  ---
+  duration_ms: 0.177707
+  type: 'test'
+  ...
+# Subtest: v130 selection empty permits no comments
+ok 188 - v130 selection empty permits no comments
+  ---
+  duration_ms: 0.134994
+  type: 'test'
+  ...
+# Subtest: v130 default note placement is last
+ok 189 - v130 default note placement is last
+  ---
+  duration_ms: 0.189338
+  type: 'test'
+  ...
+# Subtest: v130 one board deduplicates first and last
+ok 190 - v130 one board deduplicates first and last
+  ---
+  duration_ms: 0.278806
+  type: 'test'
+  ...
+# Subtest: v130 same note on all boards
+ok 191 - v130 same note on all boards
+  ---
+  duration_ms: 0.385495
+  type: 'test'
+  ...
+# Subtest: v130 individual notes match board numbers
+ok 192 - v130 individual notes match board numbers
+  ---
+  duration_ms: 0.520453
+  type: 'test'
+  ...
+# Subtest: v130 missing individual note does not reuse common text
+ok 193 - v130 missing individual note does not reuse common text
+  ---
+  duration_ms: 0.236214
+  type: 'test'
+  ...
+# Subtest: v130 publication off hides all notes
+ok 194 - v130 publication off hides all notes
+  ---
+  duration_ms: 0.395119
+  type: 'test'
+  ...
+# Subtest: v130 new match clears per-page comments
+ok 195 - v130 new match clears per-page comments
+  ---
+  duration_ms: 0.286778
+  type: 'test'
+  ...
+# Subtest: v130 long individual comment validation
+ok 196 - v130 long individual comment validation
+  ---
+  duration_ms: 0.581926
+  type: 'test'
+  ...
+# Subtest: v130 combined comment memory limit
+ok 197 - v130 combined comment memory limit
+  ---
+  duration_ms: 0.58243
+  type: 'test'
+  ...
+# Subtest: v130 adopted Horizontal layouts
+ok 198 - v130 adopted Horizontal layouts
+  ---
+  duration_ms: 1.236385
+  type: 'test'
+  ...
+# Subtest: v130 adopted Vertical layouts
+ok 199 - v130 adopted Vertical layouts
+  ---
+  duration_ms: 0.850553
+  type: 'test'
+  ...
+# Subtest: v130 local storage preference roundtrip
+ok 200 - v130 local storage preference roundtrip
+  ---
+  duration_ms: 2.688174
+  type: 'test'
+  ...
+# Subtest: v130 persistent allowlist excludes game data and private overrides
+ok 201 - v130 persistent allowlist excludes game data and private overrides
+  ---
+  duration_ms: 1.33104
+  type: 'test'
+  ...
+# Subtest: v130 encoded preferences restore kanji stash
+ok 202 - v130 encoded preferences restore kanji stash
+  ---
+  duration_ms: 1.450703
+  type: 'test'
+  ...
+# Subtest: v130 corrupted storage does not crash startup
+ok 203 - v130 corrupted storage does not crash startup
+  ---
+  duration_ms: 2.943483
+  type: 'test'
+  ...
+# Subtest: v130 storage errors returned on load and thrown on save
+ok 204 - v130 storage errors returned on load and thrown on save
+  ---
+  duration_ms: 1.392063
+  type: 'test'
+  ...
+# Subtest: v130 storage readback checked
+ok 205 - v130 storage readback checked
+  ---
+  duration_ms: 1.138925
+  type: 'test'
+  ...
+# Subtest: v130 reject bad preference null
+ok 206 - v130 reject bad preference null
+  ---
+  duration_ms: 1.447616
+  type: 'test'
+  ...
+# Subtest: v130 reject bad preference []
+ok 207 - v130 reject bad preference []
+  ---
+  duration_ms: 1.004592
+  type: 'test'
+  ...
+# Subtest: v130 reject bad preference {"app":"KifuPrintWeb","schema":99,"settings":{}}
+ok 208 - v130 reject bad preference {"app":"KifuPrintWeb","schema":99,"settings":{}}
+  ---
+  duration_ms: 0.999313
+  type: 'test'
+  ...
+# Subtest: v130 reject bad preference {"app":"other","schema":1,"settings":{}}
+ok 209 - v130 reject bad preference {"app":"other","schema":1,"settings":{}}
+  ---
+  duration_ms: 1.192633
+  type: 'test'
+  ...
+# Subtest: v130 reject bad preference {"app":"KifuPrintWeb","schema":1,"settings":{"showTitle":"true"}}
+ok 210 - v130 reject bad preference {"app":"KifuPrintWeb","schema":1,"settings":{"showTitle":"true"}}
+  ---
+  duration_ms: 2.232293
+  type: 'test'
+  ...
+# Subtest: v130 JSON size limit is bytes, not characters
+ok 211 - v130 JSON size limit is bytes, not characters
+  ---
+  duration_ms: 1.097428
+  type: 'test'
+  ...
+1..211
+# tests 211
+# suites 0
+# pass 211
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 209.517765

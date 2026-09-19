@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "CSP_bypassed": false,
+  "fixture": "generated standalone with script hashes, about:blank",
+  "exports": [
+    "PDF",
+    "PNG ZIP",
+    "JPG ZIP"
+  ],
+  "page_errors": [],
+  "CSP_violations": [],
+  "public_GitHub_verified": false
+}

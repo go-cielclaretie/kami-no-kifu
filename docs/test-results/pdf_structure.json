@@ -1,0 +1,167 @@
+{
+  "renderer": "PyMuPDF",
+  "dpi": 100,
+  "files": [
+    {
+      "file": "examples/horizontal.pdf",
+      "page_count": 3,
+      "producer": "Kifu Print Web 2.0.0",
+      "pages": [
+        {
+          "page": 1,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 2,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 3,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        }
+      ]
+    },
+    {
+      "file": "examples/vertical.pdf",
+      "page_count": 3,
+      "producer": "Kifu Print Web 2.0.0",
+      "pages": [
+        {
+          "page": 1,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 2,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 3,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        }
+      ]
+    },
+    {
+      "file": "examples/materials_replay.pdf",
+      "page_count": 1,
+      "producer": "Kifu Print Web 2.0.0",
+      "pages": [
+        {
+          "page": 1,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        }
+      ]
+    },
+    {
+      "file": "examples/time_controls.pdf",
+      "page_count": 6,
+      "producer": "Kifu Print Web 2.0.0",
+      "pages": [
+        {
+          "page": 1,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 2,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 3,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 4,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 5,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 6,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        }
+      ]
+    },
+    {
+      "file": "docs/LAYOUTS.pdf",
+      "page_count": 8,
+      "producer": "Kifu Print Web 2.0.0",
+      "pages": [
+        {
+          "page": 1,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 2,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 3,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 4,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 5,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 6,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 7,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        },
+        {
+          "page": 8,
+          "width_pt": 595.2755737304688,
+          "height_pt": 841.8897705078125,
+          "embedded_images": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0 (v1.1 regression suite)",
+  "browser": "Chromium 144.0.7559.96",
+  "check_count": 25,
+  "checks": [
+    "default title uses player names centered on every page",
+    "edited names reflected in title on all pages",
+    "download horizontal.pdf",
+    "title hidden on every page",
+    "title removal reclaims page space",
+    "vertical metadata with independent horizontal title",
+    "notes follow vertical metadata direction",
+    "download vertical.pdf",
+    "vertical fields preserve enabled fields and result",
+    "Latin IDs remain upright and stay within vertical columns",
+    "vertical notes have continuation pages",
+    "vertical long notes round-trip without clipping or loss",
+    "continuation page titles obey visibility setting",
+    "title visibility also applies to continuation pages",
+    "128 paper/orientation/writing-direction/annotation-position/stone combinations; exact grid center",
+    "capture text concise and correctly owned",
+    "16 Arabic labels centered by raster ink; 1/2/3-digit font sizes identical",
+    "all 900 three-digit labels fit; maximum ink-box diagonal is exactly 85% of diameter",
+    "100 kanji labels fit their full vertical ink boxes to 95% (font note applies)",
+    "legacy settings acquire new defaults",
+    "invalid direction/title rejected",
+    "UI reset restores title and horizontal text",
+    "download vertical_single.png",
+    "download vertical_single.jpg",
+    "new mobile controls present with no horizontal page overflow"
+  ],
+  "errors": [],
+  "annotation_matrix_count": 128,
+  "annotation_max_error_mm": 0,
+  "font_note": "Gyosho font unavailable. Kanji geometry tested with Japanese serif fallback; actual gyosho rendering and same-site licensed font setup not tested.",
+  "unverified": [
+    "GitHub Pages deployment",
+    "Android physical device",
+    "Safari/iOS"
+  ]
+}

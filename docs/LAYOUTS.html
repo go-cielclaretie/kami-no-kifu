@@ -1,0 +1,1670 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>対局情報レイアウト比較｜Kifu Print Web v2.0.0</title><style>
+*{box-sizing:border-box}body{margin:0;background:#eef1f3;color:#17232b;font:16px/1.75 system-ui,"Yu Gothic",sans-serif}header{background:#172a36;color:white;padding:22px max(24px,calc((100vw - 1120px)/2))}h1{font-size:24px;line-height:1.4;margin:0 0 8px}header p{font-size:13px;margin:0;color:#ccd7de}main{max-width:1168px;margin:24px auto;padding:0 24px}.toolbar{display:flex;gap:20px;align-items:end;flex-wrap:wrap;background:white;padding:18px;border-radius:8px}label{display:block;font-size:13px;font-weight:600}select,button{font:inherit;padding:8px 12px;border:1px solid #b4c1c8;border-radius:5px;background:white}button{background:#173e51;color:white;cursor:pointer}button:disabled{opacity:.5}#description{margin:18px 0 4px}small{color:#526773}#error{color:#a02015}canvas{display:block;width:min(100%,794px);height:auto;background:white;box-shadow:0 4px 20px #14233322;margin:22px auto 36px}.note{font-size:13px;margin-bottom:20px}</style>
+<header><h1>対局情報レイアウト比較</h1><p>横書き4種類・縦書き4種類 ／ v2.0.0 ／ 対局情報はタイトルと盤面の間、盤面の横幅以内。</p></header><main><div class="toolbar"><div><label for="variant">レイアウト</label><select id="variant"></select></div><div><label for="density">掲載する情報量</label><select id="density"><option value="all">全項目</option><option value="standard">標準（日時・場所・段級位）</option><option value="minimal">必須項目だけ</option></select></div><button id="savePdf">表示中の見本をPDF保存</button></div><p id="description"></p><small>空欄の枠は作らず、選んだ情報量で再配置する。A4縦・架空の100手。本体の表示設定で選択できる8種類と同じ描画処理。</small><p id="error" role="alert"></p><canvas id="canvas"></canvas><p class="note">縦書き：英字と名前中の数字は1文字ずつ正立。段級位の数字は縦中横。西暦は1桁ずつ、月・日は縦中横。コミ・勝敗の「.5目」は「半目／目半」。持ち時間は意味のまとまりで改列する。フォントを外部取得しない独立した比較ページ。</p></main><script>/* Kifu Print Web — SGF parser, rule checker and diagram model.
+ * All SGF processing is local. No dependencies. UMD export supports Node tests.
+ */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.KifuCore = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const LIMITS = Object.freeze({ bytes: 5 * 1024 * 1024, nodes: 12000, depth: 128,
+    games: 16, branches: 128, dimension: 25, pages: 300, field: 600, notes: 12000 });
+  const SINGLE = new Set(('B W KO MN PL C N DM GB GW HO UC V BM DO IT TE FF GM SZ CA AP ST AN BR BT CP DT EV GN GC HA KM ON OT PB PC PW RE RO RU SO TM US WR WT BL OB OW WL FG PM').split(' '));
+  const ROOT_ONLY = new Set(['FF', 'GM', 'SZ', 'CA', 'AP', 'ST']);
+  const POINTS = new Set('AB AW AE CR DD MA SL SQ TR TB TW VW'.split(' '));
+  const KNOWN = new Set([...SINGLE, ...POINTS, ...'AR LN LB'.split(' ')]);
+  const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  const first = (p, k, fallback = '') => own(p, k) ? p[k][0] : fallback;
+  const simple = s => String(s || '').replace(/[\r\n\t\f\v]/g, ' ').trim();
+  const warn = (a, msg) => { if (a.length < 80 && !a.includes(msg)) a.push(msg); };
+  class SgfError extends Error {
+    constructor(message, position = -1, kind = 'invalid') {
+      super(message); this.name = 'SgfError'; this.position = position; this.kind = kind;
+    }
+  }
+  function parse(text) {
+    if (typeof text !== 'string' || !text.trim()) throw new SgfError('SGFが空です。');
+    if (text.length > LIMITS.bytes) throw new SgfError('SGFが大きすぎます（上限5 MiB）。', -1, 'limit');
+    text = text.replace(/^\uFEFF/, '');
+    let i = 0, count = 0;
+    const warnings = [];
+    const ws = () => { while (i < text.length && /\s/.test(text[i])) i++; };
+    const fail = msg => {
+      const line = text.slice(0, i).split('\n').length;
+      const col = i - text.lastIndexOf('\n', i - 1);
+      throw new SgfError(`${msg}（${line}行 ${col}列）`, i);
+    };
+    function value() {
+      i++; // '['
+      let out = '';
+      while (i < text.length) {
+        let ch = text[i++];
+        if (ch === ']') return out;
+        if (ch === '\\') {
+          if (i >= text.length) fail('エスケープの直後にファイルが終わっています');
+          ch = text[i++];
+          if (ch === '\r' || ch === '\n') {
+            if ((ch === '\r' && text[i] === '\n') || (ch === '\n' && text[i] === '\r')) i++;
+          } else out += ch;
+        } else if (ch === '\r') {
+          if (text[i] === '\n') i++;
+          out += '\n';
+        } else if (ch === '\0') fail('NUL文字が含まれています');
+        else out += ch;
+      }
+      fail('プロパティ値を閉じる ] がありません');
+    }
+    function node() {
+      const pos = i++;
+      if (++count > LIMITS.nodes) throw new SgfError(`ノード数が上限${LIMITS.nodes}を超えています。`, pos, 'limit');
+      const props = Object.create(null);
+      ws();
+      while (i < text.length && /[A-Za-z]/.test(text[i])) {
+        let id = '';
+        while (i < text.length && /[A-Za-z]/.test(text[i])) id += text[i++];
+        if (id !== id.toUpperCase()) fail(`プロパティ名 ${id} は大文字で記述してください`);
+        if (own(props, id)) fail(`同じノードに ${id} が重複しています`);
+        ws();
+        if (text[i] !== '[') fail(`${id} の値を囲む [ ] がありません`);
+        const values = [];
+        while (text[i] === '[') { values.push(value()); ws(); }
+        props[id] = values;
+      }
+      return { props, pos, serial: count };
+    }
+    function tree(depth) {
+      if (depth > LIMITS.depth) throw new SgfError('分岐が深すぎます。', i, 'limit');
+      if (text[i] !== '(') fail('ゲーム木を開始する ( がありません');
+      i++; ws();
+      const nodes = [], children = [];
+      while (text[i] === ';') { nodes.push(node()); ws(); }
+      if (!nodes.length) fail('空のゲーム木は読み込めません');
+      while (text[i] === '(') { children.push(tree(depth + 1)); ws(); }
+      if (text[i] !== ')') fail('ゲーム木を閉じる ) がないか、予期しない文字があります');
+      i++;
+      return { nodes, children };
+    }
+    ws();
+    const games = [];
+    while (text[i] === '(') {
+      if (games.length >= LIMITS.games) throw new SgfError('1ファイル内の対局は16局までです。', i, 'limit');
+      games.push(tree(0)); ws();
+    }
+    if (!games.length) fail('SGFは (; で始まるゲーム木を含む必要があります');
+    if (i !== text.length) fail('ゲーム木の外に余分な文字があります');
+    return { games, warnings, nodeCount: count };
+  }
+  function decode(bytes, forced = 'auto') {
+    const data = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+    if (!data.length) throw new SgfError('選択したファイルは空です。');
+    if (data.length > LIMITS.bytes) throw new SgfError('ファイルは5 MiB以下にしてください。', -1, 'limit');
+    const warnings = [];
+    let encoding = forced;
+    if (forced === 'auto') {
+      if (data[0] === 0xff && data[1] === 0xfe) encoding = 'utf-16le';
+      else if (data[0] === 0xfe && data[1] === 0xff) encoding = 'utf-16be';
+      else if (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) encoding = 'utf-8';
+      else {
+        // Parse the byte-preserving representation; never mistake CA[...] in a comment for CA.
+        let declared = '';
+        try {
+          const latin = new TextDecoder('windows-1252').decode(data);
+          declared = first(parse(latin).games[0].nodes[0].props, 'CA').trim();
+        } catch (_) { /* The Unicode parser below reports structural errors. */ }
+        const aliases = { utf8: 'utf-8', utf_8: 'utf-8', gb2312: 'gb18030', gbk: 'gb18030',
+          sjis: 'shift_jis', shiftjis: 'shift_jis', 'shift-jis': 'shift_jis', cp932: 'shift_jis',
+          eucjp: 'euc-jp', latin1: 'windows-1252', 'iso-8859-1': 'windows-1252' };
+        if (declared) encoding = aliases[declared.toLowerCase()] || declared;
+        else {
+          try { new TextDecoder('utf-8', { fatal: true }).decode(data); encoding = 'utf-8'; }
+          catch (_) {
+            throw new SgfError('CA（文字コード指定）のない非UTF-8ファイルです。「文字コード」を選んで読み直してください。', -1, 'encoding');
+          }
+          warn(warnings, 'CA指定なし：UTF-8として読み込みました。文字化け時は文字コードを指定して読み直してください。');
+        }
+      }
+    }
+    let text;
+    try { text = new TextDecoder(encoding, { fatal: true }).decode(data); }
+    catch (_) { throw new SgfError(`文字コード ${encoding} では正しく復号できません。文字コードを選び直してください。`, -1, 'encoding'); }
+    if (text.includes('\uFFFD')) warn(warnings, '置換文字「�」が含まれています。名前などの文字化けを確認してください。');
+    return { text, encoding, warnings };
+  }
+  function dimensions(props) {
+    const s = first(props, 'SZ', '19');
+    if (!/^\d+(?::\d+)?$/.test(s)) throw new SgfError(`盤サイズ SZ[${s}] が不正です。`);
+    const parts = s.split(':').map(Number), w = parts[0], h = parts[1] || w;
+    if (w < 2 || h < 2 || w > LIMITS.dimension || h > LIMITS.dimension)
+      throw new SgfError('この版で扱える盤は縦横2〜25路です。26〜52路は未対応です。', -1, 'unsupported');
+    return { w, h };
+  }
+  function point(s, size, passAllowed = false) {
+    if (passAllowed && (s === '' || (s === 'tt' && size.w <= 19 && size.h <= 19))) return -1;
+    if (!/^[a-zA-Z]{2}$/.test(s)) throw new SgfError(`座標「${s}」が不正です。`);
+    const idx = ch => ch <= 'Z' ? ch.charCodeAt(0) - 65 + 26 : ch.charCodeAt(0) - 97;
+    const x = idx(s[0]), y = idx(s[1]);
+    if (x >= size.w || y >= size.h) throw new SgfError(`座標「${s}」は${size.w}×${size.h}路盤の外です。`);
+    return y * size.w + x;
+  }
+  function pointList(values, size, allowEmpty = false) {
+    const out = [], seen = new Set();
+    for (const s of values) {
+      if (s === '' && allowEmpty && values.length === 1) continue;
+      const parts = s.split(':');
+      if (parts.length > 2) throw new SgfError(`座標範囲「${s}」が不正です。`);
+      const p = point(parts[0], size), q = parts.length === 2 ? point(parts[1], size) : p;
+      const ax = p % size.w, ay = Math.floor(p / size.w), bx = q % size.w, by = Math.floor(q / size.w);
+      if (ax > bx || ay > by) throw new SgfError(`座標範囲「${s}」の開始と終了が逆です。`);
+      for (let y = ay; y <= by; y++) for (let x = ax; x <= bx; x++) {
+        const v = y * size.w + x;
+        if (seen.has(v)) throw new SgfError(`座標リスト内で ${coord(v, size)} が重複しています。`);
+        seen.add(v); out.push(v);
+      }
+    }
+    return out;
+  }
+  function coord(p, size) { return String.fromCharCode(97 + p % size.w) + String.fromCharCode(97 + Math.floor(p / size.w)); }
+  function standardKanji(n) {
+    const k = '〇一二三四五六七八九';
+    if (n < 10) return k[n];
+    if (n === 100) return '百';
+    return (n >= 20 ? k[Math.floor(n / 10)] : '') + '十' + (n % 10 ? k[n % 10] : '');
+  }
+  function compactKanji(n) {
+    if (!Number.isInteger(n) || n < 1 || n > 100) throw new RangeError('漢数字手数は1〜100です。');
+    if (n <= 20 || n % 10 === 0) return standardKanji(n);
+    return '一二三四五六七八九'[Math.floor(n / 10) - 1] + '一二三四五六七八九'[n % 10 - 1];
+  }
+  function listBranches(tree) {
+    const out = [];
+    function visit(t, path, nodes) {
+      const next = nodes.concat(t.nodes);
+      if (!t.children.length) {
+        if (out.length >= LIMITS.branches) throw new SgfError('分岐は1対局あたり128本までです。', -1, 'limit');
+        out.push({ path, nodes: next, label: out.length === 0 ? '本譜（最初の分岐）' : `変化 ${path.map(n => n + 1).join(' → ')}` });
+      } else t.children.forEach((c, j) => visit(c, path.concat(j), next));
+    }
+    visit(tree, [], []); return out;
+  }
+  function ruleFrom(s) {
+    s = String(s).toLowerCase();
+    if (/japan|日本/.test(s)) return 'japanese';
+    if (/chinese|china|中国|中國/.test(s)) return 'chinese';
+    return '';
+  }
+  function group(board, p, size) {
+    const color = board[p], stack = [p], stones = [], seen = new Set([p]), liberties = new Set();
+    while (stack.length) {
+      const a = stack.pop(); stones.push(a);
+      for (const n of neighbors(a, size)) {
+        if (!board[n]) liberties.add(n);
+        else if (board[n] === color && !seen.has(n)) { seen.add(n); stack.push(n); }
+      }
+    }
+    return { stones, liberties };
+  }
+  function neighbors(p, size) {
+    const x = p % size.w, y = Math.floor(p / size.w), a = [];
+    if (x) a.push(p - 1); if (x + 1 < size.w) a.push(p + 1);
+    if (y) a.push(p - size.w); if (y + 1 < size.h) a.push(p + size.w);
+    return a;
+  }
+  const hash = b => Array.from(b).join('');
+  function makeState(size, handicap) {
+    const board = new Uint8Array(size.w * size.h);
+    return { board, origins: new Int32Array(board.length), next: handicap >= 2 ? 2 : 1,
+      explicitPlayer: false, n: 0, captures: [0, 0, 0], previous: null, seen: new Set([hash(board)]),
+      handicap, setupChecked: false, lastPass: false, infoSeen: false };
+  }
+  function cloneState(s) {
+    return { ...s, board: s.board.slice(), origins: s.origins.slice(), captures: s.captures.slice(), seen: new Set(s.seen) };
+  }
+  function checkProps(node, size, isRoot, warnings) {
+    const p = node.props;
+    for (const [k, v] of Object.entries(p)) {
+      if (SINGLE.has(k) && v.length !== 1) throw new SgfError(`${k} は1つの値だけを持てます。`, node.pos);
+      if (!isRoot && ROOT_ONLY.has(k)) throw new SgfError(`${k} はルートノードにだけ記載できます。`, node.pos);
+      if (!KNOWN.has(k)) warn(warnings, `独自・未対応プロパティ ${k} は保存用の図には反映しません。`);
+      if (POINTS.has(k)) pointList(v, size, ['DD', 'VW', 'TB', 'TW'].includes(k));
+      if (k === 'LB') for (const s of v) {
+        if (s[2] !== ':') throw new SgfError('LBラベルは座標:文字の形式で指定してください。', node.pos);
+        point(s.slice(0, 2), size);
+      }
+      if (['AR', 'LN'].includes(k)) for (const s of v) {
+        if (!/^[A-Za-z]{2}:[A-Za-z]{2}$/.test(s)) throw new SgfError(`${k} の線の指定が不正です。`, node.pos);
+        point(s.slice(0, 2), size); point(s.slice(3), size);
+      }
+      if (['KM', 'TM', 'BL', 'WL', 'V'].includes(k) && !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(v[0]))
+        throw new SgfError(`${k}[${v[0]}] は数値で指定してください。`, node.pos);
+      if (['TM', 'BL', 'WL'].includes(k) && Number(v[0]) < 0) throw new SgfError(`${k} は0以上で指定してください。`, node.pos);
+      if (['HA', 'MN', 'OB', 'OW'].includes(k) && !/^\d+$/.test(v[0])) throw new SgfError(`${k} は0以上の整数で指定してください。`, node.pos);
+      if (['PL'].includes(k) && !['B', 'W'].includes(v[0])) throw new SgfError('PLはBまたはWで指定してください。', node.pos);
+      if (['KO', 'DO', 'IT'].includes(k) && v[0] !== '') throw new SgfError(`${k} は空の値 [] で指定してください。`, node.pos);
+      if (['DM', 'GB', 'GW', 'HO', 'UC', 'BM', 'TE'].includes(k) && !['1', '2'].includes(v[0])) throw new SgfError(`${k} は1または2で指定してください。`, node.pos);
+      if (['CR', 'DD', 'MA', 'SL', 'SQ', 'TR', 'TB', 'TW', 'VW', 'AR', 'LN', 'LB', 'FG', 'PM'].includes(k))
+        warn(warnings, 'SGFのマーク・地合いマーク・部分表示指定は印刷しません。着手から棋譜図を作成します。');
+    }
+    if (own(p, 'B') && own(p, 'W')) throw new SgfError('同じノードにBとWを同時に記載できません。', node.pos);
+    const move = own(p, 'B') || own(p, 'W');
+    if (move && ['AB', 'AW', 'AE', 'PL'].some(k => own(p, k))) throw new SgfError('着手と初期配置・PLを同じノードに混在できません。', node.pos);
+    if (own(p, 'KO') && !move) throw new SgfError('KOは着手のあるノードに記載してください。', node.pos);
+    if (own(p, 'TB') && own(p, 'TW')) {
+      const black = new Set(pointList(p.TB, size, true));
+      if (pointList(p.TW, size, true).some(q => black.has(q))) throw new SgfError('同一地点を黒地と白地の両方に指定しています。', node.pos);
+    }
+    if (own(p, 'MN')) warn(warnings, 'MNによる表示番号の変更は採用せず、B/Wの実手順をパス込みで1から数えます。');
+  }
+  function checkSetup(s, size) {
+    if (s.setupChecked) return;
+    const checked = new Set();
+    for (let p = 0; p < s.board.length; p++) if (s.board[p] && !checked.has(p)) {
+      const g = group(s.board, p, size); g.stones.forEach(q => checked.add(q));
+      if (!g.liberties.size) throw new SgfError(`初期配置の ${coord(p, size)} に呼吸点のない石があります。`);
+    }
+    const black = Array.from(s.board).filter(v => v === 1).length;
+    if (s.handicap >= 2 && black !== s.handicap)
+      throw new SgfError(`HA[${s.handicap}] と初期配置の黒石${black}個が一致しません。置石の座標ABが必要です。`);
+    s.setupChecked = true;
+  }
+  function applyNode(s, node, size, rule, warnings) {
+    const p = node.props;
+    const setup = ['AB', 'AW', 'AE', 'PL'].some(k => own(p, k));
+    if (setup) {
+      if (s.n) throw new SgfError('対局途中のAB/AW/AE/PLによる局面編集は、この印刷版では未対応です（SGF自体が不正とは限りません）。', node.pos, 'unsupported');
+      const occupied = new Set();
+      for (const [k, color] of [['AE', 0], ['AB', 1], ['AW', 2]]) if (own(p, k)) {
+        for (const q of pointList(p[k], size)) {
+          if (occupied.has(q)) throw new SgfError(`初期配置 ${coord(q, size)} の指定が重複・競合しています。`, node.pos);
+          occupied.add(q); s.board[q] = color; s.origins[q] = 0;
+        }
+      }
+      if (own(p, 'PL')) { s.next = first(p, 'PL') === 'B' ? 1 : 2; s.explicitPlayer = true; }
+      else if (!s.explicitPlayer) {
+        const b = Array.from(s.board).filter(v => v === 1).length, w = s.board.includes(2);
+        s.next = s.handicap >= 2 || (b >= 2 && !w) ? 2 : 1;
+      }
+      s.seen = new Set([hash(s.board)]); s.previous = null; s.setupChecked = false;
+    }
+    const color = own(p, 'B') ? 1 : own(p, 'W') ? 2 : 0;
+    if (!color) return null;
+    checkSetup(s, size);
+    if (color !== s.next) throw new SgfError(`${s.n + 1}手目：手番が不正です。${s.next === 1 ? '黒' : '白'}番のところに${color === 1 ? '黒' : '白'}の着手があります。`, node.pos);
+    const q = point(first(p, color === 1 ? 'B' : 'W'), size, true), old = hash(s.board);
+    const event = { n: s.n + 1, color, p: q, captured: [], pass: q < 0 };
+    if (q >= 0) {
+      if (s.board[q]) throw new SgfError(`${event.n}手目：${coord(q, size)} は既に石がある地点です。`, node.pos);
+      const next = s.board.slice(); next[q] = color;
+      const enemy = 3 - color;
+      for (const a of neighbors(q, size)) if (next[a] === enemy) {
+        const g = group(next, a, size);
+        if (!g.liberties.size) for (const t of g.stones) { next[t] = 0; event.captured.push(t); }
+      }
+      if (!group(next, q, size).liberties.size) throw new SgfError(`${event.n}手目：${coord(q, size)} は自殺手です。`, node.pos);
+      const key = hash(next);
+      if (key === s.previous) throw new SgfError(`${event.n}手目：コウの即時取り返しです。`, node.pos);
+      if (rule === 'chinese' && s.seen.has(key)) throw new SgfError(`${event.n}手目：過去と同じ盤面になるため、中国ルール用の同形反復禁止検査に不合格です。`, node.pos);
+      if (rule !== 'chinese' && s.seen.has(key)) warn(warnings, '長周期の同形反復があります。日本ルールでの無勝負・合意などの裁定は自動判定しません。');
+      s.board = next; s.origins[q] = event.n;
+      event.captured.forEach(t => { s.origins[t] = 0; });
+      s.captures[color] += event.captured.length; s.seen.add(key);
+    }
+    if (q < 0 && s.lastPass) warn(warnings, '連続パスがあります。終局の合意・再開の可否は自動判定しません。');
+    s.previous = old; s.n++; s.next = 3 - color; s.lastPass = q < 0;
+    event.captures = s.captures.slice();
+    return event;
+  }
+  function validateGame(tree, ruleOverride = '') {
+    const warnings = [], errors = [];
+    let size, branches;
+    const root = tree.nodes[0].props;
+    try {
+      const gm = first(root, 'GM', '1'), ff = first(root, 'FF', '4');
+      if (gm !== '1') throw new SgfError(`GM[${gm}] は囲碁ではありません。`, -1, 'unsupported');
+      if (!['1', '2', '3', '4'].includes(ff)) throw new SgfError(`FF[${ff}] は未対応です。`, -1, 'unsupported');
+      if (ff !== '4' || !own(root, 'FF')) warn(warnings, '旧形式またはFF指定なしのSGFを互換読み込みしています。');
+      size = dimensions(root); branches = listBranches(tree);
+    } catch (e) { return { ok: false, errors: [e.message], errorKinds: [e.kind || 'invalid'], warnings, size: null, branches: [] }; }
+    const inferred = ruleFrom(first(root, 'RU'));
+    const rule = ruleOverride || inferred || 'japanese';
+    if (!inferred && !ruleOverride) warn(warnings, 'ルール未確定：基本的な着手検査のみ実施しました。対局情報でルールを選ぶと再検査します。');
+    if (first(root, 'RU') && !inferred && !ruleOverride) warn(warnings, `RU[${first(root, 'RU')}] は日本／中国に自動分類できません。手動で選択してください。`);
+    const ha = Number(first(root, 'HA', '0'));
+    if (own(root, 'HA') && ha < 2) warn(warnings, 'HA[0]／HA[1] は互換扱いです。置石はABの指定だけから再現します。');
+    const kinds = [];
+    function visit(t, s, path, isRootTree) {
+      for (let j = 0; j < t.nodes.length; j++) {
+        const node = t.nodes[j];
+        try {
+          checkProps(node, size, isRootTree && j === 0, warnings);
+          if (own(node.props, 'HA') && !(isRootTree && j === 0)) throw new SgfError('この版ではHA（置石数）はルートに指定してください。', node.pos, 'unsupported');
+          applyNode(s, node, size, rule, warnings);
+        } catch (e) {
+          if (errors.length < 40) { errors.push(`${path || '本譜'} / ノード${node.serial}：${e.message}`); kinds.push(e.kind || 'invalid'); }
+          return;
+        }
+      }
+      if (!t.children.length) {
+        try { checkSetup(s, size); } catch (e) { errors.push(`${path || '本譜'}：${e.message}`); kinds.push(e.kind || 'invalid'); }
+      }
+      t.children.forEach((child, n) => visit(child, cloneState(s), `${path ? path + ' → ' : '分岐 '}${n + 1}`, false));
+    }
+    visit(tree, makeState(size, ha), '', true);
+    return { ok: !errors.length, errors, errorKinds: kinds, warnings, size, branches, rule, inferredRule: inferred };
+  }
+  function replay(tree, branchIndex = 0, rule = '') {
+    const result = validateGame(tree, rule);
+    if (!result.ok) throw new SgfError(result.errors[0]);
+    const branch = result.branches[branchIndex];
+    if (!branch) throw new SgfError('指定した分岐がありません。');
+    const s = makeState(result.size, Number(first(tree.nodes[0].props, 'HA', '0')));
+    const events = [], snapshots = [];
+    let initial = null;
+    for (const node of branch.nodes) {
+      const isMove = own(node.props, 'B') || own(node.props, 'W');
+      if (isMove && !initial) { initial = { board: s.board.slice(), origins: s.origins.slice(), captures: [0, 0, 0] }; snapshots.push(initial); }
+      const event = applyNode(s, node, result.size, result.rule, []);
+      if (event) { events.push(event); snapshots.push({ board: s.board.slice(), origins: s.origins.slice(), captures: s.captures.slice() }); }
+    }
+    if (!initial) { initial = { board: s.board.slice(), origins: s.origins.slice(), captures: [0, 0, 0] }; snapshots.push(initial); }
+    return { ...result, events, snapshots, initial, total: events.length, branch, branchIndex };
+  }
+  function parseResult(raw) {
+    const s = simple(raw);
+    if (!s || s === '?') return '';
+    if (/^(0|draw|jigo)$/i.test(s)) return '持碁';
+    if (/^void$/i.test(s)) return '無勝負';
+    let m = /^([BW])\+(.+)$/i.exec(s);
+    if (m) {
+      const winner = m[1].toUpperCase() === 'B' ? '黒' : '白', v = m[2];
+      if (/^(R|Resign)$/i.test(v)) return `${winner}中押し勝ち`;
+      if (/^(T|Time)$/i.test(v)) return `${winner}時間切れ勝ち`;
+      if (/^(F|Forfeit)$/i.test(v)) return `${winner}反則勝ち`;
+      if (/^\d+(?:\.\d+)?$/.test(v)) return `${winner}${Number(v)}目勝ち`;
+    }
+    // Nonstandard Chinese results: convert only when the unit 子 is explicit.
+    m = /^([黒黑白BW])(?:\+)?\s*(\d+(?:\.\d+)?|\d+\/\d+|\d+\s+\d+\/\d+)\s*子(?:勝ち|胜|勝)?$/i.exec(s);
+    if (m) {
+      const v = m[2]; let n;
+      if (v.includes('/')) {
+        const a = /^(?:(\d+)\s+)?(\d+)\/(\d+)$/.exec(v);
+        if (!a || Number(a[3]) === 0) return s;
+        n = Number(a[1] || 0) + Number(a[2]) / Number(a[3]);
+      } else n = Number(v);
+      return `${/[黒黑B]/i.test(m[1]) ? '黒' : '白'}${Number((n * 2).toFixed(6))}目勝ち`;
+    }
+    m = /^([黒黑白])(?:中盘|中盤)(?:胜|勝|勝ち)$/.exec(s);
+    if (m) return `${m[1] === '白' ? '白' : '黒'}中押し勝ち`;
+    return s;
+  }
+  // OT is free text in SGF. Only explicit, recognized formats are mapped.
+  // Main time alone does not prove sudden death; leave the mode for confirmation.
+  const TIME_CONTROLS = Object.freeze({
+    japanese: { label: '日本式', fields: [['minutes', '持ち時間（分）', 0], ['seconds', '秒読み（秒）', .001], ['periods', '回数（回）', 1, true]] },
+    canadian: { label: 'カナダ式', fields: [['minutes', '持ち時間（分）', 0], ['overtimeMinutes', '予備時間（分）', .001], ['moves', '手数（手）', 1, true]] },
+    fischer: { label: 'フィッシャー式', fields: [['minutes', '持ち時間（分）', 0], ['increment', '加算時間（秒）', 0]] },
+    absolute: { label: '切れ負け', fields: [['minutes', '持ち時間（分）', 0]] },
+    byoyomi: { label: '秒読み', fields: [['perMoveSeconds', '一手あたり（秒）', .001]] },
+    nhk: { label: 'NHK杯式', fields: [['perMoveSeconds', '一手あたり（秒）', .001], ['seconds', '考慮時間（秒）', .001], ['periods', '回数（回）', 1, true]] }
+  });
+  function normalizeTime(time) {
+    const out = { mode: '', minutes: '', increment: '', seconds: '', periods: '', overtimeMinutes: '', moves: '', perMoveSeconds: '', ...time };
+    if (out.mode === 'swiss') out.mode = 'japanese'; // v1.2 form label migration
+    return out;
+  }
+  function parseTime(tm, ot) {
+    const base = tm !== '' && Number.isFinite(Number(tm)) ? String(Number(tm) / 60) : '';
+    const out = normalizeTime({ enabled: tm !== '' || !!ot, minutes: base, raw: ot || '', recognized: !ot });
+    const t = simple(ot); let m;
+    // NHK: require the per-move allowance and consideration period explicitly.
+    if ((m = /^(?:NHK(?:杯)?(?:式)?)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*(?:s|sec|秒)\s*\+\s*(\d+)\s*[x×*]\s*(\d+(?:\.\d+)?)\s*(?:s|sec|秒)$/i.exec(t))) {
+      Object.assign(out, { mode: 'nhk', perMoveSeconds: m[1], periods: m[2], seconds: m[3], recognized: true });
+    } else if ((m = /^(?:fischer|フィッシャー(?:式)?)\s*[:：+]?\s*(\d+(?:\.\d+)?)\s*(?:s|sec|秒)?$/i.exec(t))) {
+      Object.assign(out, { mode: 'fischer', increment: m[1], recognized: true });
+    } else if ((m = /^(\d+)\s*\/\s*(\d+(?:\.\d+)?)\s*(s|sec|秒|m|min|分)?\s*canadian$/i.exec(t))) {
+      Object.assign(out, { mode: 'canadian', moves: m[1], overtimeMinutes: String(Number(m[2]) / (/^(m|min|分)$/i.test(m[3] || '') ? 1 : 60)), recognized: true });
+    } else if ((m = /^(?:canadian|カナダ式)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*(s|sec|秒|m|min|分)\s*\/\s*(\d+)\s*(?:moves?|手)?$/i.exec(t))) {
+      Object.assign(out, { mode: 'canadian', moves: m[3], overtimeMinutes: String(Number(m[1]) / (/^(m|min|分)$/i.test(m[2]) ? 1 : 60)), recognized: true });
+    } else if (/^(?:absolute|sudden[- ]?death|切れ負け)$/i.test(t)) {
+      Object.assign(out, { mode: 'absolute', recognized: true });
+    } else if ((m = /^(\d+(?:\.\d+)?)\s*(?:s|sec|秒)\s*(?:\/\s*move|per\s+move|一手あたり)$/i.exec(t)) ||
+               (m = /^(?:秒読み|一手あたり)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*(?:s|sec|秒)$/i.exec(t))) {
+      // With a nonzero main clock this is Japanese one-period overtime,
+      // not the "no main time" per-move-only form.
+      if (base !== '' && Number(base) > 0) Object.assign(out, { mode: 'japanese', seconds: m[1], periods: '1', recognized: true });
+      else Object.assign(out, { mode: 'byoyomi', perMoveSeconds: m[1], recognized: true });
+    } else if ((m = /^(\d+)\s*[x×*]\s*(\d+(?:\.\d+)?)\s*(?:s|sec|秒)?(?:\s*byo.?yomi)?$/i.exec(t)) ||
+               (m = /^(?:byo.?yomi|日本式|秒読み)\s*[:：]?\s*(\d+)\s*[x×*]\s*(\d+(?:\.\d+)?)\s*(?:s|sec|秒)?$/i.exec(t))) {
+      Object.assign(out, { mode: 'japanese', periods: m[1], seconds: m[2], recognized: true });
+    } else if ((m = /^(\d+(?:\.\d+)?)\s*秒\s*[x×*]\s*(\d+)\s*回?$/.exec(t))) {
+      Object.assign(out, { mode: 'japanese', seconds: m[1], periods: m[2], recognized: true });
+    }
+    return out;
+  }
+  // Page selectors address board diagrams, never continuation pages. This
+  // prevents pagination/selection feedback loops for long comments.
+  function parsePageNumbers(text, count) {
+    const result = new Set();
+    const normalized = String(text || '').replace(/[０-９]/g, c => String(c.charCodeAt(0) - 0xff10)).replace(/[，、]/g, ',').replace(/[〜～－–]/g, '-').trim();
+    if (!normalized) throw new SgfError('任意ページの番号を入力してください（例：2,4-6）。');
+    for (const part of normalized.split(',')) {
+      const m = /^\s*(\d+)\s*(?:-\s*(\d+)\s*)?$/.exec(part);
+      if (!m) throw new SgfError('任意ページは「2,4-6」のように指定してください。');
+      const a = Number(m[1]), b = Number(m[2] || m[1]);
+      if (!Number.isSafeInteger(a) || !Number.isSafeInteger(b) || a < 1 || b < a || b > count)
+        throw new SgfError(`任意ページは1〜${count}の範囲で指定してください。`);
+      for (let n = a; n <= b; n++) result.add(n);
+    }
+    return Array.from(result).sort((a, b) => a - b);
+  }
+  function notePages(input, count) {
+    const s = normalizeSettings(input), p = s.notesPlacement, selected = new Set();
+    if (p.all) return Array.from({ length: count }, (_, i) => i + 1);
+    if (p.first) selected.add(1);
+    if (p.last) selected.add(count);
+    if (p.custom) parsePageNumbers(s.notesPageNumbers, count).forEach(n => selected.add(n));
+    return Array.from(selected).sort((a, b) => a - b);
+  }
+  function notesForPage(m, input, page, count) {
+    if (!m.include.notes || !notePages(input, count).includes(page)) return '';
+    const s = normalizeSettings(input);
+    return String(s.notesPlacement.all && s.notesAllMode === 'individual' ? (m.notesByPage || {})[page] || '' : m.notes || '');
+  }
+  function metadata(nodes) {
+    const props = Object.create(null);
+    for (const node of nodes) for (const [k, v] of Object.entries(node.props)) if (!own(props, k)) props[k] = v;
+    const get = k => simple(first(props, k));
+    function player(name, rank) {
+      const match = /^(.*?)\s*[（(]((?:\d+|[一二三四五六七八九十百]+)(?:級|段|級位)|初段)[）)]\s*$/i.exec(name);
+      if (match && (!rank || rank === match[2])) return [match[1].trim(), rank || match[2]];
+      // Numeric English SGF ranks in parentheses, e.g. (10k).
+      const en = /^(.*?)\s*[（(](\d+\s*[dkp])[）)]\s*$/i.exec(name);
+      if (en && (!rank || rank === en[2])) return [en[1].trim(), rank || en[2]];
+      return [name, rank];
+    }
+    const [black, blackRank] = player(get('PB'), get('BR'));
+    const [white, whiteRank] = player(get('PW'), get('WR'));
+    const ha = Number(get('HA') || 0), komi = get('KM');
+    // KM[0] alone does not prove 定先. Do not silently invent this mandatory field.
+    const handicap = ha >= 2 ? `${ha}子局` : komi !== '' && Number(komi) !== 0 ? '互先' : '';
+    const time = parseTime(get('TM'), get('OT'));
+    const m = { event: get('EV'), place: get('PC'), date: get('DT'), black, blackRank, white, whiteRank,
+      handicap, rule: ruleFrom(get('RU')), komi, result: parseResult(get('RE')), notes: '', notesByPage: {}, time,
+      originalRule: get('RU'), originalResult: get('RE'), originalHandicap: get('HA'), include: {} };
+    for (const k of ['event', 'place', 'date', 'blackRank', 'whiteRank', 'notes']) m.include[k] = !!m[k];
+    m.include.time = time.enabled;
+    // Notes start empty but are ready for immediate publication when entered.
+    m.include.notes = true;
+    return m;
+  }
+  function defaults() {
+    return { showTitle: true, infoDirection: 'horizontal', infoLayoutHorizontal: 'balanced', infoLayoutVertical: 'balanced',
+      notesPlacement: { first: false, last: true, custom: false, all: false }, notesPageNumbers: '', notesAllMode: 'same', mode: 'all', split: '100', customSplit: 100, coordinates: true,
+      positions: { top: true, bottom: false, right: false, left: true }, coordFormat: 'num-kanji',
+      numbers: true, numberStyle: 'arabic', boardColor: 'bw', customBoard: '#e5c47d', grain: 'plain',
+      stoneColor: 'bw', blackColor: '#171717', whiteColor: '#ffffff', blackPattern: 'plain', whitePattern: 'plain',
+      shadow: false, captures: 'show', repeats: true, repeatBracket: 'round', repeatPosition: 'bottom',
+      repeatStones: false, repeatStoneStyle: 'beside', paper: 'A4', orientation: 'portrait', format: 'pdf', dpi: 300 };
+  }
+  function normalizeSettings(input) {
+    const base = defaults();
+    const s = { ...base, ...JSON.parse(JSON.stringify(input || {})) };
+    s.positions = { ...base.positions, ...s.positions };
+    s.notesPlacement = { ...base.notesPlacement, ...s.notesPlacement };
+    // Migrate v1.0/v1.1's radio setting without treating 'hide' as truthy.
+    if (s.repeatStones === 'show' || s.repeatStones === 'hide') s.repeatStones = s.repeatStones === 'show';
+    const locked = s.numbers && s.numberStyle === 'kanji';
+    if (locked) {
+      if (!s.paginationBeforeKanji) s.paginationBeforeKanji = { mode: s.mode, split: s.split, customSplit: s.customSplit };
+      s.mode = 'split'; s.split = '100'; s.customSplit = 100;
+    } else if (s.paginationBeforeKanji) {
+      const old = s.paginationBeforeKanji;
+      s.mode = old.mode; s.split = old.split; s.customSplit = old.customSplit;
+      delete s.paginationBeforeKanji;
+    }
+    return s;
+  }
+  function validateSettings(input) {
+    const s = normalizeSettings(input), e = [];
+    const choices = { infoLayoutHorizontal: ['balanced', 'table', 'cards', 'bands'], infoLayoutVertical: ['balanced', 'table', 'tiles', 'focus'], notesAllMode: ['same', 'individual'], infoDirection: ['horizontal', 'vertical'], mode: ['all', 'split'], split: ['50', '100', 'custom'], numberStyle: ['arabic', 'kanji'],
+      coordFormat: ['num-kanji', 'lower-lower', 'upper-upper', 'num-lower', 'num-upper'],
+      boardColor: ['bw', 'kaya-new', 'kaya-old', 'hiba', 'katsura', 'custom'], grain: ['plain', 'masame', 'itame'],
+      stoneColor: ['bw', 'custom'], blackPattern: ['plain', 'glass', 'nachi', 'agate'], whitePattern: ['plain', 'glass', 'shell', 'agate'],
+      captures: ['show', 'hide'], repeatBracket: ['round', 'square'], repeatPosition: ['top', 'bottom', 'right', 'left'],
+      repeatStoneStyle: ['beside', 'onStone'], paper: ['A3', 'A4', 'A5', 'B5'], orientation: ['portrait', 'landscape'], format: ['pdf', 'jpg', 'png'] };
+    for (const k of ['first', 'last', 'custom', 'all']) if (typeof s.notesPlacement[k] !== 'boolean') e.push('所感の掲載ページ設定が不正です。');
+    if (typeof s.notesPageNumbers !== 'string' || s.notesPageNumbers.length > 1000) e.push('任意ページの指定が不正です。');
+    for (const k of ['coordinates', 'numbers', 'shadow', 'repeats']) if (typeof s[k] !== 'boolean') e.push(`設定 ${k} が不正です。`);
+    for (const k of ['top', 'bottom', 'right', 'left']) if (typeof s.positions[k] !== 'boolean') e.push('座標の表示位置が不正です。');
+    if (typeof s.repeatStones !== 'boolean') e.push('碁石の表示設定が不正です。');
+    if (typeof s.showTitle !== 'boolean') e.push('タイトル表示の設定が不正です。');
+    for (const [k, allowed] of Object.entries(choices)) if (!allowed.includes(s[k])) e.push(`設定 ${k} が不正です。`);
+    if (s.mode === 'split' && s.split === 'custom' && (!Number.isInteger(Number(s.customSplit)) || Number(s.customSplit) < 1 || Number(s.customSplit) > 10000)) e.push('分割手数は1〜10000の整数で入力してください。');
+    for (const k of ['customBoard', 'blackColor', 'whiteColor']) if (!/^#[0-9a-f]{6}$/i.test(s[k])) e.push('色は#RRGGBBの形式で指定してください。');
+    if (![150, 300, 600].includes(Number(s.dpi))) e.push('解像度は150・300・600 dpiから選択してください。');
+    return e;
+  }
+  function validateMetadata(m) {
+    const e = [];
+    for (const [k, label] of [['black', '黒番名前'], ['white', '白番名前'], ['handicap', '手合い'], ['result', '勝敗']])
+      if (!String(m[k] || '').trim()) e.push(`${label}を入力してください。`);
+    if (!['japanese', 'chinese'].includes(m.rule)) e.push('ルールを選択してください。');
+    if (m.komi === '' || !Number.isFinite(Number(m.komi))) e.push('コミを数値で入力してください（なしは0）。');
+    for (const [k, v] of Object.entries(m)) if (typeof v === 'string' && k !== 'notes' && v.length > LIMITS.field) e.push(`${k}が長すぎます（600文字以内）。`);
+    if (m.notes.length > LIMITS.notes) e.push('所感は12000文字以内で入力してください。');
+    for (const [page, text] of Object.entries(m.notesByPage || {})) {
+      if (!/^\d+$/.test(page) || Number(page) < 1 || Number(page) > LIMITS.pages || typeof text !== 'string' || text.length > LIMITS.notes)
+        e.push('ページ別所感は各12000文字以内で入力してください。');
+    }
+    if (Object.values(m.notesByPage || {}).reduce((n, t) => n + String(t).length, 0) > 120000) e.push('ページ別所感は合計120000文字以内で入力してください。');
+    if (m.include.time) {
+      const t = normalizeTime(m.time), spec = TIME_CONTROLS[t.mode];
+      if (!spec) e.push('持ち時間の方式を選択してください。');
+      else for (const [key, label, min, integer] of spec.fields) {
+        const v = t[key];
+        if (v == null || String(v).trim() === '' || !Number.isFinite(Number(v)) || Number(v) < min || (integer && !Number.isInteger(Number(v))))
+          e.push(`${label}を${integer ? '整数' : '数値'}で入力してください（${min}以上）。`);
+      }
+    }
+    return e;
+  }
+  function diagrams(model, input) {
+    const s = normalizeSettings(input), errors = validateSettings(s);
+    if (errors.length) throw new SgfError(errors[0]);
+    const step = s.mode === 'all' ? Math.max(1, model.total) : Number(s.split === 'custom' ? s.customSplit : s.split);
+    const count = Math.max(1, Math.ceil(model.total / step));
+    if (count > LIMITS.pages) throw new SgfError(`分割後の棋譜図が${count}枚になります。上限${LIMITS.pages}枚以内になるよう分割手数を増やしてください。`, -1, 'limit');
+    const out = [], previousVisit = new Int32Array(model.initial.board.length);
+    let consumed = 0;
+    for (let page = 0; page < count; page++) {
+      const start = page * step + 1, end = Math.min(model.total, (page + 1) * step);
+      const snapshot = model.snapshots[start - 1] || model.initial;
+      while (consumed < start - 1) { const e = model.events[consumed++]; if (e.p >= 0) previousVisit[e.p] = e.n; }
+      const stones = new Map(), repeats = [], passes = [];
+      snapshot.board.forEach((color, p) => { if (color) stones.set(p, { p, color, n: 0, absolute: snapshot.origins[p], carried: true }); });
+      for (let j = start - 1; j < end; j++) {
+        const e = model.events[j];
+        if (e.pass) { passes.push(e); continue; }
+        const anchor = stones.get(e.p), prior = previousVisit[e.p];
+        if (anchor || prior) {
+          const ref = anchor && anchor.absolute ? anchor.absolute : prior;
+          repeats.push({ ...e, ref, refColor: (anchor && anchor.color) || (ref && model.events[ref - 1] ? model.events[ref - 1].color : snapshot.board[e.p]) || e.color, priorPage: !!ref && ref < start, setup: !ref,
+            referenceCoord: coord(e.p, model.size) });
+        }
+        if (!anchor) stones.set(e.p, { p: e.p, color: e.color, n: e.n, absolute: e.n, carried: false });
+        previousVisit[e.p] = e.n;
+      }
+      consumed = end;
+      const final = model.snapshots[end] || model.initial;
+      out.push({ start: model.total ? start : 0, end, page: page + 1, count, stones: Array.from(stones.values()),
+        repeats, passes, captures: final.captures, size: model.size, total: model.total });
+    }
+    return out;
+  }
+  function moveLabel(n, start, style) { return style === 'kanji' ? compactKanji(n - start + 1) : String(n); }
+  function repeatText(e, d, s) {
+    const style = s.numbers ? s.numberStyle : 'arabic';
+    const n = moveLabel(e.n, d.start, style);
+    const ref = e.setup ? `置石:${e.referenceCoord}` : e.priorPage ? `前譜${e.ref}:${e.referenceCoord}` : moveLabel(e.ref, d.start, style);
+    return s.repeatBracket === 'square' ? `${n}[${ref}]` : `${n}(${ref})`;
+  }
+  return { LIMITS, SgfError, parse, decode, dimensions, point, pointList, coord, standardKanji, compactKanji,
+    listBranches, ruleFrom, group, neighbors, hash, makeState, applyNode, validateGame, replay,
+    parseResult, parseTime, normalizeTime, TIME_CONTROLS, parsePageNumbers, notePages, notesForPage, metadata, defaults, normalizeSettings, validateSettings, validateMetadata,
+    diagrams, moveLabel, repeatText, first };
+});
+
+/* Shared Canvas renderer. Coordinates are millimetres; preview and export use
+ * the same page plan. Textures are deterministic; flat-sawn grain is reconstructed from a user-provided photograph.
+ */
+(function (root) {
+  'use strict';
+  const K = root.KifuCore;
+  const itameImage = new Image();
+  itameImage.crossOrigin = 'anonymous';
+  let textureError = '';
+  const assetsReady = new Promise(resolve => {
+    itameImage.onload = () => resolve(true);
+    itameImage.onerror = () => { textureError = '板目の画像素材を読み込めません。ページを再読み込みしてください。'; resolve(false); };
+    if (root.KifuAssets && root.KifuAssets.itame) itameImage.src = root.KifuAssets.itame;
+    else { textureError = '板目の画像素材がありません。assets/itame-grain.png の配置を確認してください。'; resolve(false); }
+  });
+  const PAPERS = Object.freeze({ A3: [297, 420], A4: [210, 297], A5: [148, 210], B5: [182, 257] });
+  const SANS = '"Noto Sans CJK JP", "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif';
+  const DIGITS = 'Arial, "Noto Sans", sans-serif';
+  const measureCanvas = document.createElement('canvas');
+  const mc = measureCanvas.getContext('2d');
+  const glyphCache = new Map();
+  let segmenter;
+  try { segmenter = new Intl.Segmenter('ja', { granularity: 'grapheme' }); } catch (_) { /* Array.from is adequate on old browsers. */ }
+  function chars(s) { return segmenter ? Array.from(segmenter.segment(s), v => v.segment) : Array.from(s); }
+  function font(ctx, size = 3, weight = 400, family = SANS) { ctx.font = `${weight} ${size}px ${family}`; }
+  function textWidth(s, size = 3, weight = 400) { font(mc, size, weight); return mc.measureText(s).width; }
+  function wrap(text, width, size = 3, weight = 400) {
+    if (width <= 0) throw new Error('文字領域の幅が不足しています。');
+    font(mc, size, weight);
+    const out = [];
+    for (const para of String(text).split('\n')) {
+      if (!para) { out.push(''); continue; }
+      let line = '';
+      for (const ch of chars(para)) {
+        if (line && mc.measureText(line + ch).width > width) { out.push(line); line = ch; }
+        else line += ch;
+      }
+      if (line) out.push(line);
+    }
+    return out;
+  }
+  function addText(blocks, text, x, y, w, size = 3, weight = 400, color = '#222222', leading = 1.48) {
+    const lines = Array.isArray(text) ? text : wrap(text, w, size, weight);
+    const lh = size * leading;
+    blocks.push({ kind: 'text', lines, x, y, w, size, weight, color, lh });
+    return lines.length * lh;
+  }
+  function paperSize(s) { const p = PAPERS[s.paper].slice(); return s.orientation === 'landscape' ? p.reverse() : p; }
+  function timeLines(m) {
+    const t = K.normalizeTime(m.time), v = x => x === '' || x == null ? '未入力' : String(x);
+    switch (t.mode) {
+      case 'japanese': return [`日本式　${v(t.minutes)}分`, `秒読み${v(t.seconds)}秒 × ${v(t.periods)}回`];
+      case 'canadian': return [`カナダ式　${v(t.minutes)}分`, `予備時間${v(t.overtimeMinutes)}分で${v(t.moves)}手`];
+      case 'fischer': return [`フィッシャー式　${v(t.minutes)}分`, `1手ごとに${v(t.increment)}秒加算`];
+      case 'absolute': return [`切れ負け　${v(t.minutes)}分`];
+      case 'byoyomi': return ['秒読み', `一手あたり${v(t.perMoveSeconds)}秒`];
+      case 'nhk': return ['NHK杯式', `一手あたり${v(t.perMoveSeconds)}秒`, `考慮時間${v(t.seconds)}秒 × ${v(t.periods)}回`];
+      default: return [`方式未選択　${v(t.minutes)}分`];
+    }
+  }
+  function halfPoints(text) {
+    // Formatting only: the editable SGF-derived values are never mutated.
+    return String(text).replace(/([+-]?\d+)\.50*\s*目/g, (_, n) => {
+      const sign = n.startsWith('-') ? '−' : n.startsWith('+') ? '+' : '';
+      const whole = String(Math.abs(Number(n)));
+      return whole === '0' ? sign + '半目' : sign + whole + '目半';
+    });
+  }
+  function dateText(text) {
+    // Retain dates/ranges that cannot be recognized instead of inventing a day.
+    return String(text).replace(/\b(\d{4})-(\d{1,2})(?:-(\d{1,2}))?\b/g,
+      (_, year, month, day) => `${year}年${Number(month)}月${day ? Number(day) + '日' : ''}`);
+  }
+  function metadataFields(m, vertical = false) {
+    const fields = [], push = (key, label, value, group = 'record') => fields.push({ key, label, value: String(value), group });
+    if (m.include.event && m.event) push('event', '大会名', m.event);
+    push('black', '黒番', (m.black || '（名前未入力）') + (m.include.blackRank && m.blackRank ? '　' + m.blackRank : ''), 'players');
+    push('white', '白番', (m.white || '（名前未入力）') + (m.include.whiteRank && m.whiteRank ? '　' + m.whiteRank : ''), 'players');
+    for (const [key, rankKey] of [['black', 'blackRank'], ['white', 'whiteRank']]) {
+      const field = fields.find(f => f.key === key);
+      field.runs = [{ text: m[key] || '（名前未入力）', digits: 'none' }];
+      if (m.include[rankKey] && m[rankKey]) field.runs.push({ text: '　' + m[rankKey], digits: 'rank' });
+    }
+    if (m.include.date && m.date) push('date', '対局日', vertical ? dateText(m.date) : m.date);
+    if (m.include.place && m.place) push('place', '対局場所', m.place);
+    push('handicap', '手合い', m.handicap || '未入力', 'conditions');
+    push('rule', 'ルール', m.rule === 'chinese' ? '中国ルール' : m.rule === 'japanese' ? '日本ルール' : '未選択', 'conditions');
+    push('komi', 'コミ', m.komi === '' ? '未入力' : vertical ? halfPoints(m.komi + '目') : m.komi + '目', 'conditions');
+    if (m.include.time) push('time', '持ち時間', timeLines(m).join('\n'), 'conditions');
+    push('result', '勝敗', vertical ? halfPoints(m.result || '未入力') : m.result || '未入力', 'result');
+    return fields;
+  }
+  // Upright Latin characters throughout. Digit grouping is explicitly field-aware:
+  // names never use tate-chu-yoko; dates keep the four-digit year upright one by
+  // one, and combine the (one/two digit) month and day. No sideways Latin runs.
+  function verticalTokens(text, size = 3, weight = 400, options = {}) {
+    if (options.runs) return options.runs.flatMap(run => verticalTokens(run.text, size, weight, { digits: run.digits }).map(t => ({ ...t, digitPolicy: run.digits })));
+    const gs = chars(String(text)), out = [], digits = options.digits || 'none';
+    for (let i = 0; i < gs.length;) {
+      const c = gs[i];
+      if (c === '\n') { out.push({ raw: c, newline: true, advance: 0 }); i++; continue; }
+      if (/^[0-9０-９]$/.test(c) && ['short', 'rank'].includes(digits)) {
+        let run = c; i++; while (i < gs.length && /^[0-9０-９]$/.test(gs[i])) run += gs[i++];
+        if (run.length <= 2 || digits === 'rank') out.push({ text: run, raw: run, tcy: true, rotate: false, advance: size * 1.18, size, weight });
+        else for (const ch of run) out.push({ text: ch, raw: ch, tcy: false, rotate: false, advance: size * 1.18, size, weight });
+      } else {
+        const rotate = /^[ー－—―‐\-~〜～（）()［］\[\]｛｝{}「」『』〈〉《》]$/.test(c);
+        out.push({ text: c, raw: c, rotate, tcy: false, punctuation: /^[、。，．]$/.test(c), advance: size * 1.18, size, weight }); i++;
+      }
+    }
+    return out;
+  }
+  function verticalColumns(text, height, size = 3, weight = 400, options = {}) {
+    const tokens = verticalTokens(text, size, weight, options), columns = [];
+    let col = [], used = 0;
+    const flush = () => { columns.push({ tokens: col, height: used }); col = []; used = 0; };
+    for (const t of tokens) {
+      if (t.newline) { col.push({ ...t, offset: used }); flush(); continue; }
+      if (col.length && used + t.advance > height + 1e-6) flush();
+      col.push({ ...t, offset: used }); used += t.advance;
+    }
+    if (col.length) flush();
+    return columns;
+  }
+  function verticalBlock(columns, x, y, w, h, size = 3, role = 'metadata') {
+    return { kind: 'vertical', role, columns, x, y, w, h, size, pitch: size * 1.65, color: '#222222' };
+  }
+  function textBlock(blocks, text, x, y, w, size = 3, weight = 400, align = 'left', role = 'metadata', color = '#222222') {
+    const start = blocks.length, h = addText(blocks, text, x, y, w, size, weight, color);
+    blocks[start].align = align; blocks[start].role = role; return h;
+  }
+  function horizontalFlow(blocks, items, x, y, w, fs = 2.85, weight = 400) {
+    const gap = fs * 1.9, rows = []; let row = [], used = 0;
+    for (const item of items) {
+      const width = Math.min(w, textWidth(item, fs, weight));
+      if (row.length && used + gap + width > w) { rows.push(row); row = []; used = 0; }
+      row.push({ text: item, w: width }); used += (row.length > 1 ? gap : 0) + width;
+    }
+    if (row.length) rows.push(row);
+    for (const r of rows) {
+      const total = r.reduce((a, v) => a + v.w, 0) + gap * (r.length - 1); let left = x + (w - total) / 2, h = 0;
+      for (const v of r) { h = Math.max(h, textBlock(blocks, v.text, left, y, v.w + .05, fs, weight, 'center')); left += v.w + gap; }
+      y += h + 1.1;
+    }
+    return y;
+  }
+  function addHorizontalMetadata(blocks, m, x, y, w, variant = 'balanced') {
+    const top = y, fields = metadataFields(m), get = k => fields.find(f => f.key === k);
+    const txt = f => `${f.label}　${f.value.replace(/\n/g, '　／　')}`;
+    const players = fields.filter(f => f.group === 'players'), conditions = fields.filter(f => f.group === 'conditions'), records = fields.filter(f => f.group === 'record');
+    if (variant === 'table') {
+      // Two-column table, with one shared label width in every cell.
+      const gap = 3, cw = (w - gap) / 2, labelW = Math.min(17, cw * .28), fs = 2.8;
+      const groups = [];
+      if (get('event')) groups.push([get('event')]);
+      groups.push(players);
+      const other = fields.filter(f => !['black', 'white', 'event', 'time', 'result'].includes(f.key));
+      for (let i = 0; i < other.length; i += 2) groups.push(other.slice(i, i + 2));
+      if (get('time')) groups.push([get('time')]); groups.push([get('result')]);
+      for (const row of groups) {
+        const cellW = row.length === 1 ? w : cw, h = Math.max(...row.map(f => wrap(f.value, cellW - labelW - 5, fs).length * fs * 1.48)) + 4;
+        row.forEach((f, i) => {
+          const bx = x + i * (cw + gap);
+          blocks.push({ kind: 'rect', role: 'metadata', x: bx, y, w: cellW, h, fill: '#fafafa', stroke: '#cccccc' });
+          textBlock(blocks, f.label, bx + 2, y + 2, labelW - 2, fs, 600);
+          textBlock(blocks, f.value, bx + labelW, y + 2, cellW - labelW - 3, fs);
+        }); y += h + .7;
+      }
+    } else if (variant === 'bands') {
+      const groups = [['対局者', players.map(txt)], ['対局記録', records.map(txt)], ['対局条件', conditions.map(txt)], ['勝敗', [get('result').value]]];
+      for (const [label, vals] of groups) {
+        if (!vals.length) continue;
+        const lw = 17, fs = 2.85, lines = wrap(vals.join('　／　'), w - lw - 5, fs), h = Math.max(lines.length * fs * 1.48 + 4, 9);
+        blocks.push({ kind: 'rect', role: 'metadata', x, y, w: lw, h, fill: '#eceff0' });
+        textBlock(blocks, label, x + 1, y + 2, lw - 2, 2.8, 600, 'center');
+        textBlock(blocks, lines, x + lw + 3, y + 2, w - lw - 3, fs, label === '勝敗' ? 600 : 400);
+        blocks.push({ kind: 'rect', role: 'metadata', x, y: y + h, w, h: .18, fill: '#cccccc' }); y += h + 1.5;
+      }
+    } else {
+      if (get('event')) y += textBlock(blocks, get('event').value, x, y, w, 3.25, 500, 'center') + 1.2;
+      const cards = variant === 'cards' || variant === 'focus', gap = cards ? 5 : 6, cw = (w - gap) / 2;
+      let ph = Math.max(...players.map(f => wrap(f.value, cw - (cards ? 6 : 0), cards ? 3.7 : 3.4, 600).length * (cards ? 3.7 : 3.4) * 1.48));
+      players.forEach((f, i) => {
+        const bx = x + i * (cw + gap);
+        if (cards) {
+          blocks.push({ kind: 'rect', role: 'metadata', x: bx, y, w: cw, h: ph + 10, fill: '#f8f8f8', stroke: '#cccccc' });
+          textBlock(blocks, f.label, bx + 3, y + 1.7, cw - 6, 2.6, 500, 'center');
+          textBlock(blocks, f.value, bx + 3, y + 6.5, cw - 6, 3.7, 600, 'center');
+        } else textBlock(blocks, txt(f), bx, y, cw, 3.4, 600, 'center');
+      });
+      // Include the label in the natural row-height calculation when unframed.
+      if (!cards) ph = Math.max(...players.map(f => wrap(txt(f), cw, 3.4, 600).length * 3.4 * 1.48));
+      y += ph + (cards ? 12 : 2.4);
+      y = horizontalFlow(blocks, records.filter(f => f.key !== 'event').map(txt), x, y, w);
+      if (variant === 'focus') {
+        const cols = Math.min(3, conditions.length), gap2 = 2.5, tw = (w - gap2 * (cols - 1)) / cols;
+        for (let offset = 0; offset < conditions.length; offset += cols) {
+          const row = conditions.slice(offset, offset + cols), actualW = (w - gap2 * (row.length - 1)) / row.length;
+          const rh = Math.max(...row.map(f => wrap(f.value, actualW - 4, 2.8).length * 4.15)) + 8;
+          row.forEach((f, i) => {
+            const bx = x + i * (actualW + gap2);
+            textBlock(blocks, f.label, bx, y, actualW, 2.6, 600, 'center', 'metadata', '#666666');
+            textBlock(blocks, f.value, bx + 2, y + 4.5, actualW - 4, 2.8, 400, 'center');
+          }); y += rh;
+        }
+      } else {
+        y = horizontalFlow(blocks, conditions.filter(f => f.key !== 'time').map(txt), x, y, w);
+        if (get('time')) {
+          const lines = timeLines(m);
+          y += textBlock(blocks, '持ち時間　' + lines[0], x, y, w, 2.85, 400, 'center');
+          if (lines.length > 1) y += textBlock(blocks, lines.slice(1).join('　／　'), x, y, w, 2.85, 400, 'center');
+          y += 1;
+        }
+      }
+      const rh = wrap('勝敗　' + get('result').value, w - 6, 3.1, 600).length * 4.59 + 3.8;
+      blocks.push({ kind: 'rect', role: 'metadata', x, y, w, h: rh, fill: variant === 'focus' ? '#e9edef' : '#f3f3f3' });
+      textBlock(blocks, '勝敗　' + get('result').value, x + 3, y + 1.5, w - 6, 3.1, 600, 'center'); y += rh + 1.5;
+    }
+    return y - top + 2.5;
+  }
+  function addVerticalMetadata(blocks, m, x, y, w, H, margin, variant = 'balanced') {
+    const fields = metadataFields(m, true), top = y;
+    // Semantic time lines are indivisible at normal size. Wrapping is permitted
+    // only as a last resort for user-entered extreme lengths, not every N glyphs.
+    const maxValueH = Math.max(24, Math.min(47, H * .155));
+    const bands = variant === 'tiles' ? [fields.filter(f => ['players', 'record'].includes(f.group)), fields.filter(f => ['conditions', 'result'].includes(f.group))] : [fields];
+    for (const band of bands) {
+      let groups, usedW, fs = 3;
+      for (fs of [3, 2.8, 2.6, 2.4, 2.2]) {
+        groups = band.map(f => {
+          const digitMode = ['black', 'white', 'event', 'place'].includes(f.key) ? 'none' : 'short';
+          const size = variant === 'focus' && f.group === 'players' ? fs * 1.08 : fs;
+          let vh = variant === 'tiles' ? maxValueH * .72 : maxValueH;
+          if (f.key === 'time') vh = Math.max(vh, Math.max(...f.value.split('\n').map(v => verticalTokens(v, size, 400, { digits: 'short' }).reduce((a, t) => a + t.advance, 0))));
+          const cols = verticalColumns(f.value, vh, size, 400, { digits: digitMode, runs: f.runs });
+          const pitch = size * 1.65;
+          return { f, size, cols, pitch, width: Math.max(pitch, cols.length * pitch), valueH: Math.max(0, ...cols.map(c => c.height)) };
+        });
+        usedW = groups.reduce((n, g) => n + g.width, 0) + (groups.length - 1) * 2.2 + 3;
+        if (usedW <= w) break;
+      }
+      if (usedW > w) throw new Error('縦書きの対局情報が収まりません。項目を短くするか、横書き・大きい用紙を選んでください。');
+      const labelH = 4 * fs * 1.18, indent = labelH + fs * 1.1;
+      const height = indent + Math.max(...groups.map(g => g.valueH)) + 2.5;
+      const free = Math.max(0, w - usedW), gap = 2.2 + free / Math.max(1, groups.length);
+      let right = x + w - gap / 2 - 1.5;
+      const arranged = variant === 'groups' || variant === 'focus' ? ['players', 'record', 'conditions', 'result'].flatMap(key => groups.filter(g => g.f.group === key)) : groups;
+      arranged.forEach((g, i) => {
+        const bx = right - g.width, cellX = bx - gap / 2, cellW = g.width + gap;
+        if (variant === 'table' || variant === 'tiles') {
+          blocks.push({ kind: 'rect', role: 'metadata', x: Math.max(x, cellX), y: y - .5, w: Math.min(cellW, x + w - Math.max(x, cellX)), h: height + 1, fill: '#ffffff', stroke: '#cccccc' });
+          blocks.push({ kind: 'rect', role: 'metadata', x: Math.max(x, cellX) + .15, y: y - .3, w: Math.min(cellW, x + w - Math.max(x, cellX)) - .3, h: indent - 1, fill: '#f1f2f3' });
+        } else if (variant === 'groups' && i && arranged[i - 1].f.group !== g.f.group) {
+          blocks.push({ kind: 'rect', role: 'metadata', x: right + gap / 2, y, w: .25, h: height, fill: '#bbbbbb' });
+        } else if (variant === 'focus' && ['players', 'result'].includes(g.f.group)) {
+          blocks.push({ kind: 'rect', role: 'metadata', x: bx - .8, y: y - 1, w: g.width + 1.6, h: height + 2, fill: '#f2f3f3' });
+        }
+        // Labels and all value/continuation columns share a fixed grid. An
+        // empty continuation label is space, never content pulled upward.
+        const label = verticalBlock(verticalColumns(g.f.label, labelH + .01, fs, 600), bx, y, g.width, labelH, fs, 'metadata-label');
+        label.field = g.f.key; label.pitch = g.pitch; blocks.push(label);
+        const val = verticalBlock(g.cols, bx, y + indent, g.width, g.valueH, g.size, 'metadata-value');
+        val.field = g.f.key; val.pitch = g.pitch; val.valueTop = y + indent; blocks.push(val);
+        right -= g.width + gap;
+      });
+      y += height + (variant === 'tiles' ? 4 : 2.5);
+    }
+    return y - top;
+  }
+  function header(m, W, H, subtitle = '', s = K.defaults()) {
+    const b = [], margin = W < 160 ? 9 : W > 280 ? 13 : 11, w = W - margin * 2;
+    let y = margin;
+    if (s.showTitle) {
+      const title = `${String(m.black || '（黒番未入力）').trim()} 対 ${String(m.white || '（白番未入力）').trim()}`;
+      let fs = 6.4; while (fs > 4 && textWidth(title, fs, 600) > w) fs -= .2;
+      const lines = wrap(title, w, fs, 600), lh = fs * 1.4;
+      b.push({ kind: 'text', role: 'title', align: 'center', lines, x: margin, y, w, size: fs, weight: 600, color: '#171717', lh });
+      y += lines.length * lh + 4;
+    }
+    const info = s._infoBounds || { x: margin, w }, variant = s._layoutVariant || (s.infoDirection === 'vertical' ? s.infoLayoutVertical : s.infoLayoutHorizontal) || 'balanced';
+    const infoY = y;
+    // Lay out small formats at a readable reference width, then shrink the
+    // whole metadata band uniformly. Re-wrapping into a 50 mm board-width band
+    // otherwise creates a runaway "taller header -> smaller board" loop.
+    const referenceW = Math.max(info.w, s.infoDirection === 'vertical' ? 165 : 145);
+    const metaBlocks = [];
+    const naturalH = s.infoDirection === 'vertical'
+      ? addVerticalMetadata(metaBlocks, m, 0, 0, referenceW, H, margin, variant)
+      : addHorizontalMetadata(metaBlocks, m, 0, 0, referenceW, variant);
+    const available = H - margin - 13 - y - (s._notesBudget || 0);
+    const maxInfoH = Math.max(12, Math.min(H * .36, available - 44));
+    const factor = Math.min(1, info.w / referenceW, maxInfoH / naturalH);
+    const offsetX = info.x + (info.w - referenceW * factor) / 2;
+    for (const original of metaBlocks) {
+      const block = { ...original, x: offsetX + original.x * factor, y: y + original.y * factor };
+      for (const key of ['w', 'h', 'size', 'lh', 'pitch']) if (typeof original[key] === 'number') block[key] = original[key] * factor;
+      if (typeof original.valueTop === 'number') block.valueTop = y + original.valueTop * factor;
+      if (original.columns) block.columns = original.columns.map(c => ({ ...c, height: c.height * factor,
+        tokens: c.tokens.map(t => { const token = { ...t }; for (const k of ['size', 'advance', 'offset']) if (typeof t[k] === 'number') token[k] = t[k] * factor; return token; }) }));
+      b.push(block);
+    }
+    y += naturalH * factor;
+    const infoBottom = y;
+    if (subtitle) y += textBlock(b, subtitle, info.x, y, info.w, 3.15, 600, 'center', 'diagram-title') + 1.8;
+    if (y > H - margin - 38) throw new Error('対局情報が用紙に収まりません。長い項目を短くするか、用紙サイズ・向きを変更してください。');
+    return { blocks: b, y, margin, w, infoBounds: { x: info.x, y: infoY, w: info.w, h: infoBottom - infoY } };
+  }
+  function repeatEntries(d, s) {
+    return d.repeats.map(e => ({ text: K.repeatText(e, d, s), color: e.color, refColor: e.refColor || e.color,
+      label: K.moveLabel(e.n, d.start, s.numbers ? s.numberStyle : 'arabic'),
+      refLabel: e.setup ? '' : e.priorPage ? String(e.ref) : K.moveLabel(e.ref, d.start, s.numbers ? s.numberStyle : 'arabic'),
+      refPrefix: e.setup ? '置石:' : e.priorPage ? '前譜' : '',
+      refSuffix: e.setup || e.priorPage ? e.referenceCoord : '', refKanji: !e.setup && !e.priorPage && s.numbers && s.numberStyle === 'kanji' }));
+  }
+  function annotationParts(e, s, fs) {
+    if (!s.repeatStones || s.repeatStoneStyle !== 'onStone') return null;
+    const [open, close] = s.repeatBracket === 'square' ? ['[', ']'] : ['(', ')'];
+    const parts = [{ kind: 'stone', label: e.label, color: e.color, kanji: s.numbers && s.numberStyle === 'kanji' }, { kind: 'text', text: open }];
+    if (e.refPrefix) parts.push({ kind: 'text', text: e.refPrefix });
+    if (e.refLabel) parts.push({ kind: 'stone', label: e.refLabel, color: e.refColor, kanji: e.refKanji });
+    if (e.refSuffix) parts.push({ kind: 'text', text: (e.refLabel ? ':' : '') + e.refSuffix });
+    parts.push({ kind: 'text', text: close });
+    let x = 0;
+    for (const p of parts) { p.x = x; p.w = p.kind === 'stone' ? fs * 2.12 : textWidth(p.text, fs); x += p.w + fs * .08; }
+    return { parts, w: x - fs * .08 };
+  }
+  function tokensLayout(entries, width, fontSize, input, vertical = false) {
+    const s = K.normalizeSettings(typeof input === 'object' ? input : { repeatStones: !!input });
+    const rows = []; let row = [], used = 0;
+    entries.forEach((entry, index) => {
+      const comma = !vertical && index + 1 < entries.length ? ',' : '', drawText = entry.text + comma;
+      const graphical = annotationParts(entry, s, fontSize);
+      const contentWidth = graphical ? graphical.w + textWidth(comma, fontSize) : textWidth(drawText, fontSize) + (s.repeatStones ? fontSize * 1.55 : 0);
+      const gap = fontSize * .65;
+      if (contentWidth > width + .15) throw new Error('着手注記が欄に収まりません。表示位置を上または下に変更してください。');
+      if (row.length && (vertical || used + contentWidth > width)) { rows.push(row); row = []; used = 0; }
+      row.push({ ...entry, drawText, comma, graphical, x: used, width: contentWidth + gap, contentWidth }); used += contentWidth + gap;
+    });
+    if (row.length) rows.push(row); return rows;
+  }
+  function rowWidth(row) { const last = row[row.length - 1]; return last ? last.x + last.contentWidth : 0; }
+  function layoutPages(model, input, m) {
+    const s = K.normalizeSettings(input), [W, H] = paperSize(s), ds = K.diagrams(model, s), pages = [], spill = [];
+    if (m.include.notes) K.notePages(s, ds.length); // validate before preparing pages
+    const sharedNotes = s.notesPlacement.all && s.notesAllMode === 'same';
+    let sharedNoteSpillAdded = false;
+    for (const d of ds) {
+      const noteText = K.notesForPage(m, s, d.page, ds.length);
+      const title = s.mode === 'all' ? `総譜  ${d.total ? `1〜${d.end}手` : '初期配置'}` : `第${d.page}譜  ${d.start}〜${d.end}手`;
+      const head = header(m, W, H, title, { ...s, _notesBudget: noteText.trim() ? 38 : 0, _infoBounds: s._infoBoundsBySource ? s._infoBoundsBySource[d.page] : s._infoBounds }); let y = head.y;
+      if (s.numbers && s.numberStyle === 'kanji') y += textBlock(head.blocks, `本譜の番号 一〜${K.compactKanji(Math.max(1, d.end - d.start + 1))}  ／ 通算 ${d.start}〜${d.end}手`, head.margin, y, head.w, 2.4, 400, 'center', 'diagram-title') + 1.2;
+      const bottom = H - head.margin - 8, footerLines = [];
+      if (s.numbers && d.stones.some(a => a.carried)) footerLines.push('無番号の石は、前譜から残った石または初期配置の石。');
+      if (d.passes.length) footerLines.push('パス  ' + d.passes.map(e => `${K.moveLabel(e.n, d.start, s.numbers ? s.numberStyle : 'arabic')}${e.color === 1 ? '黒' : '白'}`).join(', '));
+      let ft = footerLines.flatMap(t => wrap(t, head.w, 2.6));
+      if (ft.length > 5) { spill.push({ title: `第${d.page}譜・パス／注記の続き`, lines: ft.slice(4), source: d.page }); ft = ft.slice(0, 4).concat('注記の続きは補記ページに掲載。'); }
+      const footH = ft.length * 3.9 + (ft.length ? 4 : 0);
+      let notesVisible = [], notesH = 0, verticalNotes = null;
+      const noteTitle = sharedNotes ? '所感の続き（全棋譜図共通）' : `所感の続き（第${d.page}譜）`;
+      function addNoteSpill(item) {
+        if (sharedNotes && sharedNoteSpillAdded) return;
+        spill.push({ ...item, title: noteTitle, source: d.page, notes: true });
+        if (sharedNotes) sharedNoteSpillAdded = true;
+      }
+      if (noteText.trim() && s.infoDirection === 'vertical') {
+        const fs = 3, maxH = s.orientation === 'landscape' ? 22 : 34, cols = verticalColumns(noteText, maxH, fs);
+        const capacity = Math.max(1, Math.floor((head.w - 8) / (fs * 1.65))), visible = cols.slice(0, capacity);
+        const extra = cols.slice(capacity).flatMap(c => c.tokens.map(t => t.raw)).join('');
+        verticalNotes = { columns: visible, height: Math.max(...visible.map(c => c.height)), fs, overflow: !!extra };
+        notesH = verticalNotes.height + 5 + (extra ? 4 : 0);
+        if (extra) addNoteSpill({ verticalText: extra });
+      } else if (noteText.trim()) {
+        const notesAll = wrap(noteText, head.w, 3), keep = Math.min(notesAll.length, s.orientation === 'landscape' ? 3 : 5);
+        notesVisible = notesAll.slice(0, keep); notesH = keep * 4.5 + 8;
+        if (notesAll.length > keep) { addNoteSpill({ lines: notesAll.slice(keep) }); notesH += 4.3; }
+      }
+      // Dedicated capture row immediately below the board/coordinate envelope.
+      // It is separate from page-bottom notes and does not share their position.
+      const captureH = s.captures === 'show' ? 6 : 0;
+      let area = { x: head.margin, y, w: head.w, h: bottom - y - footH - notesH - captureH - 2 };
+      if (area.h < 25) throw new Error('用紙の高さが不足しています。縦向きにするか、掲載する対局情報を減らしてください。');
+      const entries = s.repeats ? repeatEntries(d, s) : [];
+      let annotation = null;
+      if (entries.length) {
+        const side = ['left', 'right'].includes(s.repeatPosition), fs = W < 160 ? 2.35 : 2.65;
+        const onStone = s.repeatStones && s.repeatStoneStyle === 'onStone', lh = fs * (onStone ? 2.48 : 1.65), pad = onStone ? 1.8 : 1.2, gap = 3;
+        const widths = entries.map(e => { const a = annotationParts(e, s, fs); return a ? a.w : textWidth(e.text, fs) + (s.repeatStones ? fs * 1.55 : 0); });
+        let nw = side ? Math.max(...widths) + 2 * pad : area.w;
+        nw = Math.min(nw, area.w * (side ? .47 : 1));
+        let maxH;
+        if (side) {
+          const testArea = { ...area, w: area.w - nw - gap }; maxH = Math.min(area.h, boardGeometry({ diagram: d, area: testArea }, s).box.h);
+        } else {
+          maxH = Math.max(12, Math.min(35, area.h * .24));
+          const testArea = { ...area, h: area.h - maxH - gap }; nw = Math.min(area.w, Math.max(25, boardGeometry({ diagram: d, area: testArea }, s).box.w));
+        }
+        const rows = tokensLayout(entries, nw - 2 * pad, fs, s, side);
+        let capacity = Math.max(1, Math.floor((maxH - 2 * pad) / lh));
+        if (rows.length > capacity) capacity = Math.max(1, Math.floor((maxH - 2 * pad - 4) / lh));
+        const visible = rows.slice(0, capacity), extra = rows.slice(capacity).flat().map(e => { const a = { ...e }; delete a.graphical; return a; });
+        const nh = visible.length * lh + 2 * pad + (extra.length ? 4 : 0);
+        const contentW = Math.max(...visible.map(rowWidth), extra.length ? textWidth('続きは補記ページ', 2) : 0) + 2 * pad;
+        if (extra.length) spill.push({ title: `第${d.page}譜・着手注記の続き`, entries: extra, source: d.page, vertical: side });
+        if (side) { area.w -= nw + gap; if (s.repeatPosition === 'left') area.x += nw + gap; }
+        else { area.h -= nh + gap; if (s.repeatPosition === 'top') area.y += nh + gap; }
+        const geo = boardGeometry({ diagram: d, area }, s);
+        const nx = side ? (s.repeatPosition === 'left' ? geo.extent.x - gap - contentW : geo.extent.x + geo.extent.w + gap) : geo.centerX - contentW / 2;
+        const ny = side ? geo.centerY - nh / 2 : (s.repeatPosition === 'top' ? geo.extent.y - gap - nh : geo.extent.y + geo.extent.h + captureH + gap);
+        annotation = { x: nx, y: ny, w: contentW, h: nh, rows: visible, fs, lh, pad, overflow: !!extra.length, centered: true, vertical: side,
+          centerAxis: side ? 'y' : 'x', boardCenterX: geo.centerX, boardCenterY: geo.centerY };
+      }
+      const geo = boardGeometry({ diagram: d, area }, s);
+      if (s.captures === 'show') {
+        const cap = `アゲハマ   黒：${d.captures[1]}  白：${d.captures[2]}`;
+        textBlock(head.blocks, cap, geo.box.x, geo.extent.y + geo.extent.h + 1.3, geo.box.w, 2.6, 400, 'right', 'captures');
+      }
+      const bottomTextY = bottom - footH - notesH;
+      if (ft.length) textBlock(head.blocks, ft, head.margin, bottomTextY, head.w, 2.6, 400, 'left', 'footnotes');
+      if (verticalNotes) {
+        const ny = bottom - notesH;
+        head.blocks.push(verticalBlock(verticalColumns('所感', Math.max(8, verticalNotes.height), 3, 600), head.margin + head.w - 6, ny, 6, Math.max(8, verticalNotes.height), 3, 'notes-label'));
+        head.blocks.push(verticalBlock(verticalNotes.columns, head.margin, ny, head.w - 8, verticalNotes.height, 3, 'notes'));
+        if (verticalNotes.overflow) textBlock(head.blocks, '所感の続きは補記ページに掲載。', head.margin, ny + verticalNotes.height + 1, head.w, 2.5, 400, 'left', 'notes-continuation');
+      }
+      if (notesVisible.length) {
+        let ny = bottom - notesH;
+        ny += textBlock(head.blocks, '所感', head.margin, ny, head.w, 3, 600, 'left', 'notes-label') + 1;
+        ny += textBlock(head.blocks, notesVisible, head.margin, ny, head.w, 3, 400, 'left', 'notes');
+        if (notesH > notesVisible.length * 4.5 + 8.1) textBlock(head.blocks, '所感の続きは補記ページに掲載。', head.margin, ny, head.w, 2.5, 400, 'left', 'notes-continuation');
+      }
+      pages.push({ type: 'board', W, H, margin: head.margin, blocks: head.blocks, diagram: d, area, annotation, infoBounds: head.infoBounds,
+        title, source: d.page, boardCount: ds.length, notesText: noteText });
+    }
+    for (const item of spill) {
+      let lines = item.lines ? wrap(item.lines.join('\n'), W - (W < 160 ? 18 : W > 280 ? 26 : 22), 3) : null;
+      let entries = item.entries ? item.entries.slice() : null, part = 0, verticalText = item.verticalText || '';
+      while ((lines && lines.length) || (entries && entries.length) || verticalText) {
+        part++; const h = header(m, W, H, `補記  ${item.title}${part > 1 ? '（続）' : ''}`, s), maxH = H - h.margin - 10 - h.y;
+        if (verticalText) {
+          const fs = 3, cols = verticalColumns(verticalText, maxH, fs), capacity = Math.max(1, Math.floor(h.w / (fs * 1.65))), visible = cols.slice(0, capacity);
+          h.blocks.push(verticalBlock(visible, h.margin, h.y, h.w, maxH, fs, 'notes'));
+          verticalText = cols.slice(capacity).flatMap(c => c.tokens.map(t => t.raw)).join('');
+          pages.push({ type: 'notes', W, H, margin: h.margin, blocks: h.blocks, title: item.title, source: item.source });
+        } else if (lines) {
+          const capacity = Math.max(1, Math.floor(maxH / 4.5));
+          textBlock(h.blocks, lines.splice(0, capacity), h.margin, h.y, h.w, 3, 400, 'left', item.title.startsWith('所感') ? 'notes' : 'footnotes');
+          pages.push({ type: 'notes', W, H, margin: h.margin, blocks: h.blocks, title: item.title, source: item.source });
+        } else {
+          const fs = 3, lh = fs * (s.repeatStones && s.repeatStoneStyle === 'onStone' ? 2.48 : 1.65), pad = 2;
+          const rows = tokensLayout(entries, h.w - 4, fs, s, item.vertical), visible = rows.slice(0, Math.max(1, Math.floor((maxH - 4) / lh)));
+          const taken = visible.reduce((a, r) => a + r.length, 0); entries.splice(0, taken);
+          const aw = Math.max(...visible.map(rowWidth)) + 4, ah = visible.length * lh + 4;
+          pages.push({ type: 'notes', W, H, margin: h.margin, blocks: h.blocks, title: item.title, source: item.source,
+            annotation: { x: h.margin + (h.w - aw) / 2, y: h.y, w: aw, h: ah, rows: visible, fs, lh, pad, overflow: false, centered: true, vertical: item.vertical } });
+        }
+        if (pages.length > K.LIMITS.pages) throw new Error(`出力は補記を含めて${K.LIMITS.pages}ページまでです。`);
+      }
+    }
+    pages.forEach((p, i) => { p.index = i + 1; p.totalPages = pages.length; }); return pages;
+  }
+  function getPlans(model, input, m) {
+    const s = K.normalizeSettings(input);
+    // All eight selected layouts now share board-width-constrained planning.
+    if (s._infoBounds) return layoutPages(model, s, m);
+    // Reflow metadata into the actual board width rather than the paper width.
+    // Damped iteration avoids two-state width/height oscillations. Each
+    // diagram has its own band, accounting for that page's comments.
+    let bounds = null;
+    for (let pass = 0; pass < 32; pass++) {
+      const plans = layoutPages(model, { ...s, _infoBoundsBySource: bounds }, m), next = {}; let stable = !!bounds;
+      for (const p of plans.filter(p => p.type === 'board')) {
+        const g = boardGeometry(p, s), old = bounds && bounds[p.source];
+        const w = old ? (old.w + g.box.w) / 2 : g.box.w, x = g.centerX - w / 2;
+        next[p.source] = { x, w };
+        if (!old || Math.abs(old.w - w) > .015 || Math.abs(old.x - x) > .015) stable = false;
+      }
+      if (stable) {
+        // Final conservative reflow: band edges are inside the board even at
+        // a floating-point/line-wrap boundary.
+        const safe = {};
+        for (const p of plans.filter(p => p.type === 'board')) {
+          const g = boardGeometry(p, s), width = Math.min(bounds[p.source].w, g.box.w) - .025;
+          safe[p.source] = { x: g.centerX - width / 2, w: width };
+        }
+        return layoutPages(model, { ...s, _infoBoundsBySource: safe }, m);
+      }
+      bounds = next;
+    }
+    throw new Error('対局情報と盤面の配置を確定できません。用紙を大きくするか、掲載項目を減らしてください。');
+  }
+  function colorRGB(hex) { return [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)); }
+  function rgba(hex, alpha) { const [r, g, b] = colorRGB(hex); return `rgba(${r},${g},${b},${alpha})`; }
+  function mix(a, b, t) { const x = colorRGB(a), y = colorRGB(b); return '#' + x.map((v, i) => Math.round(v * (1 - t) + y[i] * t).toString(16).padStart(2, '0')).join(''); }
+  function contrast(hex) {
+    const v = colorRGB(hex).map(x => x / 255).map(x => x <= 0.04045 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4));
+    return v[0] * .2126 + v[1] * .7152 + v[2] * .0722 > .27 ? '#111111' : '#ffffff';
+  }
+  function rng(seed) { let x = seed >>> 0 || 12345; return () => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return (x >>> 0) / 4294967296; }; }
+  function boardTexture(ctx, box, s) {
+    const palette = { bw: '#ffffff', 'kaya-new': '#e7c273', 'kaya-old': '#b57b43', hiba: '#eee0ae', katsura: '#cba08b', custom: s.customBoard };
+    const base = palette[s.boardColor];
+    ctx.fillStyle = base; ctx.fillRect(box.x, box.y, box.w, box.h);
+    ctx.save(); ctx.beginPath(); ctx.rect(box.x, box.y, box.w, box.h); ctx.clip();
+    if (s.grain === 'itame') {
+      if (!itameImage.complete || !itameImage.naturalWidth) { ctx.restore(); throw new Error(textureError || '板目の画像素材を準備中です。'); }
+      ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = s.boardColor === 'bw' ? .72 : 1;
+      ctx.drawImage(itameImage, box.x, box.y, box.w, box.h); ctx.restore();
+    }
+    if (s.grain === 'masame') {
+      const random = rng(814731), dark = s.boardColor === 'bw' ? '#404040' : '#72401d', light = s.boardColor === 'bw' ? '#aaaaaa' : '#fff0ca';
+      // Normalized paths are deterministic across page sizes and DPI. Fine
+      // fibres run with, not across, the cut grain. No tiled source photograph.
+      const cx = v => .40 + .014 * Math.sin(v * 6.3) + .006 * Math.sin(v * 17.5);
+      const potential = v => .0027 * (.76 + .63 * Math.sin(v * 17.7 + .45) + .14 * Math.sin(v * 42.5));
+      const pathX = (u, v) => {
+        if (s.grain === 'masame') return u + .0022 * Math.sin(v * 6 + u * 15) + .0011 * Math.sin(v * 19 + u * 25);
+        const d = u - .40, bend = .013 * Math.sin(v * 7 + 1) + .007 * Math.sin(v * 19);
+        return u + bend * Math.exp(-Math.abs(d) * 6) + .0025 * Math.sin(v * 15 + u * 20);
+      };
+      // Nearly parallel, high-contrast quarter-sawn latewood + light earlywood.
+      if (s.grain === 'masame') {
+        for (let i = 0; i < 132; i++) {
+          const u = (i + random() * .65) / 131, width = (.00038 + random() * .0010) * box.w;
+          ctx.beginPath();
+          for (let j = 0; j <= 45; j++) { const v = j / 45, xx = box.x + pathX(u, v) * box.w, yy = box.y + v * box.h; if (!j) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy); }
+          ctx.strokeStyle = rgba(dark, .15 + random() * .24); ctx.lineWidth = width; ctx.stroke();
+          ctx.strokeStyle = rgba(light, .15); ctx.lineWidth = width * .35; ctx.stroke();
+        }
+      } else {
+        // Flat-sawn grain: narrow cathedral/spindle figures localized left of
+        // centre, with long straight grain outside. Intersections of warped
+        // growth-ring surfaces create the repeated pointed figures; the whole
+        // board is not filled with identical nested U-shaped arches.
+        for (let i = 0; i < 172; i++) {
+          const half = .005 + (i + random() * .5) * .00375;
+          const level = half * half, opacity = .13 + random() * .27;
+          ctx.strokeStyle = rgba(dark, opacity); ctx.lineWidth = box.w * (.00042 + random() * .00075);
+          for (const sign of [-1, 1]) {
+            ctx.beginPath(); let active = false;
+            for (let j = 0; j <= 350; j++) {
+              const v = j / 350, f = level - potential(v);
+              if (f < 0) { active = false; continue; }
+              const offset = Math.sqrt(f) * (sign < 0 ? 1.20 : 1.03);
+              const u = .40 + (cx(v) - .40) * Math.exp(-half * 12) + sign * offset + .0008 * Math.sin(v * 51 + half * 40);
+              const xx = box.x + u * box.w, yy = box.y + v * box.h;
+              if (!active) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy); active = true;
+            }
+            ctx.stroke();
+          }
+        }
+      }
+      // Fine fibres and occasional soft bands, different for every strip but
+      // stable for the same settings. Low amplitude leaves grid lines legible.
+      for (let i = 0; i < 320; i++) {
+        const u = random(), alpha = .04 + random() * .10;
+        ctx.strokeStyle = rgba(random() < .35 ? light : dark, alpha); ctx.lineWidth = box.w * (.00010 + random() * .00023);
+        ctx.beginPath();
+        for (let j = 0; j <= 26; j++) { const v = j / 26, xx = box.x + pathX(u, v) * box.w, yy = box.y + v * box.h; if (!j) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy); }
+        ctx.stroke();
+      }
+    }
+    if (s.boardColor === 'kaya-new' || s.boardColor === 'kaya-old') {
+      const old = s.boardColor === 'kaya-old', grad = ctx.createLinearGradient(box.x, box.y, box.x + box.w, box.y + box.h);
+      grad.addColorStop(0, `rgba(255,255,255,${old ? .22 : .10})`); grad.addColorStop(.36, 'rgba(255,255,255,0)');
+      grad.addColorStop(.7, `rgba(40,20,0,${old ? .13 : .025})`); grad.addColorStop(1, 'rgba(255,255,255,.05)');
+      ctx.fillStyle = grad; ctx.fillRect(box.x, box.y, box.w, box.h);
+    }
+    ctx.restore();
+  }
+  function stone(ctx, x, y, r, color, s, scale = 1, seed = 1, tiny = false) {
+    const base = s.stoneColor === 'custom' ? (color === 1 ? s.blackColor : s.whiteColor) : color === 1 ? '#171717' : '#ffffff';
+    const pattern = color === 1 ? s.blackPattern : s.whitePattern;
+    ctx.save();
+    if (s.shadow && !tiny) {
+      ctx.shadowColor = 'rgba(0,0,0,.24)'; ctx.shadowBlur = r * .35 * scale;
+      ctx.shadowOffsetX = r * .12 * scale; ctx.shadowOffsetY = r * .18 * scale;
+    }
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+    if (pattern === 'plain' || tiny) ctx.fillStyle = base;
+    else {
+      const g = ctx.createRadialGradient(x - r * .35, y - r * .42, r * .02, x + r * .16, y + r * .18, r * 1.32);
+      if (pattern === 'nachi') {
+        g.addColorStop(0, mix(base, '#ffffff', .27)); g.addColorStop(.28, mix(base, '#ffffff', .12));
+        g.addColorStop(.68, base); g.addColorStop(1, mix(base, '#000000', .62));
+      } else if (pattern === 'agate') {
+        g.addColorStop(0, mix(base, '#ffffff', color === 1 ? .26 : .015));
+        g.addColorStop(.38, mix(base, color === 1 ? '#858e92' : '#b6c9c8', color === 1 ? .21 : .48));
+        g.addColorStop(.72, mix(base, '#000000', color === 1 ? .15 : .16));
+        g.addColorStop(.9, mix(base, color === 1 ? '#b7c6c9' : '#dbe9e8', color === 1 ? .3 : .3));
+        g.addColorStop(1, mix(base, '#000000', color === 1 ? .6 : .25));
+      } else if (pattern === 'shell') {
+        g.addColorStop(0, mix(base, '#fff8e7', .4)); g.addColorStop(.45, mix(base, '#e9dfce', .16));
+        g.addColorStop(1, mix(base, '#a09483', .3));
+      } else { // Glass: sharp surface reflection and an unclouded glossy body.
+        g.addColorStop(0, mix(base, '#ffffff', .56)); g.addColorStop(.23, mix(base, '#ffffff', .12));
+        g.addColorStop(.53, mix(base, '#000000', color === 1 ? .04 : .05));
+        g.addColorStop(1, mix(base, '#000000', color === 1 ? .68 : .35));
+      }
+      ctx.fillStyle = g;
+    }
+    ctx.fill(); ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+    ctx.lineWidth = Math.max(.12, r * .035); ctx.strokeStyle = mix(base, '#000000', color === 2 ? .76 : .2); ctx.stroke();
+    if (!tiny && pattern !== 'plain') {
+      ctx.save(); ctx.beginPath(); ctx.arc(x, y, r * .976, 0, Math.PI * 2); ctx.clip();
+      const random = rng(seed * 4177 + color * 1021);
+      if (pattern === 'nachi') {
+        // Diffuse lit dome with fine, paired micro-facets. No mirror-like blob.
+        for (let i = 0; i < 620; i++) {
+          const a = random() * Math.PI * 2, d = Math.sqrt(random()) * r, xx = x + Math.cos(a) * d, yy = y + Math.sin(a) * d;
+          const rr = r * (.006 + random() * .014), lit = 1 - ((xx - x) + (yy - y)) / (r * 3.2);
+          ctx.fillStyle = `rgba(0,0,0,${.18 + random() * .24})`; ctx.beginPath(); ctx.arc(xx, yy, rr, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = `rgba(255,255,255,${(.13 + random() * .19) * lit})`; ctx.beginPath(); ctx.arc(xx - rr * .3, yy - rr * .6, rr * .60, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (pattern === 'shell') {
+        const angle = ((seed * .71) % 1.1) - .55; ctx.translate(x, y); ctx.rotate(angle);
+        // Fine parallel shell growth striae, deliberately exclusive to shell.
+        for (let i = -10; i <= 10; i++) {
+          const a = i * r / 8.8 + (random() - .5) * r * .025;
+          ctx.strokeStyle = rgba('#877969', .28 + random() * .18); ctx.lineWidth = r * (.011 + random() * .012);
+          ctx.beginPath(); ctx.moveTo(-r * 1.2, a + r * .1); ctx.bezierCurveTo(-r * .42, a - r * .1, r * .38, a - r * .11, r * 1.2, a + r * .1); ctx.stroke();
+          ctx.strokeStyle = 'rgba(255,255,255,.45)'; ctx.lineWidth = r * .009; ctx.stroke();
+        }
+      } else if (pattern === 'agate') {
+        // Translucent depth is expressed by soft internal clouds and a bright
+        // subsurface crescent. No concentric bands or shell-stripe paths.
+        for (let i = 0; i < 5; i++) {
+          const xx = x + (random() - .5) * r * 1.1, yy = y + (random() - .5) * r * 1.1, rr = r * (.35 + random() * .45);
+          const g = ctx.createRadialGradient(xx, yy, 0, xx, yy, rr);
+          g.addColorStop(0, color === 1 ? 'rgba(199,225,230,.16)' : 'rgba(255,255,255,.56)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+        ctx.save(); ctx.lineCap = 'round';
+        const glow = ctx.createLinearGradient(x + r * .9, y, x, y + r * .9);
+        glow.addColorStop(0, 'rgba(226,244,245,0)'); glow.addColorStop(.48, color === 1 ? 'rgba(211,236,239,.35)' : 'rgba(255,255,255,.6)'); glow.addColorStop(1, 'rgba(255,255,255,0)');
+        for (let k = 0; k < 5; k++) { ctx.strokeStyle = glow; ctx.lineWidth = r * (.018 + k * .024); ctx.globalAlpha = .22; ctx.beginPath(); ctx.arc(x - r * .015, y - r * .03, r * .80, .08, 1.5); ctx.stroke(); }
+        ctx.restore();
+        ctx.fillStyle = 'rgba(255,255,255,.78)'; ctx.beginPath(); ctx.ellipse(x - r * .35, y - r * .42, r * .23, r * .10, -.55, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,.32)'; ctx.beginPath(); ctx.ellipse(x - r * .35, y - r * .40, r * .32, r * .18, -.55, 0, Math.PI * 2); ctx.fill();
+      } else if (pattern === 'glass') {
+        if (color === 2) {
+          // A thin reflected dark environment around the hard white highlight
+          // keeps glass visibly glossy even when the base color is white.
+          ctx.fillStyle = 'rgba(53,66,73,.16)'; ctx.beginPath(); ctx.ellipse(x - r * .34, y - r * .43, r * .34, r * .16, -.57, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.fillStyle = 'rgba(255,255,255,.88)'; ctx.beginPath(); ctx.ellipse(x - r * .34, y - r * .43, r * .31, r * .135, -.57, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,.36)'; ctx.beginPath(); ctx.ellipse(x - r * .31, y - r * .44, r * .37, r * .20, -.57, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = r * .035; ctx.beginPath(); ctx.arc(x, y, r * .90, .35, 1.15); ctx.stroke();
+      }
+      ctx.restore();
+    }
+    ctx.restore(); return base;
+  }
+  function inkMetrics(ctx, text) {
+    // Alignment/baseline MUST be set before measureText, not afterwards.
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.direction = 'ltr';
+    const m = ctx.measureText(text), finite = (v, fallback) => Number.isFinite(v) ? v : fallback;
+    const f = parseFloat(ctx.font.match(/([\d.]+)px/)[1]);
+    const l = finite(m.actualBoundingBoxLeft, 0), r = finite(m.actualBoundingBoxRight, m.width);
+    const a = finite(m.actualBoundingBoxAscent, f * .8), d = finite(m.actualBoundingBoxDescent, f * .2);
+    return { l, r, a, d, w: l + r, h: a + d, advance: m.width };
+  }
+  function centeredGlyph(ctx, text, x, y) {
+    const m = inkMetrics(ctx, text);
+    ctx.fillText(text, x + (m.l - m.r) / 2, y + (m.a - m.d) / 2);
+  }
+  const NUMBER_REFERENCE = 1000;
+  function numberMetrics(label, r, kanji = false) {
+    const family = kanji ? '"KifuGyosho", "Yu Mincho", serif' : DIGITS, weight = kanji ? 400 : 600;
+    const text = String(label), key = (kanji ? 'k:' : 'a:') + text;
+    let layout = glyphCache.get(key);
+    if (!layout) {
+      mc.save(); font(mc, NUMBER_REFERENCE, weight, family);
+      if (!kanji) {
+        let ref = glyphCache.get('arabic-reference-diagonal');
+        if (!ref) {
+          ref = 0;
+          // Worst-case three-digit ink box: 1/2/3-digit labels all share ONE
+          // type size, rather than stretching each label to fill the stone.
+          for (let n = 100; n <= 999; n++) {
+            const m = inkMetrics(mc, String(n)); ref = Math.max(ref, Math.hypot(m.w, m.h));
+          }
+          glyphCache.set('arabic-reference-diagonal', ref);
+        }
+        const m = inkMetrics(mc, text);
+        layout = { glyphs: [{ text, x: (m.l - m.r) / 2, y: (m.a - m.d) / 2 }], width: m.w, height: m.h,
+          referenceDiagonal: text.length <= 3 ? ref : Math.max(ref, Math.hypot(m.w, m.h)) };
+      } else {
+        const glyphs = [], ms = Array.from(text).map(ch => ({ text: ch, m: inkMetrics(mc, ch) }));
+        const gap = NUMBER_REFERENCE * .07;
+        const height = ms.reduce((sum, v) => sum + v.m.h, 0) + Math.max(0, ms.length - 1) * gap;
+        const width = Math.max(...ms.map(v => v.m.w)); let top = -height / 2;
+        for (const { text: ch, m } of ms) { glyphs.push({ text: ch, x: (m.l - m.r) / 2, y: top + m.a }); top += m.h + gap; }
+        layout = { glyphs, width, height, referenceDiagonal: Math.hypot(width, height) };
+      }
+      mc.restore(); glyphCache.set(key, layout);
+    }
+    const ratio = kanji ? .95 : .85, k = (2 * r * ratio) / Math.max(1, layout.referenceDiagonal);
+    return { ...layout, family, weight, scale: k, nominalFontSize: NUMBER_REFERENCE * k,
+      inkWidth: layout.width * k, inkHeight: layout.height * k, targetRatio: ratio,
+      actualRatio: Math.hypot(layout.width, layout.height) * k / (2 * r) };
+  }
+  function number(ctx, label, x, y, r, ink, kanji) {
+    const metrics = numberMetrics(label, r, kanji);
+    ctx.save(); ctx.fillStyle = ink; ctx.translate(x, y); ctx.scale(metrics.scale, metrics.scale);
+    // Measure and draw at the same reference size, avoiding rounding of ink
+    // bearings at tiny millimetre-sized fonts in Canvas implementations.
+    font(ctx, NUMBER_REFERENCE, metrics.weight, metrics.family);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.direction = 'ltr';
+    for (const g of metrics.glyphs) ctx.fillText(g.text, g.x, g.y);
+    ctx.restore();
+    return metrics;
+  }
+  function drawVertical(ctx, b) {
+    ctx.save(); ctx.fillStyle = b.color;
+    b.columns.forEach((col, ci) => {
+      const x = b.x + b.w - b.pitch * (ci + .5);
+      for (const t of col.tokens) {
+        if (t.newline || /^\s+$/.test(t.text)) continue;
+        ctx.save(); font(ctx, t.size, t.weight); ctx.fillStyle = b.color;
+        let y = b.y + t.offset + t.advance / 2;
+        if (t.punctuation) { ctx.translate(x + t.size * .22, y - t.size * .22); }
+        else ctx.translate(x, y);
+        if (t.rotate) ctx.rotate(Math.PI / 2);
+        if (t.tcy) {
+          const m = inkMetrics(ctx, t.text), k = Math.min(1, t.size * .96 / Math.max(.01, m.w)); ctx.scale(k, 1);
+        }
+        centeredGlyph(ctx, t.text, 0, 0); ctx.restore();
+      }
+    });
+    ctx.restore();
+  }
+  function coordLabel(n, axis, format) {
+    if (format === 'num-kanji') return axis === 'v' ? String(n) : K.standardKanji(n);
+    if (format === 'lower-lower') return String.fromCharCode(96 + n);
+    if (format === 'upper-upper') return String.fromCharCode(64 + n);
+    if (format === 'num-lower') return axis === 'v' ? String(n) : String.fromCharCode(96 + n);
+    return axis === 'v' ? String(n) : String.fromCharCode(64 + n);
+  }
+  function boardGeometry(page, s) {
+    const d = page.diagram, a = page.area, p = s.coordinates ? s.positions : { top: false, right: false, bottom: false, left: false };
+    // An equal cell pitch in both axes, including rectangular SGF boards.
+    const sides = { left: p.left ? 1.25 : .64, right: p.right ? 1.25 : .64, top: p.top ? 1.25 : .64, bottom: p.bottom ? 1.25 : .64 };
+    const cell = Math.min(a.w / (d.size.w - 1 + sides.left + sides.right), a.h / (d.size.h - 1 + sides.top + sides.bottom));
+    const totalW = (d.size.w - 1 + sides.left + sides.right) * cell, totalH = (d.size.h - 1 + sides.top + sides.bottom) * cell;
+    const x0 = a.x + (a.w - totalW) / 2 + sides.left * cell, y0 = a.y + (a.h - totalH) / 2 + sides.top * cell;
+    const bw = (d.size.w - 1) * cell, bh = (d.size.h - 1) * cell;
+    const box = { x: x0 - cell * .56, y: y0 - cell * .56, w: bw + cell * 1.12, h: bh + cell * 1.12 };
+    return { cell, x0, y0, bw, bh, r: cell * .47, box, p,
+      centerX: x0 + bw / 2, centerY: y0 + bh / 2,
+      extent: { x: x0 - sides.left * cell, y: y0 - sides.top * cell, w: totalW, h: totalH } };
+  }
+  function horizontalCoordinateLayout(labels, size, centerY) {
+    mc.save(); font(mc, 1000); const m = inkMetrics(mc, '国Hg');
+    const baseline = centerY + (m.a - m.d) / 2 * size / 1000;
+    const result = labels.map(text => ({ text, baseline, size })); mc.restore(); return result;
+  }
+  function coordinateGlyph(ctx, text, x, baseline, size) {
+    ctx.save(); ctx.translate(x, baseline); ctx.scale(size / 1000, size / 1000);
+    font(ctx, 1000); const m = inkMetrics(ctx, text); ctx.fillText(text, (m.l - m.r) / 2, 0); ctx.restore();
+  }
+  function board(ctx, page, s, scale) {
+    const d = page.diagram, geo = boardGeometry(page, s);
+    const { cell, x0, y0, bw, bh, box, p } = geo;
+    boardTexture(ctx, box, s);
+    ctx.strokeStyle = s.boardColor === 'bw' ? '#252525' : '#26211c'; ctx.lineWidth = Math.max(.12, cell * .015);
+    ctx.beginPath();
+    for (let x = 0; x < d.size.w; x++) { ctx.moveTo(x0 + x * cell, y0); ctx.lineTo(x0 + x * cell, y0 + bh); }
+    for (let y = 0; y < d.size.h; y++) { ctx.moveTo(x0, y0 + y * cell); ctx.lineTo(x0 + bw, y0 + y * cell); }
+    ctx.stroke(); ctx.lineWidth = Math.max(.23, cell * .028); ctx.strokeRect(x0, y0, bw, bh);
+    if (d.size.w === d.size.h && [9, 13, 19].includes(d.size.w)) {
+      const n = d.size.w, edge = n === 9 ? 2 : 3, mid = (n - 1) / 2;
+      const stars = n === 19 ? [edge, mid, n - 1 - edge].flatMap(x => [edge, mid, n - 1 - edge].map(y => [x, y])) : [[edge, edge], [edge, n - edge - 1], [n - edge - 1, edge], [n - edge - 1, n - edge - 1], [mid, mid]];
+      ctx.fillStyle = s.boardColor === 'bw' ? '#202020' : '#201d18'; for (const [x, y] of stars) { ctx.beginPath(); ctx.arc(x0 + cell * x, y0 + cell * y, cell * .08, 0, Math.PI * 2); ctx.fill(); }
+    }
+    ctx.fillStyle = '#333333'; font(ctx, Math.min(3.5, cell * .31), 400);
+    const coordSize = Math.min(3.5, cell * .31);
+    const labels = Array.from({ length: d.size.w }, (_, i) => coordLabel(i + 1, 'h', s.coordFormat));
+    for (const [enabled, yy] of [[p.top, y0 - cell * .91], [p.bottom, y0 + bh + cell * .91]]) {
+      if (enabled) horizontalCoordinateLayout(labels, coordSize, yy).forEach((t, i) => coordinateGlyph(ctx, t.text, x0 + cell * i, t.baseline, coordSize));
+    }
+    for (let y = 0; y < d.size.h; y++) {
+      const label = coordLabel(y + 1, 'v', s.coordFormat);
+      if (p.left) centeredGlyph(ctx, label, x0 - cell * .91, y0 + cell * y);
+      if (p.right) centeredGlyph(ctx, label, x0 + bw + cell * .91, y0 + cell * y);
+    }
+    const r = cell * .47;
+    for (const st of d.stones) {
+      const x = x0 + (st.p % d.size.w) * cell, y = y0 + Math.floor(st.p / d.size.w) * cell;
+      const base = stone(ctx, x, y, r, st.color, s, scale, st.p + 1);
+      if (s.numbers && st.n) number(ctx, K.moveLabel(st.n, d.start, s.numberStyle), x, y, r, contrast(base), s.numberStyle === 'kanji');
+    }
+    return geo;
+  }
+  function drawAnnotation(ctx, a, s, scale) {
+    ctx.save();
+    // No caption and no opaque panel: the notation itself is the content.
+    a.rows.forEach((row, index) => {
+      const y = a.y + a.pad + (index + .5) * a.lh;
+      const origin = a.centered ? a.x + (a.w - rowWidth(row)) / 2 : a.x + a.pad;
+      row.forEach(e => {
+        let x = origin + e.x;
+        if (e.graphical && s.repeatStones && s.repeatStoneStyle === 'onStone') {
+          for (const p of e.graphical.parts) {
+            if (p.kind === 'stone') {
+              const r = a.fs * .98, sx = x + p.x + p.w / 2;
+              const base = stone(ctx, sx, y, r, p.color, s, scale, p.color * 31 + index, false);
+              number(ctx, p.label, sx, y, r, contrast(base), p.kanji);
+            } else {
+              ctx.fillStyle = '#222222'; font(ctx, a.fs); centeredGlyph(ctx, p.text, x + p.x + p.w / 2, y);
+            }
+          }
+          if (e.comma) { ctx.fillStyle = '#222222'; font(ctx, a.fs); centeredGlyph(ctx, e.comma, x + e.graphical.w + textWidth(e.comma, a.fs) / 2, y + a.fs * .23); }
+        } else {
+          if (s.repeatStones) { stone(ctx, x + a.fs * .55, y, a.fs * .48, e.color, s, scale, 1, true); x += a.fs * 1.55; }
+          ctx.fillStyle = '#222222'; font(ctx, a.fs); const t = e.drawText === undefined ? e.text : e.drawText;
+          const metrics = inkMetrics(ctx, '国Ag'); ctx.fillText(t, x, y + (metrics.a - metrics.d) / 2);
+        }
+      });
+    });
+    if (a.overflow) {
+      ctx.fillStyle = '#666666'; font(ctx, 2); ctx.textAlign = a.centered ? 'center' : 'left'; ctx.textBaseline = 'top';
+      ctx.fillText('続きは補記ページ', a.centered ? a.x + a.w / 2 : a.x + a.pad, a.y + a.h - 3);
+    }
+    ctx.restore();
+  }
+  function draw(canvas, page, input, dpi = 110, options = {}) {
+    const s = K.normalizeSettings(input), scale = dpi / 25.4;
+    const cw = Math.round(page.W * scale), ch = Math.round(page.H * scale);
+    if (cw * ch > 45000000) throw new Error('画像が大きすぎます。解像度を300 dpi以下にしてください。');
+    canvas.width = cw; canvas.height = ch;
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) throw new Error('Canvasを作成できません。別のブラウザで開いてください。');
+    ctx.setTransform(scale, 0, 0, scale, 0, 0); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, page.W, page.H);
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    for (const b of page.blocks) {
+      if (b.kind === 'rect') { ctx.fillStyle = b.fill; ctx.fillRect(b.x, b.y, b.w, b.h); if (b.stroke) { ctx.strokeStyle = b.stroke; ctx.lineWidth = .17; ctx.strokeRect(b.x, b.y, b.w, b.h); } }
+      else if (b.kind === 'vertical') drawVertical(ctx, b);
+      else {
+        font(ctx, b.size, b.weight); ctx.fillStyle = b.color; ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+        if (b.align === 'center') {
+          b.lines.forEach((line, i) => {
+            const m = inkMetrics(ctx, line);
+            ctx.fillText(line, b.x + b.w / 2 + (m.l - m.r) / 2, b.y + i * b.lh + m.a);
+          });
+        } else if (b.align === 'right') { ctx.textAlign = 'right'; b.lines.forEach((line, i) => ctx.fillText(line, b.x + b.w, b.y + i * b.lh)); } else b.lines.forEach((line, i) => ctx.fillText(line, b.x, b.y + i * b.lh));
+      }
+    }
+    let geometry = null;
+    if (page.type === 'board') geometry = board(ctx, page, s, scale);
+    if (page.annotation) drawAnnotation(ctx, page.annotation, s, scale);
+    ctx.strokeStyle = '#cccccc'; ctx.lineWidth = .15;
+    ctx.beginPath(); ctx.moveTo(page.margin, page.H - page.margin - 5); ctx.lineTo(page.W - page.margin, page.H - page.margin - 5); ctx.stroke();
+    font(ctx, 2.5); ctx.textBaseline = 'top'; ctx.fillStyle = '#666666'; ctx.textAlign = 'left';
+    ctx.fillText(page.type === 'board' ? `全${page.diagram.total}手  ／  棋譜図 ${page.source} / ${page.boardCount}` : `補記  ／  第${page.source}譜関連`, page.margin, page.H - page.margin - 3.4);
+    ctx.textAlign = 'right'; ctx.fillText(`${page.index} / ${page.totalPages}`, page.W - page.margin, page.H - page.margin - 3.4);
+    if (options.draft) {
+      ctx.save(); ctx.translate(page.W / 2, page.H / 2); ctx.rotate(-.4);
+      ctx.fillStyle = 'rgba(170,55,35,.16)'; font(ctx, 10, 600); ctx.textAlign = 'center'; ctx.fillText(options.draft, 0, 0); ctx.restore();
+    }
+    return geometry;
+  }
+  function clearFontCache() { glyphCache.clear(); }
+  root.KifuRender = { ready: () => assetsReady, PAPERS, SANS, paperSize, wrap, getPlans, draw, stone, number, numberMetrics, boardGeometry, verticalColumns, verticalTokens, metadataFields, dateText, halfPoints, timeLines, header, boardTexture, horizontalCoordinateLayout, repeatEntries, tokensLayout, contrast, coordLabel, clearFontCache };
+})(globalThis);
+
+/* Binary PDF/JPEG/PNG/ZIP export. No external PDF/ZIP CDN is required.
+ * PDFs contain high-resolution JPEG pages (not editable vector text).
+ */
+(function (root) {
+  'use strict';
+  const encoder = new TextEncoder();
+  const bytes = s => encoder.encode(s);
+  const join = arrays => {
+    const len = arrays.reduce((a, b) => a + b.length, 0), result = new Uint8Array(len);
+    let offset = 0; for (const a of arrays) { result.set(a, offset); offset += a.length; }
+    return result;
+  };
+  const crcTable = (() => {
+    const t = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) { let c = i; for (let j = 0; j < 8; j++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[i] = c >>> 0; }
+    return t;
+  })();
+  function crc32(data) { let c = 0xffffffff; for (const b of data) c = crcTable[(c ^ b) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
+  function safeName(name) {
+    const s = String(name || 'kifu').normalize('NFC').replace(/\.sgf$/i, '').replace(/[<>:"/\\|?*\x00-\x1f\x7f]/g, '_').replace(/[ .]+$/g, '').slice(0, 140);
+    return s || 'kifu';
+  }
+  function pngDensity(data, dpi) {
+    if (data[0] !== 137 || String.fromCharCode(...data.slice(1, 4)) !== 'PNG') throw new Error('PNGの生成に失敗しました。');
+    const ppm = Math.round(dpi / .0254), payload = new Uint8Array(9), pv = new DataView(payload.buffer);
+    pv.setUint32(0, ppm); pv.setUint32(4, ppm); payload[8] = 1;
+    const kind = bytes('pHYs'), content = join([kind, payload]), chunk = new Uint8Array(21), cv = new DataView(chunk.buffer);
+    cv.setUint32(0, 9); chunk.set(content, 4); cv.setUint32(17, crc32(content));
+    const parts = [data.slice(0, 8)]; let p = 8, added = false;
+    while (p + 12 <= data.length) {
+      const n = new DataView(data.buffer, data.byteOffset + p, 4).getUint32(0), end = p + n + 12;
+      if (end > data.length) throw new Error('PNGチャンクが破損しています。');
+      const type = String.fromCharCode(...data.slice(p + 4, p + 8));
+      if (type !== 'pHYs') parts.push(data.slice(p, end));
+      if (type === 'IHDR' && !added) { parts.push(chunk); added = true; }
+      p = end;
+    }
+    return join(parts);
+  }
+  function jpegDensity(data, dpi) {
+    if (data[0] !== 255 || data[1] !== 216) throw new Error('JPEGの生成に失敗しました。');
+    const out = data.slice(); let p = 2;
+    while (p + 4 <= out.length && out[p] === 255) {
+      const marker = out[p + 1]; if (marker === 0xda || marker === 0xd9) break;
+      const len = (out[p + 2] << 8) | out[p + 3];
+      if (len < 2 || p + len + 2 > out.length) break;
+      if (marker === 0xe0 && len >= 16 && String.fromCharCode(...out.slice(p + 4, p + 9)) === 'JFIF\0') {
+        out[p + 11] = 1; out[p + 12] = dpi >> 8; out[p + 13] = dpi & 255; out[p + 14] = dpi >> 8; out[p + 15] = dpi & 255;
+        return out;
+      }
+      p += len + 2;
+    }
+    const app = new Uint8Array([255, 224, 0, 16, 74, 70, 73, 70, 0, 1, 2, 1, dpi >> 8, dpi & 255, dpi >> 8, dpi & 255, 0, 0]);
+    return join([out.slice(0, 2), app, out.slice(2)]);
+  }
+  function canvasBlob(canvas, mime, quality = .98) {
+    return new Promise((resolve, reject) => {
+      try { canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('画像を生成できません。解像度を下げてください。')), mime, quality); }
+      catch (e) { reject(new Error(`画像出力に失敗しました：${e.message}`)); }
+    });
+  }
+  async function imageData(canvas, format, dpi) {
+    const blob = await canvasBlob(canvas, format === 'png' ? 'image/png' : 'image/jpeg');
+    const data = new Uint8Array(await blob.arrayBuffer());
+    return format === 'png' ? pngDensity(data, dpi) : jpegDensity(data, dpi);
+  }
+  function zip(files) {
+    const local = [], central = []; let offset = 0;
+    if (files.length > 65535) throw new Error('ZIPファイル数の上限を超えています。');
+    const now = new Date(), time = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+    const date = ((Math.max(1980, now.getFullYear()) - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+    for (const file of files) {
+      const name = bytes(file.name), data = file.data, crc = crc32(data);
+      if (data.length > 0xffffffff || offset > 0xffffffff) throw new Error('ZIP64が必要な大きさのため出力できません。');
+      const lh = new Uint8Array(30 + name.length), lv = new DataView(lh.buffer);
+      lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+      lv.setUint16(8, 0, true); lv.setUint16(10, time, true); lv.setUint16(12, date, true);
+      lv.setUint32(14, crc, true); lv.setUint32(18, data.length, true); lv.setUint32(22, data.length, true); lv.setUint16(26, name.length, true); lh.set(name, 30);
+      local.push(lh, data);
+      const ch = new Uint8Array(46 + name.length), v = new DataView(ch.buffer);
+      v.setUint32(0, 0x02014b50, true); v.setUint16(4, 20, true); v.setUint16(6, 20, true); v.setUint16(8, 0x0800, true);
+      v.setUint16(12, time, true); v.setUint16(14, date, true); v.setUint32(16, crc, true); v.setUint32(20, data.length, true); v.setUint32(24, data.length, true);
+      v.setUint16(28, name.length, true); v.setUint32(42, offset, true); ch.set(name, 46); central.push(ch);
+      offset += lh.length + data.length;
+    }
+    const size = central.reduce((a, b) => a + b.length, 0), end = new Uint8Array(22), v = new DataView(end.buffer);
+    v.setUint32(0, 0x06054b50, true); v.setUint16(8, files.length, true); v.setUint16(10, files.length, true);
+    v.setUint32(12, size, true); v.setUint32(16, offset, true);
+    return new Blob([...local, ...central, end], { type: 'application/zip' });
+  }
+  function pdfTitle(s) {
+    let out = 'FEFF'; for (let i = 0; i < s.length; i++) out += s.charCodeAt(i).toString(16).padStart(4, '0'); return `<${out}>`;
+  }
+  class PdfWriter {
+    constructor(pages, title) {
+      this.parts = []; this.offset = 0; this.offsets = [0]; this.pages = pages;
+      this.push(new Uint8Array([37, 80, 68, 70, 45, 49, 46, 52, 10, 37, 226, 227, 207, 211, 10]));
+      this.object(1, '<< /Type /Catalog /Pages 2 0 R >>');
+      this.object(2, `<< /Type /Pages /Count ${pages} /Kids [${Array.from({ length: pages }, (_, i) => `${4 + i * 3} 0 R`).join(' ')}] >>`);
+      this.object(3, `<< /Title ${pdfTitle(title)} /Producer (Kifu Print Web 2.0.0) >>`);
+    }
+    push(data) { const d = typeof data === 'string' ? bytes(data) : data; this.parts.push(d); this.offset += d.length; }
+    object(id, text) { this.offsets[id] = this.offset; this.push(`${id} 0 obj\n${text}\nendobj\n`); }
+    stream(id, dict, data) { this.offsets[id] = this.offset; this.push(`${id} 0 obj\n<< ${dict} /Length ${data.length} >>\nstream\n`); this.push(data); this.push('\nendstream\nendobj\n'); }
+    addPage(index, page, canvas, jpeg) {
+      const id = 4 + index * 3, w = (page.W * 72 / 25.4).toFixed(5), h = (page.H * 72 / 25.4).toFixed(5);
+      this.object(id, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] /Resources << /XObject << /PageImage ${id + 1} 0 R >> >> /Contents ${id + 2} 0 R >>`);
+      this.stream(id + 1, `/Type /XObject /Subtype /Image /Width ${canvas.width} /Height ${canvas.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode`, jpeg);
+      this.stream(id + 2, '', bytes(`q\n${w} 0 0 ${h} 0 0 cm\n/PageImage Do\nQ`));
+    }
+    finish() {
+      const xref = this.offset, count = 4 + this.pages * 3;
+      this.push(`xref\n0 ${count}\n0000000000 65535 f \n`);
+      for (let i = 1; i < count; i++) this.push(`${String(this.offsets[i]).padStart(10, '0')} 00000 n \n`);
+      this.push(`trailer\n<< /Size ${count} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+      return new Blob(this.parts, { type: 'application/pdf' });
+    }
+  }
+  async function generate(plans, settings, filename, onProgress = () => {}, signal) {
+    if (settings.grain === 'itame' && !(await root.KifuRender.ready())) throw new Error('板目の画像素材を読み込めません。');
+    const errors = root.KifuCore.validateSettings(settings); if (errors.length) throw new Error(errors[0]);
+    const name = safeName(filename), files = [], canvas = document.createElement('canvas');
+    const format = settings.format, writer = format === 'pdf' ? new PdfWriter(plans.length, name) : null;
+    let accumulated = 0;
+    try {
+      for (let i = 0; i < plans.length; i++) {
+        if (signal && signal.aborted) throw new DOMException('出力を中止しました。', 'AbortError');
+        onProgress(i, plans.length, `${i + 1} / ${plans.length}ページを生成中`);
+        await new Promise(resolve => setTimeout(resolve, 0));
+        root.KifuRender.draw(canvas, plans[i], settings, Number(settings.dpi));
+        const data = await imageData(canvas, format === 'pdf' ? 'jpg' : format, Number(settings.dpi));
+        accumulated += data.length;
+        if (accumulated > 400 * 1024 * 1024) throw new Error('出力が400 MiBを超えました。解像度を下げるか、手数分割を減らしてください。');
+        if (writer) writer.addPage(i, plans[i], canvas, data);
+        else files.push({ name: `${name}${plans.length > 1 ? '_p' + String(i + 1).padStart(3, '0') : ''}.${format}`, data });
+      }
+      if (signal && signal.aborted) throw new DOMException('出力を中止しました。', 'AbortError');
+      onProgress(plans.length, plans.length, 'ファイルをまとめています');
+      if (writer) return { blob: writer.finish(), name: `${name}.pdf` };
+      if (files.length === 1) return { blob: new Blob([files[0].data], { type: format === 'png' ? 'image/png' : 'image/jpeg' }), name: files[0].name };
+      return { blob: zip(files), name: `${name}_${format}.zip` };
+    } finally { canvas.width = 1; canvas.height = 1; }
+  }
+  const urls = new Set();
+  function save(blob, name) {
+    const url = URL.createObjectURL(blob); urls.add(url);
+    const a = document.createElement('a'); a.href = url; a.download = name; a.target = '_self';
+    a.style.display = 'none'; document.body.append(a); a.click(); a.remove();
+    // Keep an explicit download link alive for browsers which block the automatic click.
+    return { url, revoke: () => { URL.revokeObjectURL(url); urls.delete(url); } };
+  }
+  root.addEventListener('pagehide', () => { for (const url of urls) URL.revokeObjectURL(url); urls.clear(); });
+  root.KifuExport = { crc32, pngDensity, jpegDensity, zip, PdfWriter, generate, safeName, save };
+})(globalThis);
+</script><script>const SAMPLE_SGF="(;FF[4]GM[1]CA[UTF-8]AP[KifuPrintWeb:1.0.0]PB[サンプル黒(10級)]PW[サンプル白(9級)]DT[2026-09-18]PC[動作確認用]EV[サンプル対局・架空の棋譜]RU[Japanese]KM[6.5]RE[B+R]SZ[19]TM[600]OT[3x30 byo-yomi]C[ソフトウェアの確認用に生成した架空の対局。実際の対局ではありません。];B[bo];W[ae];B[hm];W[ee];B[ac];W[qf];B[hi];W[ah];B[dj];W[fs];B[sd];W[lm];B[hf];W[io];B[re];W[mj];B[qh];W[gr];B[fl];W[ik];B[ag];W[js];B[lq];W[bk];B[gn];W[rf];B[qm];W[ff];B[el];W[ha];B[gm];W[of];B[ib];W[mh];B[mi];W[be];B[oa];W[dk];B[ki];W[rn];B[ab];W[gq];B[bn];W[ho];B[rb];W[iq];B[pq];W[rj];B[mb];W[jk];B[ni];W[ad];B[is];W[qb];B[lo];W[fn];B[af];W[ci];B[sb];W[nf];B[ed];W[rm];B[he];W[ij];B[fc];W[bg];B[la];W[aj];B[ob];W[fa];B[nj];W[qj];B[mp];W[ko];B[gj];W[kg];B[qp];W[pa];B[cd];W[so];B[sh];W[jb];B[gg];W[ap];B[es];W[as];B[ml];W[lp];B[cp];W[ls];B[no];W[gl];B[qs];W[kr];B[nh];W[di];B[cr];W[dg];B[jp];W[fg];B[pe];W[op];B[rr];W[bb];B[go];W[cg];B[ig];W[sp];B[pi];W[hc];B[ji];W[bf];B[mq];W[qa];B[ei];W[sg];B[eh];W[nn];B[hj];W[oo];B[fm];W[qi];B[je];W[ch];B[np];W[aa];B[qo];W[dn];B[ma];W[pb];B[gf];W[if];B[nq];W[oe];B[nb];W[kl];B[al];W[kp];B[sm];W[rs];B[kc];W[jl];B[hk];W[kk];B[fk];W[ba];B[md];W[fe];B[cb];W[me];B[ol];W[ce];B[jr];W[dl];B[ag];W[ke];B[lj];W[pk];B[cq];W[jg];B[da];W[sa];B[ir];W[qg];B[mc];W[ic];B[gk];W[ns];B[on];W[pm];B[oj];W[fp];B[fi];W[bj];B[cs];W[si];B[dp];W[lb];B[jm];W[pj];B[rl];W[qc];B[qd];W[nd];B[im];W[lg];B[ck];W[hn];B[ja];W[ql];B[dr];W[ea];B[cc];W[or];B[oi];W[sj];B[eg];W[bh];B[mf];W[sk];B[cn];W[lf];B[pn];W[lh];B[fh];W[pg];B[gb];W[ak];B[il];W[om];B[hd];W[am];B[qk];W[pc];B[lk];W[hr];B[er];W[mg];B[pf];W[bm];B[hg];W[bd];B[ep];W[en];B[pp];W[mr];B[qe];W[sr];B[an];W[aq];B[fd];W[kh];B[ar];W[nr];B[ok])\n";
+// Standalone viewer for the eight layouts implemented in the production UI.
+const examples = [
+ ['H1','horizontal','balanced','中央バランス型','大会名・対局者・条件を中央にまとめる。少ない項目でも余白が片側に偏らず、盤面を大きく残しやすい。'],
+ ['H2','horizontal','table','二列整列表型','項目名と値を表で対応させる。掲載情報を照合しやすい。行数に応じて情報欄が高くなる。'],
+ ['H3','horizontal','cards','対局者カード型','黒白を左右のカードにまとめ、共通条件を下に集約する。名前を主役にした構成。'],
+ ['H4','horizontal','bands','分類帯型','対局者・対局記録・対局条件・勝敗に分類。情報量が変わっても分類の位置を追いやすい。'],
+ ['V1','vertical','balanced','均等列組み型','ラベルと値の開始位置をそろえ、使う列を均等配置。空欄の列は作らない。'],
+ ['V2','vertical','table','罫線整列表型','縦列を罫線で分け、項目名の帯を設ける。複数列の持ち時間も一つのセルに収める。'],
+ ['V4','vertical','tiles','二段タイル型','対局者・対局記録を上段、対局条件・勝敗を下段に配置する。上部の高さを使うため盤面は小さくなる。'],
+ ['V5','vertical','focus','対局者強調型','黒白の名前を少し大きくし、対局者と勝敗の背景を淡く強調する。共通条件は控えめな列にまとめる。']
+];
+const K=KifuCore, R=KifuRender, E=KifuExport;
+const tree=K.parse(SAMPLE_SGF).games[0];tree.nodes=tree.nodes.slice(0,101);tree.children=[];
+const model=K.replay(tree),initial=K.metadata(model.branch.nodes);
+function proposalMeta(density='all') {
+ const m={...structuredClone(initial),black:'Aoi12',blackRank:'10級',white:'Ren34',whiteRank:'15級',event:'第12回 秋季囲碁大会',place:'市民文化会館',date:'2026-09-18',result:'白1.5目勝ち',komi:'6.5',notes:'',time:{mode:'fischer',minutes:'20',increment:'10',seconds:'30',periods:'3'}};
+ Object.assign(m.include,{event:density==='all',place:density!=='minimal',date:density!=='minimal',blackRank:density!=='minimal',whiteRank:density!=='minimal',time:density==='all',notes:false});return m;
+}
+function buildProposal(index,density='all') {
+ const v=examples[index],s={...K.defaults(),infoDirection:v[1],[v[1]==='horizontal'?'infoLayoutHorizontal':'infoLayoutVertical']:v[2]},m=proposalMeta(density),plans=R.getPlans(model,s,m);
+ for(const p of plans)p.blocks.push({kind:'text',role:'proposal-caption',lines:[`${v[0]} ${v[3]} ／ 搭載レイアウト・架空の対局`],x:p.margin,y:5,w:p.W-2*p.margin,size:2.6,weight:400,color:'#555555',lh:3.85,align:'center'});
+ return {s,m,plans,description:v[4]};
+}
+let current;
+function updateProposal(){
+ try{const index=Number(document.querySelector('#variant').value),density=document.querySelector('#density').value;current=buildProposal(index,density);document.querySelector('#description').textContent=current.description;R.draw(document.querySelector('#canvas'),current.plans[0],current.s,150);document.querySelector('#error').textContent='';}
+ catch(e){document.querySelector('#error').textContent=e.message;current=null;}
+}
+const selector=document.querySelector('#variant');examples.forEach((v,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${v[0]} ${v[3]}`;selector.append(o)});
+selector.addEventListener('change',updateProposal);document.querySelector('#density').addEventListener('change',updateProposal);
+document.querySelector('#savePdf').addEventListener('click',async()=>{if(!current)return;const button=document.querySelector('#savePdf');button.disabled=true;try{const result=await E.generate(current.plans,{...current.s,format:'pdf',dpi:300},'layout_'+examples[Number(selector.value)][0]);E.save(result.blob,result.name);}catch(e){document.querySelector('#error').textContent=e.message;}finally{button.disabled=false}});
+updateProposal();
+</script></html>

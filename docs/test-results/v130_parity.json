@@ -1,0 +1,633 @@
+{
+  "baseline": "v1.3.0",
+  "current": "v2.0.0",
+  "dpi": 60,
+  "cases": 48,
+  "pages": 144,
+  "checks": [
+    {
+      "direction": "horizontal",
+      "layout": "balanced",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "cc29d8ba0daed128d42da131c3aba2c2d4115a1f1d424f38d0972ee50a156c3f",
+        "21b04388af6101a46308cc6674a9b8e1ea5c2595e10582f018cc12ac33798dbf",
+        "2d29163b20bae82d5c21cb71b6539c60250c17ee76e39609ef30ca2bd65fad76"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "balanced",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "8045eb7cf9629d308c6076ee92de8a0577cda74b3c03c492d12c69dc017627a2",
+        "1df2654686f922174e93dd67a60ee6ad1730f1ca3b9762d36fa15cb4e38aeec2",
+        "c344f37013ab3abfb2fcf8cecb89189d1a16e712c64074f00ae5d23000c4368b"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "balanced",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "f7e6965ed00b8ab0a71927c1e1903f508aff50f7847db3045cad8a72f6d95aec",
+        "95c2d72772ebac7490f4fc00b68f16e8f78edbb605c3836b268565001bca3998",
+        "b7922576c5a5e04cec936e3002eb7b829d288fd6857ab6f6669596048f409058"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "balanced",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "b1236fbeb8ed5028037ef176a53e14f24f6316a2adb17a9ed5f424cdebeb0419",
+        "ccebadd1950e79014c6e3a37da1758324107faa15bbd19414df731e9bdd03627",
+        "f685ffcebdacf1b5900e3dd949b167603426e536872a24ae4e19fd5597ad8e79"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "balanced",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "f618d4712552524209cb7c81168eb24f5046b7edf63d8039994b274ae31e3a8a",
+        "42e58bcef1a416a104571afdfd9a6ee963bb6bc0cfcef4884c92413c34b848ff",
+        "64854e458f46566b56e5f651fe60e5d802221e3d80a8b7e0f2c07fcdddbf4155"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "balanced",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "0c014f0b33fa7b155e8802e6de942eeef5fc038871bcbfc1d15272957d59a512",
+        "cbeb02ba611be9be261e25e1d3ce5d5732ebed6cecc13a5f0eb6b458fd114624",
+        "3401bda33b2a8aa9f0f92177f675c388ecfaf4c975af383f5d0f074f0ec7a934"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "table",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "cef28b498fdf5c1d685574d1a1eb827e8ce9e6386391fefee3e3f23876959b03",
+        "d17f425781ae5cd0775bc676330c4c6a556d820a944f73c9e451d9f34d15a9d5",
+        "8f36a59fc99026df6e336e1c292f0d1e5659a2adf6d871697b34b13ad9204ee3"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "table",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "a746b18a97a1d719099c97065b1139a06dbe7d991345fbaa91be3bc5c859f49e",
+        "ec05c2d1f9487b8e174d48c45a558957b501c9b2e66b1a5eae85d5524daa8f12",
+        "4dc63fe4cb98daf15bc7f5c2b6838b6d2800cd7c47ca332e5088485ec6b86d6c"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "table",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "7f57a88f98f941ba99d9aadf1a962eef60e98d8900a1aef723ac3030b5f429e5",
+        "76bdd32e31025a8aaaef36806a432c7982242bcc10a1ec48af8c8790a8911ef2",
+        "4184703f6cc1ce9c8787b164da7b6be0d5d7f89fcef8e480d16e4a0eb216bb17"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "table",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "e64fa5fd2aa1e88fcb3d8bbb24b9156ea8543d2e550037c5b1db15e37451936c",
+        "713b7877320dd4c97063f116b3cdbe99ac80cabdabbde230a565bf9b209e13c0",
+        "6a2df94a37191256c95b1ae531af63e1e9d6953cb427a953b95333ac949162c0"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "table",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "38a69d8b9ba50e560d12c36c9ed579b562966d39ae5736b2de7927d7f5872c0d",
+        "9208f59fe726a08338adfff888f5fda9df4b465ba35752eb65a3b40a13647fb2",
+        "a2b459269be313680bbeb53c922928fc450aa7493ae1b2f52f13f63c9c518382"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "table",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "de89fc8ec7e608232814052cb3f37d1c49f2a7b2fba840aea7e4796043ce7e4f",
+        "64accaf0188aaf214bb50964dc7e1cc403658e8e9152d7e372242fe66e16c78f",
+        "22ec6cd41a608e83f3b0d987c38cdc1b28c91709792e10d56b807cc7400fb030"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "cards",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "03a1b0a7d51cbaf1b7b8b9c1b75c4df474a8a848316e1e3501ac23d662e6bacf",
+        "683ddebb6541b0acd609989f6d884c73bc09cad8b7bca95d70b184841fdee0d5",
+        "65d7aa2f5df106dda853fb7576900b66b7aaee865b436c0ff8430343369e2de0"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "cards",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "5d37470af491c692d0b6bff014245e1c10877e8d15d7f3562b6be16293dce97e",
+        "009b5b3c90aef6ae36a28e0cf45504a7f18f818e519537ede383b5f2499d6f92",
+        "8ddbe9f9e26991ef78e0ddf68346da9f8a20aab31e5f509aef2722f7fa4dc0ed"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "cards",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "bb48805c7475561059873be57d87afa4be582e6cea240144f16c49d16b11c207",
+        "243aeeb6aca41fabef29dec21e1be29cbb3bb4675b325749fa2e1314c81a3223",
+        "fa80251605299a865984cdc79b178c65961b3a5ef57574e083d1f52f02f3c4b3"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "cards",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "4f91ab222731b778248a0fe61f4313d783836acc5b5ee8333fd3c582896685a1",
+        "3590cd804f5c6fa4a9ceb0441b50412ea38ed92468541ddf92ea7c6ec722a730",
+        "657f9bceccd89142660401105b4ef59dd2c2142d80f8d734cd0c9abd5ab01ea8"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "cards",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "99b8528b3519c9979a3fdd8960983fb2574c0e5e34a9fd0dc992c1b076ceff54",
+        "d2b437d928c441b14bb6189ec65b505780033de175d79dbcf9454a69b5ceefc6",
+        "4b53cd84092eda687416eb460bcc28e76761a4070a4942c4579478f2020ac093"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "cards",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "2276238ab02e3aa4cb0732e091eb379c8b64189452edb626e8806cbd7d6cbb09",
+        "61b5815c6f83c33ad4631fc4a61da4bac1bb8cd3f8a02a41bf2b9fc2165db468",
+        "ec590eace868dfd4070d47c8b724b20ad01e283aeed9c8ed51903a3fd582c02a"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "bands",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "c110189f48a38413e2e26bb02c0a2ac4b73a898d87ef886e73f63c326f2e483d",
+        "0d62617171c9fc40ea2e9688d8c8c4b2911b4e5c620255a434942a64c0e1099b",
+        "e359b0a1a750858b6ef94ec241f69a210845e6f99b59e62ee7fb63ac0dcec827"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "bands",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "a45ff0da50436d75a5b7a7f752b1e538c93bf24b32d9290852180656073c8d38",
+        "a8eacf43f5affa6aafade663a92bc0c33e183a51b66cb8d1122cb266dc41f6e8",
+        "736cc2474f1afdbb7772983cf1daaf5d371ba2667127037558a20d260647cac3"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "bands",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "2a4cf080522926aaabe71ef218c26406c151e69ad8f8b8bfa5f1a798d3edb239",
+        "0566d6b0be26d086475414fa1a9b83e24f0c461459942574626167379c8bdbf9",
+        "f62bae4ad5418cda6160846c9c4a6fd65b9d17c8d4782d0357f8a1eca119d869"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "bands",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "767dfdb2f6d52c709be1b673679a8e2066490fd3c893ea6c97c6d46e0b4d1bf0",
+        "60bb5b224ace30bfa390c05869256c13c38907b6de3f9040202b119428c828b7",
+        "45cc129899aaa834ee1a28ed1348baede336a0e06db5c369cca96c3a015d6b4f"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "bands",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "6c7e05119646b2284592bc3158f2a670449fb650d0289dbffe2fcf9d6af58635",
+        "cc849a209c9eb3d6807e095243c4b96e7db8cc49d05f65f53e46a1f2a1b134dd",
+        "d924e0a84a8cb413ae3e7a974ebf770b60924d4a20f322a1d020d05fa2c9ac91"
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "layout": "bands",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "7e48e25a9019481e7164851d0c3d3c6d56a2221ac532344df6e87a42ea08c91f",
+        "1080f29a97189c2a4db62b0a8529d9b2f063a178354b85971f8cc694edf035c8",
+        "ce5ab4f52422464b588358aed98d6cb3723573b9d3fa7e9f2f6c8e14caa587c4"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "balanced",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "86d9f4c2708c16645b6b31e60862e601d343cd864cf880833a9e7f0736462fd8",
+        "9355bb804bafb13838960bae80ce3cd0d2b06afb5d722d1d01a1cd6cfadfb639",
+        "6e8c5c02ff8d5637a38622844a83138eee9f5d4a25da58e17144105c38a0c0ee"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "balanced",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "f35a64e47147c9bda2b8660da2cf81379bc7112a8d48ef25c7544ed6e6f8b68b",
+        "415b171c7b208f9132afea4e6b9d830381206ce85566b0594189e9a4d88c5284",
+        "03c49251468651eebc8f1a031d0293556b0ba2248e3a64004f572e866de149af"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "balanced",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "7dcf56a50cc55be5d24f4346f323a4641273878829fa30093a2bb93c0d907502",
+        "a60d540bd093ed482e4eb90c7a223ae6351147d6c6c6f25ea911f2a25dff77fd",
+        "14c043864e59487fe3728172806c85348806e39807d82466b8f79125ff103132"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "balanced",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "9a08fcf908a2b75cb301603d3f96aacdd8d914354496584ede61f64ba2f47ef5",
+        "4dd26527a4264ebf940ecd0a2161fbab8e9a7842d5adfee6dcacc852268dab40",
+        "e6c7026b6c94c12edf45060b093d6ed4cbce9df350606d4ee71194fccb17b4af"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "balanced",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "d00140876a0df57a155df06ba03e448c2622f5c73b5bb53436645e3fe82bde31",
+        "a13c43226d56a901298266ffafe4a08855e14eabc1c5b2c55f96f080936a957a",
+        "c6d80a1d5c0a87abe3956a29bc300dec54b084596482703755af2fb1428de576"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "balanced",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "561e69b867fdbdb6c22d63258680ba1cc89272e5ac5336c12bf934b483678acb",
+        "ae4a6b42dd39906c490e41f91c4b058131411b8281c4f47522fcfd7439505a72",
+        "c3cf6b4d2f6922e802ecb53bdf35116708aa1e7b7b5d676a13d1bb46ff9edb6b"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "table",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "5b43a19367a2df97f72ea0d7eeea27ed3805692289c51f3b66b50fb216decbf1",
+        "5e049652634534ee60c37594e1fa54c8259c572d6fa2732c97798f3f1a696725",
+        "65430297ec868917fac4a185b36dc1f75c04144314cfecd519ddfa950347d337"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "table",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "e04ee147f99f9f64b925cd3e3c964d25ee5ddc27d1a3b1abd1da887d0c9dbb94",
+        "b3fe5db8b85f03eb098f6679cf69b1cbeeb2a9ecf2fdb82b3f46896b4dc1e093",
+        "0a18613eecd44e14e283c1a727216c9b131474e60b287e2518b182e905341cd1"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "table",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "12798c8de12742fd70f150de797d38705eaaf8747366584288e19615840d78d6",
+        "2c8ffbf9c5c4213e44a7af0500eb270a6f7c09136ddb83db3d4891a972e28b21",
+        "4d4ed320fd0dbcf0305636b587a17ffe3c4ea2a4290d9fea9b4ac13b4095485a"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "table",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "ce9b199646a8dc77e29ed740e250e9c6c8e5e59204176bd38f756e65d4ec08e1",
+        "cf7ff195435dee95956bb9418ca3f470cc14dd0696b339c0175ad983f464a96a",
+        "028f021408f2cf85e8ae71ab84bf1fedd37e428e68fcbc342548f193ff7c5d9e"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "table",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "ef1d0e1502ca83abb36b481b0c00018aff8bdd01249d451aa5f1a758bb4eb11b",
+        "bbaf4c20b61ba5ec6023366edec44212950e7dfe218c3a50422ad5395a04421d",
+        "212a1c0da6bb66a33d08d8f3cffcce409315e4b2e8b0852ed9e2ddbadbce62bb"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "table",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "85abb455d1062eb8e17b5e7abba92daa2c9d77d94a3de321bbe1b14d99d55392",
+        "0177e3200baedc326dae816a87894ec92e94a9d54cf860c74112997ff0732647",
+        "cbaa8857f2e48952871f16144df70dc96cbc9626059fc243e59f5a9b19b245f3"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "tiles",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "47f127c35435675c8b2f4c38494fba4137353cb73be0eda2957c7e5c70196ff4",
+        "ab8455830ea3f0f4228d09e20336ce5c8b25797d210406e2bb0d3ffbceef482d",
+        "44b279f3cf999aa9d7a3dbbd500934400e759da9a1128ab53584526df2107113"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "tiles",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "0c15a1ef3472a9c3d57b382ec26192b1be201e5bae27236a8fb8cacf26c0b741",
+        "93e0529534369709f258f29d563676c2c077084422619289b57196956d4b7ff8",
+        "fd4886d9f6f215e33de414cb4b7eef291df76ffaf797260d023203f0ec6c2bd0"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "tiles",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "aa3cfd5e7a5d38f61c30971961dc55db2d5ff366f377a51a6e5376c02027650f",
+        "3ce9f26f63a406da75f7d382fcb716d9af31f7f25011e8c3243b34e0267b8804",
+        "f58d43e6b0d0006fe1b90fb6ac87d58e7927f787d850f081f039adb522d19a3a"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "tiles",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "2e04f19fa3579d5f2f7669bcb0b6587381d8bd8e5553537caceb614c8d2d5d37",
+        "75fa72e883610d96a6d690b7c4d098df487118e468eed39cf292b26018d14432",
+        "60d3068c9949003b3ac00131657b4797a3d5dc19953fe6a63834ac9022ea3307"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "tiles",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "b5bd07769ba4ffb150dfe79ef0b887b7133afe99d2418798d3caaa074fd0cd9e",
+        "ce5bc0c585b8065a3303d49bb733f28b9999c79060042aea438c5de1467ffc89",
+        "833db4fed08b0458906ff0de26377e9dd13a5429279ea162049714ebe3c139d8"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "tiles",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "cdcd9966423b5f81a6b910f902dfa0eadff3f4b109b14394c29ed35aff6a4b8c",
+        "28a60e5fa3d7028bf7a19a8d19b9d6cac3586c519cb6721904137bedd95127f8",
+        "fce6bb8d3e32c065b7f4f991bd1e2b3aa496eb6848c45dd4ff5b846d622668fa"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "focus",
+      "mode": "japanese",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "cba50856808fb01a7230dd718ccd5eed29646276b4c11881aad18cef313ee64d",
+        "13dbfd9d93368cf7b301f085a46f543f37baa3c480f0e4e48d024f6712aec5f1",
+        "b886fe2ebe0a317623c3d8ee454b17536408d91fbfea350d0771cdc1f120e8d6"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "focus",
+      "mode": "canadian",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "36a11599d7fb88abe5d83bcc9cabbe05d27109cea81adcd25252a7ca2f2e6b3d",
+        "a9fd18aeabb015de88b29300b5f6fcbd3e94f276ceaaf65da92b7aafe0f2796e",
+        "60e81a24a7252b2e9a1edaaca1024875aee06f87e3aa657b33bf09431fb6e6ef"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "focus",
+      "mode": "fischer",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "1c3d1ea8ecdc01278fa6efc7246d288893a91e1663fbc497e4c67eb90d12974b",
+        "1582870abae0052618741b9bcef76bb4f9b3a518f9229c8fc7a74e0750ba01ba",
+        "6c1f23e176720d97c31806560f0b2f3397969e379d4e7ebb71ee874e40e852bd"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "focus",
+      "mode": "absolute",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "4711fd0cd8b8a2102afd7e7c3f34ce0e7d7b83701e14fc2dc64de525d257df8b",
+        "54c1a2170b48f3f30b5766364933d8ad2c6a20fc2c4165f4cf05fb5bc96d3e47",
+        "b9813899f98eafdac2071bcbcabe37b3133e9f2312bbe21bd546fd7cd5006f31"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "focus",
+      "mode": "byoyomi",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "dbf7a4bb1fc034b4df7f4b06f6fcc5b1aa48be48a41c51be10dd6786db97548e",
+        "e33f33788ad184affe54b9b58afcdcb645e3a707cfa7097f6c714f41077a3e52",
+        "79a6a3556c90a1b96bc07fe5d3ecf0dcef8a65feaae6495ce29ed7afa510ae9d"
+      ]
+    },
+    {
+      "direction": "vertical",
+      "layout": "focus",
+      "mode": "nhk",
+      "plan_identical": true,
+      "canvas_png_identical": true,
+      "pages": 3,
+      "page_hashes": [
+        "e74c13925a9b6d69212f1d2fa89e64247793e20d894cf7c17cf3c696a83f2348",
+        "2cf2dc5a45571f835cf562a6865d0e501809156e5d7c99c0425df232ab5b5d7d",
+        "2d4dfae6f1ec325e2e9845e253b5b5909e6f169f203919643b0454fe5cd5bf0f"
+      ]
+    }
+  ]
+}

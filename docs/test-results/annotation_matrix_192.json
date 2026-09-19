@@ -1,0 +1,1350 @@
+{
+  "count": 192,
+  "maxCenterError": 0,
+  "results": [
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A3",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A4",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "A5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "portrait",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "horizontal",
+      "repeatPosition": "right",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "top",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "bottom",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "left",
+      "style": "onStone"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "none"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "beside"
+    },
+    {
+      "paper": "B5",
+      "orientation": "landscape",
+      "infoDirection": "vertical",
+      "repeatPosition": "right",
+      "style": "onStone"
+    }
+  ]
+}

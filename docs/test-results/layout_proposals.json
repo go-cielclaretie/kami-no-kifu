@@ -1,0 +1,148 @@
+{
+  "results": [
+    {
+      "id": "H1",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H1",
+      "density": "standard",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H1",
+      "density": "all",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H2",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H2",
+      "density": "standard",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H2",
+      "density": "all",
+      "boardWidth": 164.40508396178984,
+      "metadataWidth": 164.38008396178984
+    },
+    {
+      "id": "H3",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H3",
+      "density": "standard",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H3",
+      "density": "all",
+      "boardWidth": 176.52114630467568,
+      "metadataWidth": 176.49614630467568
+    },
+    {
+      "id": "H4",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H4",
+      "density": "standard",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "H4",
+      "density": "all",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "V1",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "V1",
+      "density": "standard",
+      "boardWidth": 178.08612166918047,
+      "metadataWidth": 178.06112166918047
+    },
+    {
+      "id": "V1",
+      "density": "all",
+      "boardWidth": 171.2802091503268,
+      "metadataWidth": 171.2552091503268
+    },
+    {
+      "id": "V2",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "V2",
+      "density": "standard",
+      "boardWidth": 178.08612166918047,
+      "metadataWidth": 178.06112166918047
+    },
+    {
+      "id": "V2",
+      "density": "all",
+      "boardWidth": 171.2802091503268,
+      "metadataWidth": 171.2552091503268
+    },
+    {
+      "id": "V4",
+      "density": "minimal",
+      "boardWidth": 152.9347381043781,
+      "metadataWidth": 152.8886262365078
+    },
+    {
+      "id": "V4",
+      "density": "standard",
+      "boardWidth": 144.99512944581,
+      "metadataWidth": 144.94851718965938
+    },
+    {
+      "id": "V4",
+      "density": "all",
+      "boardWidth": 137.84241193310524,
+      "metadataWidth": 137.78804051169433
+    },
+    {
+      "id": "V5",
+      "density": "minimal",
+      "boardWidth": 180.72197083961788,
+      "metadataWidth": 180.69697083961788
+    },
+    {
+      "id": "V5",
+      "density": "standard",
+      "boardWidth": 178.08612166918047,
+      "metadataWidth": 178.06112166918047
+    },
+    {
+      "id": "V5",
+      "density": "all",
+      "boardWidth": 171.2802091503268,
+      "metadataWidth": 171.2552091503268
+    }
+  ]
+}

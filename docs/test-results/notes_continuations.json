@@ -1,0 +1,30 @@
+[
+  {
+    "dir": "horizontal",
+    "mode": "same",
+    "pages": 5,
+    "boardCount": 3,
+    "contentRecovery": true
+  },
+  {
+    "dir": "horizontal",
+    "mode": "individual",
+    "pages": 9,
+    "boardCount": 3,
+    "contentRecovery": true
+  },
+  {
+    "dir": "vertical",
+    "mode": "same",
+    "pages": 5,
+    "boardCount": 3,
+    "contentRecovery": true
+  },
+  {
+    "dir": "vertical",
+    "mode": "individual",
+    "pages": 9,
+    "boardCount": 3,
+    "contentRecovery": true
+  }
+]
