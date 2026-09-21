@@ -19,7 +19,7 @@ const server = http.createServer(async (req, res) => {
     if (!pathname.startsWith(base) || pathname.includes('\\') || pathname.includes('\0')) { res.writeHead(404); return res.end('Not found'); }
     let name = pathname.slice(base.length); if (!name || name.endsWith('/')) name += 'index.html';
     // Only public static resources, not development files or uploads.
-    if (!(name === 'index.html' || /^(js|css|assets)\//.test(name))) { res.writeHead(404); return res.end('Not found'); }
+    if (!(name === 'index.html' || /^(js|css|assets|fonts)\//.test(name))) { res.writeHead(404); return res.end('Not found'); }
     const full = resolve(root, name);
     if (!full.startsWith(root + sep) || !(await stat(full)).isFile()) { res.writeHead(404); return res.end('Not found'); }
     const data = await readFile(full);

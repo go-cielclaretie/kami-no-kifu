@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>縦書き対局情報レイアウト A〜E・25案</title>
+  <style>
+    :root{color-scheme:light;--ink:#202622;--sub:#667169;--line:#d7ddd7;--paper:#fffef9;--accent:#355f4d;--bg:#e9eeea}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.65 "Yu Gothic UI","Yu Gothic","Noto Sans JP",Meiryo,sans-serif}
+    header{padding:30px max(18px,calc((100% - 980px)/2));background:#fff;border-bottom:1px solid var(--line)}
+    h1{margin:0;font-size:25px;letter-spacing:.045em} header p{max-width:760px;margin:8px 0 0;color:var(--sub)}
+    main{max-width:980px;margin:auto;padding:22px 18px 50px}
+    .tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+    .tabs button,.pick{border:1px solid #c8d1ca;border-radius:7px;background:#fff;color:var(--ink);font:inherit;cursor:pointer}
+    .tabs button{min-width:94px;padding:9px 14px;font-weight:600}.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+    .concept{display:grid;grid-template-columns:120px 1fr;gap:10px 20px;align-items:start;margin:0 0 20px;padding:13px 15px;background:#fff;border-left:4px solid var(--accent)}
+    .concept strong{font-size:16px}.concept p{margin:0;color:var(--sub)}
+    .selection{min-height:26px;margin:0 0 13px;color:var(--accent);font-weight:600}
+    .gallery{display:grid;gap:18px}
+    article{background:#fff;padding:15px 15px 13px;box-shadow:0 3px 14px #273e3020}
+    .article-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:10px}
+    h2{margin:0;font-size:16px;letter-spacing:.035em}.tag{color:var(--accent);font:600 12px/1.4 ui-monospace,Consolas,monospace}
+    .article-head p{margin:3px 0 0;color:var(--sub);font-size:12px}.pick{padding:6px 11px;white-space:nowrap}.pick[aria-pressed="true"]{background:#e6efe8;border-color:#6d907c;color:#264d3c;font-weight:600}
+    canvas{display:block;width:100%;height:auto;background:var(--paper);border:1px solid #d6d7d1}
+    .spec{display:flex;gap:13px;flex-wrap:wrap;margin-top:8px;color:var(--sub);font-size:11px}.spec b{color:#3c4740;font-weight:600}
+    footer{margin-top:24px;padding-top:14px;border-top:1px solid #cad2cc;color:var(--sub);font-size:12px}
+    @media(max-width:620px){header{padding-top:22px}h1{font-size:20px}.concept{grid-template-columns:1fr}.tabs button{min-width:54px;flex:1}.article-head{display:block}.pick{margin-top:8px}article{padding:12px 9px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>縦書き対局情報レイアウト A〜E・25案</h1>
+    <p>横書きA〜Eの役割を保ったまま、全案を高さ43mm相当の情報帯に収めた比較用プロトタイプ。文字はCSSの縦書きではなく、実装と同じCanvas 2Dで一字ずつ描画する。</p>
+  </header>
+  <main>
+    <nav class="tabs" role="tablist" aria-label="レイアウトのコンセプト"></nav>
+    <section class="concept" aria-live="polite"><strong id="conceptTitle"></strong><p id="conceptText"></p></section>
+    <p id="selection" class="selection" aria-live="polite">候補を選ぶと、ここに案番号が表示されます。</p>
+    <section id="gallery" class="gallery" aria-label="レイアウト案"></section>
+    <footer>共通原則：右から左へ読む／ラベルを分離する場合は必ず右、値は左／各縦列の字心は固定／句読点は右上、長音は縦線、括弧類のみ90度回転／2桁以下の数字は縦中横。</footer>
+  </main>
+  <script>
+  (() => {
+    'use strict';
+    const W=760,H=250,BAND={x:14,y:13,w:732,h:181},DPR=2;
+    const COLORS={ink:'#202622',sub:'#6a736d',line:'#cfd5cf',paper:'#fffef9',dark:'#222724',mid:'#69736c',white:'#ffffff',red:'#8d493e',board:'#dcc08a',boardLine:'#745f38'};
+    const fields=[
+      {key:'event',label:'大会名',value:'第18回本因坊秀策記念大会',group:'record'},
+      {key:'date',label:'対局日',value:'2026年9月20日',group:'record'},
+      {key:'place',label:'対局場所',value:'日本棋院・東京本院',group:'record'},
+      {key:'black',label:'黒番',value:'藤沢里菜　七段',group:'players'},
+      {key:'white',label:'白番',value:'井山裕太　九段',group:'players'},
+      {key:'handicap',label:'手合い',value:'互先',group:'conditions'},
+      {key:'rule',label:'ルール',value:'日本ルール',group:'conditions'},
+      {key:'komi',label:'コミ',value:'六目半',group:'conditions'},
+      {key:'time',label:'持ち時間',value:'各3時間／秒読み60秒',group:'conditions'},
+      {key:'result',label:'勝敗',value:'黒中押し勝ち',group:'result'}
+    ];
+    const byKey=key=>fields.find(f=>f.key===key);
+    const concepts=[
+      {id:'A',title:'A　整列表型',source:'横書きA：二列整列表',text:'全項目を同じ規則のセルに置き、項目名と値の対応を最優先する。縦書きでは右ラベル列＋左値列を一組として固定。',patterns:[
+        ['A1','総罫線','すべての項目を均質なセルで照合しやすくする。'],['A2','見出し帯','項目名だけを淡い縦帯に入れて値との役割差を明示。'],['A3','交互地','列の地色を交互に変え、罫線を減らして追従性を保つ。'],['A4','二重外枠','外周を強く、内部を細くして帳票らしい階層を作る。'],['A5','開放罫','上下線と短い区切りだけで、表の精度と軽さを両立。'] ]},
+      {id:'B',title:'B　中央バランス型',source:'横書きB：中央バランス',text:'装飾より余白と均衡を優先し、情報量が変わっても中央の重心を崩さない。長い値は高さを増やさず左側の列へ送る。',patterns:[
+        ['B1','無罫均等','均等な呼吸で並べる最も静かな案。'],['B2','中央軸','棋士と勝敗を中央軸に寄せ、左右の情報量を釣り合わせる。'],['B3','上下留め','細い上下線だけで情報帯の高さを明確にする。'],['B4','余白強調','項目群の間隔を広げ、まとまりを余白で示す。'],['B5','圧縮均衡','字間と列間を詰め、盤面への高さ負担を最小化。'] ]},
+      {id:'C',title:'C　対局者カード型',source:'横書きC：対局者カード',text:'黒番・白番を独立したカードとして主役にし、記録・条件は小さな補助列へ集約する。名前は太く、段位は同じ値列内で続ける。',patterns:[
+        ['C1','双子札','黒白を同じ寸法の二枚の札として並べる。'],['C2','黒白対照','黒番を墨面、白番を白面にして識別を強める。'],['C3','勝敗の橋','黒白の間に勝敗を置き、対局の関係を一塊にする。'],['C4','氏名札','棋士名の値列のみ拡大し、ラベルは細い脇柱にする。'],['C5','細枠カード','背景を使わず、細枠だけで端正なカード感を出す。'] ]},
+      {id:'D',title:'D　分類帯型',source:'横書きD：分類帯',text:'対局記録・対局者・対局条件・勝敗の四分類を帯として維持する。分類名は各帯の最右列、個別項目はその左側。',patterns:[
+        ['D1','四分類帯','四つの面を明確に分ける標準案。'],['D2','見出しレール','分類名だけを濃いレールにして各帯を識別。'],['D3','濃淡階層','地色の濃淡で記録から勝敗までの優先度を示す。'],['D4','括弧組','面を使わず、上下面の短い線で分類範囲を示す。'],['D5','極細区切り','最小限の縦線だけで分類の境界を残す。'] ]},
+      {id:'E',title:'E　対局者フォーカス型',source:'横書きE：対局者フォーカス',text:'黒番・白番・勝敗へ視線を集め、その他の条件は細く控えめに扱う。強調しても情報帯の高さは全案共通。',patterns:[
+        ['E1','墨面棋士','黒白の棋士カードを共通の墨面で大きく見せる。'],['E2','黒白対比','黒番を墨、白番を白で対照化し、勝敗を中間調に置く。'],['E3','勝敗芯','中央の勝敗を最も強くし、両側に棋士を従える。'],['E4','氏名拡大','面を使わず、棋士名と結果の字級差だけで焦点を作る。'],['E5','一文字帯','主要三項目に細い強調帯を添える、印刷向けの抑制案。'] ]}
+    ];
+    function font(ctx,size,weight=400){ctx.font=`${weight} ${size}px "Yu Gothic","Noto Sans JP",Meiryo,sans-serif`;}
+    function chars(text){return Array.from(String(text));}
+    function tokenise(text){
+      const src=chars(text),out=[];
+      for(let i=0;i<src.length;){
+        if(/[0-9０-９]/.test(src[i])){let s='';while(i<src.length&&/[0-9０-９]/.test(src[i]))s+=src[i++];if(chars(s).length<=2)out.push({text:s,tcy:true});else chars(s).forEach(c=>out.push({text:c}));continue;}
+        out.push({text:src[i++]});
+      }
+      return out;
+    }
+    function drawGlyph(ctx,t,x,cy,size,color,weight){
+      ctx.save();ctx.fillStyle=color;font(ctx,size,weight);ctx.textAlign='center';ctx.textBaseline='middle';const c=t.text;
+      if(t.tcy){font(ctx,Math.max(8,size*.72),weight);ctx.fillText(c,x,cy);}
+      else if(/[、。，．]/.test(c)){font(ctx,size*.62,weight);ctx.fillText(c,x+size*.27,cy-size*.25);}
+      else if(/[ー―－‐]/.test(c)){ctx.strokeStyle=color;ctx.lineWidth=Math.max(1,size*.09);ctx.beginPath();ctx.moveTo(x,cy-size*.38);ctx.lineTo(x,cy+size*.38);ctx.stroke();}
+      else if(/[（）()［］\[\]「」『』〈〉《》]/.test(c)){ctx.translate(x,cy);ctx.rotate(Math.PI/2);ctx.fillText(c,0,0);}
+      else ctx.fillText(c,x,cy);ctx.restore();
+    }
+    function verticalText(ctx,text,x,y,maxH,opt={}){
+      const size=opt.size||14,weight=opt.weight||400,color=opt.color||COLORS.ink,step=size*(opt.step||1.2),colGap=opt.colGap||size*1.18;
+      let cx=x,cy=y+step/2,used=0,cols=1;
+      for(const t of tokenise(text)){
+        if(t.text==='\n'||(used&&used+step>maxH)){cx-=colGap;cy=y+step/2;used=0;cols++;if(t.text==='\n')continue;}
+        drawGlyph(ctx,t,cx,cy,size,color,weight);cy+=step;used+=step;
+      }
+      return {cols,width:(cols-1)*colGap+size,height:Math.min(maxH,Math.max(step,used))};
+    }
+    function line(ctx,x1,y1,x2,y2,color=COLORS.line,width=1){ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();}
+    function rect(ctx,x,y,w,h,fill=null,stroke=null,width=1){ctx.save();if(fill){ctx.fillStyle=fill;ctx.fillRect(x,y,w,h);}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.strokeRect(x+.5,y+.5,w-1,h-1);}ctx.restore();}
+    function drawPair(ctx,f,box,opt={}){
+      const pad=opt.pad??7,labelSize=opt.labelSize||11,valueSize=opt.valueSize||14,labelX=box.x+box.w-pad-labelSize*.48;
+      if(opt.fill||opt.stroke)rect(ctx,box.x,box.y,box.w,box.h,opt.fill||null,opt.stroke||null,opt.strokeWidth||1);
+      if(opt.labelFill)rect(ctx,box.x+box.w-(opt.labelRail||23),box.y,opt.labelRail||23,box.h,opt.labelFill);
+      if(opt.topBar)rect(ctx,box.x,box.y,box.w,opt.topBar,opt.topBarColor||COLORS.dark);
+      if(opt.edge)rect(ctx,box.x+box.w-(opt.edgeWidth||3),box.y,opt.edgeWidth||3,box.h,opt.edge);
+      const labelColor=opt.labelColor||COLORS.sub,valueColor=opt.valueColor||COLORS.ink;
+      if(!opt.hideLabel)verticalText(ctx,f.label,labelX,box.y+8,box.h-16,{size:labelSize,weight:600,color:labelColor,step:1.16});
+      if(!opt.hideLabel&&opt.divider!==false)line(ctx,labelX-labelSize*.72,box.y+7,labelX-labelSize*.72,box.y+box.h-7,opt.dividerColor||COLORS.line,.8);
+      const valueX=opt.hideLabel?box.x+box.w-pad-valueSize*.5:labelX-(opt.valueGap||20);
+      verticalText(ctx,f.value,valueX,box.y+8,box.h-16,{size:valueSize,weight:opt.valueWeight||400,color:valueColor,step:opt.valueStep||1.16,colGap:valueSize*1.13});
+    }
+    function boxesFromRight(widths,gap=2,x=BAND.x+BAND.w,y=BAND.y,h=BAND.h){const out=[];let right=x;for(const w of widths){out.push({x:right-w,y,w,h});right-=w+gap;}return out;}
+    function boardStrip(ctx){
+      const y=207;rect(ctx,0,0,W,H,COLORS.paper);rect(ctx,14,y,732,43,COLORS.board);ctx.save();ctx.globalAlpha=.6;
+      for(let x=24;x<748;x+=22)line(ctx,x,y,x,H,COLORS.boardLine,.75);for(let yy=y+9;yy<H;yy+=22)line(ctx,14,yy,746,yy,COLORS.boardLine,.75);ctx.restore();
+      line(ctx,14,199,746,199,'#b9c2bb',1);font(ctx,10,600);ctx.fillStyle=COLORS.sub;ctx.textAlign='right';ctx.textBaseline='alphabetic';ctx.fillText('対局情報 43 mm　｜　盤面はこの下から',744,204);
+    }
+    function drawA(ctx,v){
+      const widths=Array(10).fill((BAND.w-18)/10),slots=boxesFromRight(widths,2);if(v===4)rect(ctx,BAND.x-3,BAND.y-3,BAND.w+6,BAND.h+6,null,COLORS.dark,2);
+      normalOrder.forEach((key,i)=>{const o={labelSize:10,valueSize:13,pad:5,valueGap:17,valueStep:1.14};
+        if(v===1)Object.assign(o,{fill:'#fbfbf7',stroke:COLORS.line});if(v===2)Object.assign(o,{fill:'#fbfbf7',stroke:'#d8ddd8',labelFill:'#e2e8e2',labelRail:21});
+        if(v===3)Object.assign(o,{fill:i%2?'#f7f8f4':'#eaf0ea',divider:false});if(v===4)Object.assign(o,{fill:'#fffef9',stroke:'#aeb6af',strokeWidth:.7});
+        if(v===5){o.divider=false;line(ctx,slots[i].x,slots[i].y,slots[i].x+slots[i].w,slots[i].y,COLORS.mid,.8);line(ctx,slots[i].x,slots[i].y+slots[i].h,slots[i].x+slots[i].w,slots[i].y+slots[i].h,COLORS.mid,.8);if(i)line(ctx,slots[i].x+slots[i].w+1,slots[i].y+10,slots[i].x+slots[i].w+1,slots[i].y+slots[i].h-10,COLORS.line,.8);}
+        drawPair(ctx,byKey(key),slots[i],o);});
+    }
+    function drawB(ctx,v){
+      let order=normalOrder,widths=[73,64,74,77,77,57,61,57,82,76],gap=2;
+      if(v===2){order=['event','date','place','black','result','white','handicap','rule','komi','time'];widths=[69,60,69,82,74,82,52,57,52,77];gap=3;}
+      if(v===4){widths=[70,60,70,82,82,52,57,52,78,72];gap=6;}if(v===5){widths=[67,58,67,70,70,49,52,49,75,66];gap=1;}
+      const slots=boxesFromRight(widths,gap),used=widths.reduce((a,b)=>a+b,0)+gap*9,left=BAND.x+BAND.w-used;if(v===2)line(ctx,W/2,BAND.y+7,W/2,BAND.y+BAND.h-7,'#a8b3aa',1.2);
+      if(v===3){line(ctx,left,BAND.y,left+used,BAND.y,COLORS.mid,1);line(ctx,left,BAND.y+BAND.h,left+used,BAND.y+BAND.h,COLORS.mid,1);}
+      order.forEach((key,i)=>{const important=['black','white','result'].includes(key),o={divider:false,labelSize:10,valueSize:important?15:13,pad:5,valueGap:18,valueWeight:important?600:400,valueStep:1.15};
+        if(v===2&&important)o.edge=key==='result'?COLORS.red:'#b9c0ba';if(v===4&&[3,5,6].includes(i))line(ctx,slots[i].x+slots[i].w+gap/2,BAND.y+16,slots[i].x+slots[i].w+gap/2,BAND.y+BAND.h-16,COLORS.line,.8);
+        if(v===5)Object.assign(o,{labelSize:9,valueSize:important?14:12,valueGap:15,pad:4});drawPair(ctx,byKey(key),slots[i],o);});
+    }
+    const normalOrder=['event','date','place','black','white','handicap','rule','komi','time','result'];
+    function groupSlots(spec){const gap=7,groups=[];let right=BAND.x+BAND.w;for(const g of spec){const width=g.widths.reduce((a,b)=>a+b,0)+Math.max(0,g.widths.length-1)*2;groups.push({...g,x:right-width,w:width});right-=width+gap;}return groups;}
+    function drawC(ctx,v){
+      const groups=groupSlots([{name:'記録',keys:['event','date','place'],widths:[62,58,66]},{name:'棋士',keys:v===3?['black','result','white']:['black','white'],widths:v===3?[82,62,82]:[91,91]},{name:'条件',keys:['handicap','rule','komi','time'],widths:[49,54,49,69]},...(v===3?[]:[{name:'結果',keys:['result'],widths:[78]}])]);
+      groups.forEach(g=>{const slots=boxesFromRight(g.widths,2,g.x+g.w);g.keys.forEach((key,i)=>{const player=['black','white'].includes(key),result=key==='result';const o={labelSize:player?11:9,valueSize:player?16:result?14:12,pad:5,valueGap:player?20:16,valueWeight:player||result?600:400,valueStep:1.14};
+        if(v===1&&player)Object.assign(o,{fill:'#f2f4ef',stroke:key==='black'?'#363b37':'#aeb5af',topBar:4,topBarColor:key==='black'?COLORS.dark:'#aab1ab'});
+        if(v===2&&player)Object.assign(o,key==='black'?{fill:COLORS.dark,stroke:COLORS.dark,labelColor:'#cbd1cc',valueColor:COLORS.white,dividerColor:'#707873'}:{fill:'#fff',stroke:'#4e5650',labelColor:'#69716b'});
+        if(v===3&&(player||result))Object.assign(o,result?{fill:COLORS.red,labelColor:'#ead6d1',valueColor:'#fff',dividerColor:'#b97a70'}:{fill:'#f4f5f1',stroke:'#9ca49e'});
+        if(v===4&&player)Object.assign(o,{fill:'#f0f3ef',labelFill:key==='black'?COLORS.dark:'#aab1ab',labelColor:key==='black'?'#fff':'#222',labelRail:24,valueSize:17});
+        if(v===5&&player)Object.assign(o,{stroke:key==='black'?COLORS.dark:'#9ba39d',strokeWidth:1.3,topBar:3,topBarColor:key==='black'?COLORS.dark:'#9ba39d'});
+        if(!player&&!result&&v!==2)o.divider=false;drawPair(ctx,byKey(key),slots[i],o);});});
+    }
+    function drawD(ctx,v){
+      const specs=[{name:'対局記録',keys:['event','date','place'],widths:[53,50,57],tone:'#f4f6f2'},{name:'対局者',keys:['black','white'],widths:[70,70],tone:'#e8ede8'},{name:'対局条件',keys:['handicap','rule','komi','time'],widths:[43,48,43,59],tone:'#f2f3ef'},{name:'勝敗',keys:['result'],widths:[72],tone:'#e1e6e1'}];let right=BAND.x+BAND.w;
+      for(const g of specs){const head=22,inside=g.widths.reduce((a,b)=>a+b,0)+2*(g.widths.length-1),gw=head+inside,x=right-gw;
+        if(v===1)rect(ctx,x,BAND.y,gw,BAND.h,g.tone,'#c6cdc7');if(v===2)rect(ctx,right-head,BAND.y,head,BAND.h,g.name==='勝敗'?COLORS.red:COLORS.dark);if(v===3)rect(ctx,x,BAND.y,gw,BAND.h,g.tone,null);
+        if(v===4){line(ctx,x,BAND.y,x+gw,BAND.y,COLORS.mid,1);line(ctx,x,BAND.y+BAND.h,x+gw,BAND.y+BAND.h,COLORS.mid,1);line(ctx,x,BAND.y,x,BAND.y+12,COLORS.mid,1);line(ctx,x,BAND.y+BAND.h-12,x,BAND.y+BAND.h,COLORS.mid,1);}
+        if(v===5&&right!==BAND.x+BAND.w)line(ctx,right+4,BAND.y+7,right+4,BAND.y+BAND.h-7,COLORS.mid,1);const headColor=v===2?'#fff':g.name==='勝敗'?COLORS.red:COLORS.sub;
+        verticalText(ctx,g.name,right-head/2,BAND.y+9,BAND.h-18,{size:10,weight:600,color:headColor,step:1.14});if(v!==2)line(ctx,right-head,BAND.y+7,right-head,BAND.y+BAND.h-7,'#bfc7c0',.8);
+        const slots=boxesFromRight(g.widths,2,right-head);g.keys.forEach((key,i)=>drawPair(ctx,byKey(key),slots[i],{hideLabel:key==='result',divider:false,labelSize:9,valueSize:['black','white','result'].includes(key)?14:12,valueWeight:['black','white','result'].includes(key)?600:400,pad:4,valueGap:15,valueStep:1.14}));right=x-7;}
+    }
+    function drawE(ctx,v){
+      let order=['event','date','place','black','white','result','handicap','rule','komi','time'];if(v===3)order=['event','date','place','black','result','white','handicap','rule','komi','time'];
+      const widths=order.map(k=>['black','white'].includes(k)?100:k==='result'?86:k==='time'?61:48),slots=boxesFromRight(widths,2);
+      order.forEach((key,i)=>{const player=['black','white'].includes(key),result=key==='result',major=player||result;const o={divider:!major,labelSize:major?11:9,valueSize:player?17:result?15:11,pad:4,valueGap:major?21:14,valueWeight:major?600:400,valueStep:1.13};
+        if(v===1&&player)Object.assign(o,{fill:COLORS.dark,labelColor:'#cbd1cc',valueColor:'#fff',dividerColor:'#747b76'});if(v===1&&result)Object.assign(o,{fill:'#d7ddd8',labelColor:'#4e5751'});
+        if(v===2&&player)Object.assign(o,key==='black'?{fill:COLORS.dark,labelColor:'#d0d5d1',valueColor:'#fff',dividerColor:'#737a75'}:{fill:'#fff',stroke:COLORS.dark});if(v===2&&result)Object.assign(o,{fill:'#e2e5e1',stroke:'#9da49e'});
+        if(v===3&&result)Object.assign(o,{fill:COLORS.red,labelColor:'#efdcd7',valueColor:'#fff',dividerColor:'#bd8379',valueSize:16});if(v===3&&player)Object.assign(o,{fill:'#f2f4ef',stroke:'#acb4ad'});
+        if(v===4){o.divider=false;if(major)o.valueSize=player?18:16;}if(v===5&&major)Object.assign(o,{edge:result?COLORS.red:key==='black'?COLORS.dark:'#9ea6a0',edgeWidth:4,fill:'#f7f8f4'});drawPair(ctx,byKey(key),slots[i],o);});
+    }
+    function draw(canvas,concept,variant){canvas.width=W*DPR;canvas.height=H*DPR;const ctx=canvas.getContext('2d');ctx.scale(DPR,DPR);boardStrip(ctx);if(concept==='A')drawA(ctx,variant);if(concept==='B')drawB(ctx,variant);if(concept==='C')drawC(ctx,variant);if(concept==='D')drawD(ctx,variant);if(concept==='E')drawE(ctx,variant);}
+    const tabs=document.querySelector('.tabs'),gallery=document.querySelector('#gallery'),title=document.querySelector('#conceptTitle'),text=document.querySelector('#conceptText'),selection=document.querySelector('#selection');let current='A',selected='';
+    function render(){const concept=concepts.find(c=>c.id===current);title.textContent=concept.title;text.textContent=`${concept.source}。${concept.text}`;gallery.replaceChildren();
+      concept.patterns.forEach((p,index)=>{const article=document.createElement('article');article.innerHTML=`<div class="article-head"><div><h2><span class="tag">${p[0]}</span>　${p[1]}</h2><p>${p[2]}</p></div><button class="pick" type="button" data-pick="${p[0]}" aria-pressed="${selected===p[0]}">${selected===p[0]?'選択中':'候補にする'}</button></div><canvas aria-label="${p[0]} ${p[1]}の縦書きレイアウト見本"></canvas><div class="spec"><span><b>情報帯</b> 43 mm</span><span><b>字心</b> 固定</span><span><b>折返し</b> 左列へ</span><span><b>描画</b> Canvas 2D</span></div>`;gallery.append(article);draw(article.querySelector('canvas'),concept.id,index+1);});
+      gallery.querySelectorAll('[data-pick]').forEach(button=>button.addEventListener('click',()=>{selected=button.dataset.pick;selection.textContent=`選択候補：${selected}（別の案を選ぶと置き換わります）`;render();}));}
+    concepts.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.role='tab';b.textContent=`${c.id}案`;b.setAttribute('aria-selected',String(i===0));b.addEventListener('click',()=>{current=c.id;tabs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-selected',String(x===b)));render();});tabs.append(b);});render();
+  })();
+  </script>
+</body>
+</html>

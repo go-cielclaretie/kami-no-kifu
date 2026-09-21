@@ -23,6 +23,9 @@ export async function checkSite() {
   }
   const config = await readFile(resolve(root, 'js/config.js'), 'utf8');
   if (!config.includes(`version: '${pkg.version}'`)) throw new Error('Config version mismatch');
+  const fontPaths = [...config.matchAll(/path: '(fonts\/[^']+\.ttf)'/g)].map(m => m[1]);
+  if (!fontPaths.length) throw new Error('No licensed TTF fonts are configured');
+  for (const path of fontPaths) await access(resolve(root, path));
   const exp = await readFile(resolve(root, 'js/export.js'), 'utf8');
   if (!exp.includes(`Kifu Print Web ${pkg.version}`)) throw new Error('PDF producer version mismatch');
   await access(resolve(root, '.nojekyll'));
