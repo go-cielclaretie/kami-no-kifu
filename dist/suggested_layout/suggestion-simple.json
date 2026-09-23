@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "app": "KifuPrintWeb",
+  "settings": {
+    "showTitle": true,
+    "infoDirection": "horizontal",
+    "infoLayoutHorizontal": "cards",
+    "infoLayoutVertical": "balanced",
+    "infoVariant": "base",
+    "infoPatternVertical": "1",
+    "fonts": {
+      "title": "default",
+      "info": "default",
+      "number": "auto"
+    },
+    "fontFamilies": {
+      "title": "",
+      "info": "",
+      "number": ""
+    },
+    "dateFormat": "japanese",
+    "dateCalendar": "gregorian",
+    "scoreFormat": "half",
+    "komiFormat": "decimal",
+    "resultFormat": "decimal",
+    "sameScoreFormat": true,
+    "notesPlacement": {
+      "first": false,
+      "last": true,
+      "custom": false,
+      "all": false
+    },
+    "notesPageNumbers": "",
+    "notesAllMode": "same",
+    "mode": "all",
+    "split": "100",
+    "customSplit": 100,
+    "coordinates": true,
+    "positions": {
+      "top": true,
+      "bottom": false,
+      "right": false,
+      "left": true
+    },
+    "coordFormat": "num-kanji",
+    "numbers": true,
+    "numberStyle": "arabic",
+    "boardColor": "bw",
+    "customBoard": "#e5c47d",
+    "grain": "plain",
+    "stoneColor": "bw",
+    "blackColor": "#171717",
+    "whiteColor": "#ffffff",
+    "blackPattern": "plain",
+    "whitePattern": "plain",
+    "shadow": false,
+    "captures": "show",
+    "repeats": true,
+    "repeatBracket": "square",
+    "repeatPosition": "bottom",
+    "repeatStones": true,
+    "repeatStoneStyle": "beside",
+    "paper": "A4",
+    "orientation": "portrait",
+    "format": "pdf",
+    "dpi": 300
+  }
+}

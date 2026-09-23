@@ -8,9 +8,15 @@
   const state = { settings: K.defaults(), meta: K.metadata([]), file: null, collection: null, tree: null,
     model: null, validation: null, plans: [], page: 0, game: 0, branch: 0, encoding: '',
     decodeWarnings: [], loadError: '', layoutError: '', exportError: '', busy: false, loading: false,
-    focusNotes: false, seq: 0, raf: 0, controller: null, lastDownload: null,
+    focusNotes: false, suggestion: '', suggestionLoading: false, suggestionRequest: 0,
+    seq: 0, raf: 0, controller: null, lastDownload: null,
     previewDraft: '', previewDpi: 0 };
   const fontState = { name: '', error: '', loaded: new Map(), pending: new Map() };
+  const SUGGESTION_PATHS = Object.freeze({
+    simple: 'suggested_layout/suggestion-simple.json',
+    particular: 'suggested_layout/suggestion-particular.json',
+    japanese: 'suggested_layout/suggestion-japanese.json'
+  });
   function esc(s) { return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
   function radio(path, values, columns = 2) {
     return `<div class="choice-grid ${columns === 3 ? 'three' : columns === 4 ? 'four' : ''}">${values.map(([v, label]) => `<label class="choice"><input type="radio" name="s_${path}" data-setting="${path}" value="${v}"><span>${label}</span></label>`).join('')}</div>`;
@@ -28,8 +34,12 @@
   function check(path, label) { return `<label class="check-line"><input type="checkbox" data-setting="${path}"><span>${label}</span></label>`; }
   function group(label, html, id = '') { return `<div class="control-group"${id ? ` id="${id}"` : ''}><div class="group-label">${label}</div>${html}</div>`; }
   function section(title, html, open = false) { return `<details${open ? ' open' : ''}><summary>${title}</summary><div class="section-content">${html}</div></details>`; }
+  function suggestionRadio() {
+    return `<div class="choice-grid suggestion-choices">${[['simple', 'シンプル'], ['particular', 'こだわりカラー'], ['japanese', '和風']].map(([value, label]) => `<label class="choice"><input type="radio" name="suggestedLayout" data-suggestion="${value}" value="${value}"><span>${label}</span></label>`).join('')}</div><p id="suggestionStatus" class="help" role="status" aria-live="polite"></p>`;
+  }
   function makeForms() {
     $('settingsForm').innerHTML =
+      section('おすすめ設定', suggestionRadio()) +
       section('レイアウト',
         check('showTitle', 'タイトルを表示する') +
         '<p class="help">用紙上部中央に「黒番名前 対 白番名前」を掲載。名前の編集に追従し、全ページに反映する。</p>' +
@@ -192,6 +202,7 @@
   function syncForms() {
     const s = state.settings, m = state.meta;
     document.querySelectorAll('[data-setting]').forEach(e => setControl(e, getPath(s, e.dataset.setting)));
+    document.querySelectorAll('[data-suggestion]').forEach(e => { e.checked = e.dataset.suggestion === state.suggestion; });
     document.querySelectorAll('[data-meta]').forEach(e => setControl(e, m[e.dataset.meta]));
     document.querySelectorAll('[data-include]').forEach(e => setControl(e, m.include[e.dataset.include]));
     document.querySelectorAll('[data-time]').forEach(e => setControl(e, m.time[e.dataset.time]));
@@ -232,6 +243,54 @@
     else $('fontStatus').textContent = 'フォントの変更はプレビューと出力に反映される。';
     $('retryFont').disabled = state.busy || !fontState.error;
   }
+  function clearSuggestionSelection() {
+    state.suggestion = '';
+    document.querySelectorAll('[data-suggestion]').forEach(e => { e.checked = false; });
+    const status = $('suggestionStatus');
+    if (status) { status.textContent = ''; status.classList.remove('warning'); }
+  }
+  async function applySuggestion(key) {
+    const path = SUGGESTION_PATHS[key];
+    if (!path || state.busy) return;
+    const request = ++state.suggestionRequest;
+    state.suggestion = key;
+    state.suggestionLoading = true;
+    syncForms(); updateStatus();
+    try {
+      let text;
+      const embedded = root.KifuSuggestedLayouts && root.KifuSuggestedLayouts[key];
+      if (embedded) text = typeof embedded === 'string' ? embedded : JSON.stringify(embedded);
+      else {
+        const url = root.KifuPlatform.assetURL(path);
+        const response = await root.fetch(url, {
+          method: 'GET', mode: 'same-origin', credentials: 'omit',
+          referrerPolicy: 'no-referrer', redirect: 'error'
+        });
+        if (!response.ok) throw new Error(`おすすめ設定を取得できません（HTTP ${response.status}）。`);
+        text = await response.text();
+      }
+      if (new TextEncoder().encode(text).length > 50000) throw new Error('おすすめ設定は50 KB以内にしてください。');
+      const settings = P.decode(text);
+      if (request !== state.suggestionRequest) return;
+      state.settings = settings;
+      state.page = Math.max(0, Math.min(state.page, state.plans.length - 1));
+      $('suggestionStatus').classList.remove('warning');
+      $('suggestionStatus').textContent = 'おすすめ設定を適用しました。表示設定を手動変更すると選択は解除されます。';
+      $('settingsSaveStatus').dataset.error = 'false';
+      $('settingsSaveStatus').textContent = 'おすすめ設定を適用しました。次回用に残すには「表示設定を保存」を押してね。';
+      syncForms(); requestRender(); refreshSelectedFonts();
+    } catch (error) {
+      if (request !== state.suggestionRequest) return;
+      clearSuggestionSelection();
+      $('suggestionStatus').textContent = 'おすすめ設定を読み込めません：' + (error.message || error);
+      $('suggestionStatus').classList.add('warning');
+    } finally {
+      if (request === state.suggestionRequest) {
+        state.suggestionLoading = false;
+        syncForms(); updateStatus();
+      }
+    }
+  }
   function missing() {
     const reasons = [];
     if (!state.tree || !state.model) reasons.push(state.loadError || 'SGFの読み込み・検査が必要です。');
@@ -256,7 +315,7 @@
     $('downloadButton').disabled = state.busy || state.loading || !!errors.length;
     $('downloadButton').textContent = `${state.settings.format.toUpperCase()}をダウンロード`;
     $('downloadButton').title = errors.join('\n');
-    $('settingsFields').disabled = !state.model || state.busy || state.loading;
+    $('settingsFields').disabled = !state.model || state.busy || state.loading || state.suggestionLoading;
     $('saveSettings').disabled = state.busy || state.loading; $('exportSettings').disabled = state.busy; $('importSettings').disabled = state.busy;
     $('infoFields').disabled = !state.tree || state.busy || state.loading;
     $('resetSettings').disabled = !state.model || state.busy;
@@ -472,6 +531,7 @@
     const settingsInput = e => {
       const path = e.target.dataset.setting; if (!path || state.busy) return;
       state.exportError = '';
+      clearSuggestionSelection();
       const v = e.target.type === 'checkbox' ? e.target.checked : path === 'dpi' ? Number(e.target.value) : e.target.value;
       setPath(state.settings, path, v); state.settings = K.normalizeSettings(state.settings);
       if (path.startsWith('notes')) state.focusNotes = true;
@@ -481,6 +541,10 @@
       if (path.startsWith('fonts.') || path.startsWith('fontFamilies.') || ['numberStyle', 'numbers'].includes(path)) refreshSelectedFonts();
     };
     $('settingsForm').addEventListener('input', settingsInput);
+    $('settingsForm').addEventListener('change', e => {
+      const key = e.target.dataset.suggestion;
+      if (key) applySuggestion(key);
+    });
     $('infoForm').addEventListener('input', settingsInput);
     $('infoForm').addEventListener('input', e => {
       if (state.busy) return;
@@ -505,7 +569,7 @@
     });
     $('retryFont').addEventListener('click', () => refreshSelectedFonts(true));
     $('showNotesPage').addEventListener('click', () => { state.focusNotes = true; requestRender(); });
-    $('resetSettings').addEventListener('click', () => { document.querySelectorAll('#settingsBody details').forEach(d => { d.open = false; }); state.settings = K.defaults(); state.page = 0; $('settingsSaveStatus').textContent = '初期値に変更。保存済み設定も更新するには「表示設定を保存」を押してね。'; syncForms(); requestRender(); });
+    $('resetSettings').addEventListener('click', () => { document.querySelectorAll('#settingsBody details').forEach(d => { d.open = false; }); clearSuggestionSelection(); state.settings = K.defaults(); state.page = 0; $('settingsSaveStatus').textContent = '初期値に変更。保存済み設定も更新するには「表示設定を保存」を押してね。'; syncForms(); requestRender(); });
     $('saveSettings').addEventListener('click', () => {
       try { P.save(state.settings); $('settingsSaveStatus').textContent = '表示設定を保存したよ。次回、同じブラウザで自動復元する。'; $('settingsSaveStatus').dataset.error = 'false'; }
       catch (e) { $('settingsSaveStatus').textContent = e.message; $('settingsSaveStatus').dataset.error = 'true'; }
@@ -519,7 +583,7 @@
       const file = e.target.files[0]; if (!file || state.busy) return;
       try {
         if (file.size > 50000) throw new Error('設定ファイルは50 KB以内にしてください。');
-        state.settings = P.decode(await file.text()); syncForms(); requestRender(); refreshSelectedFonts();
+        state.settings = P.decode(await file.text()); clearSuggestionSelection(); syncForms(); requestRender(); refreshSelectedFonts();
         $('settingsSaveStatus').dataset.error = 'false';
         $('settingsSaveStatus').textContent = '設定を読み込んだよ。次回用に残すには「表示設定を保存」を押してね。';
       } catch (err) { $('settingsSaveStatus').dataset.error = 'true'; $('settingsSaveStatus').textContent = '設定を読み込めません：' + err.message; }

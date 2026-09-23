@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "app": "KifuPrintWeb",
+  "settings": {
+    "showTitle": true,
+    "infoDirection": "vertical",
+    "infoLayoutHorizontal": "cards",
+    "infoLayoutVertical": "tiles",
+    "infoVariant": "base",
+    "infoPatternVertical": "1",
+    "fonts": {
+      "title": "asset:yuji-syuku",
+      "info": "asset:yuji-syuku",
+      "number": "asset:yuji-syuku"
+    },
+    "fontFamilies": {
+      "title": "",
+      "info": "",
+      "number": ""
+    },
+    "dateFormat": "japanese",
+    "dateCalendar": "gregorian",
+    "scoreFormat": "half",
+    "komiFormat": "decimal",
+    "resultFormat": "decimal",
+    "sameScoreFormat": true,
+    "notesPlacement": {
+      "first": false,
+      "last": true,
+      "custom": false,
+      "all": false
+    },
+    "notesPageNumbers": "",
+    "notesAllMode": "same",
+    "mode": "split",
+    "split": "100",
+    "customSplit": 100,
+    "coordinates": true,
+    "positions": {
+      "top": true,
+      "bottom": false,
+      "right": false,
+      "left": true
+    },
+    "coordFormat": "num-kanji",
+    "numbers": true,
+    "numberStyle": "kanji",
+    "boardColor": "bw",
+    "customBoard": "#e5c47d",
+    "grain": "plain",
+    "stoneColor": "bw",
+    "blackColor": "#171717",
+    "whiteColor": "#ffffff",
+    "blackPattern": "plain",
+    "whitePattern": "plain",
+    "shadow": false,
+    "captures": "show",
+    "repeats": true,
+    "repeatBracket": "square",
+    "repeatPosition": "bottom",
+    "repeatStones": true,
+    "repeatStoneStyle": "beside",
+    "paper": "A4",
+    "orientation": "portrait",
+    "format": "pdf",
+    "dpi": 300,
+    "paginationBeforeKanji": {
+      "mode": "all",
+      "split": "100",
+      "customSplit": 100
+    }
+  }
+}
