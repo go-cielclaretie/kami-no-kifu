@@ -503,18 +503,38 @@
     state.exportError = ''; state.busy = true; state.controller = new AbortController(); document.body.classList.add('busy');
     $('progressWrap').hidden = false; $('downloadResult').hidden = true; updateStatus();
     if (state.lastDownload) { state.lastDownload.revoke(); state.lastDownload = null; }
+    const analyticsInput = {
+      settings: JSON.parse(JSON.stringify(state.settings)),
+      include: { ...state.meta.include },
+      ranks: { black: state.meta.blackRank, white: state.meta.whiteRank }
+    };
+    let exportPhase = 'generate', outputStarted = false;
     try {
       // Freeze the selected page plan and settings for the duration of export.
       const settings = JSON.parse(JSON.stringify(state.settings)), plans = state.plans;
       const output = await E.generate(plans, settings, state.file.name, (current, total, text) => {
         $('progress').value = current / total * 100; $('progressLabel').textContent = text;
       }, state.controller.signal);
+      exportPhase = 'save';
       state.lastDownload = E.save(output.blob, output.name);
+      outputStarted = true;
+      try {
+        const task = root.KifuAnalytics && root.KifuAnalytics.recordDownload({
+          ...analyticsInput, packageType: /\.zip$/i.test(output.name) ? 'zip' : 'single'
+        });
+        if (task && typeof task.catch === 'function') task.catch(() => {});
+      } catch (_) { /* 統計の失敗でダウンロード操作を止めない。 */ }
       const result = $('downloadResult'); result.replaceChildren();
       const msg = document.createElement('span'); msg.textContent = `作成完了（${(output.blob.size / 1024 / 1024).toFixed(2)} MiB）。保存が始まらない場合： `;
       const link = document.createElement('a'); link.href = state.lastDownload.url; link.download = output.name; link.target = '_self'; link.textContent = output.name;
       result.append(msg, link); result.hidden = false;
     } catch (e) {
+      if (!outputStarted) {
+        try {
+          const reason = e.name === 'AbortError' ? 'cancelled' : exportPhase;
+          if (root.KifuAnalytics) root.KifuAnalytics.recordFailure(reason);
+        } catch (_) { /* 統計の失敗で画面操作を止めない。 */ }
+      }
       state.exportError = e.name === 'AbortError' ? '出力を中止したよ。途中のファイルは保存していない。' : `出力に失敗したよ：${e.message || e}`;
     } finally {
       state.busy = false; state.controller = null; document.body.classList.remove('busy'); $('progressWrap').hidden = true;
@@ -627,6 +647,7 @@
   else if (stored.settings) $('settingsSaveStatus').textContent = '保存済みの表示設定を復元したよ。';
   R.ready().then(() => requestRender());
   if ($('bootNotice')) $('bootNotice').hidden = true;
+  if (root.KifuAnalytics) root.KifuAnalytics.recordVisit();
   if (matchMedia('(max-width:950px)').matches) { state.mobile = true; togglePanel('left', true); togglePanel('right', true); }
   // Read-only diagnostic access helps reproduce a problem without uploading SGF.
   root.KifuApp = { version: '2.0.0', readFile, render, get state() { return state; }, get fontState() { return fontState; } };

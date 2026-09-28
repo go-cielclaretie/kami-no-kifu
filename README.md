@@ -1,18 +1,19 @@
 # 棋譜作成WEBフォーム v2.0.0 — GitHub Pages版
 
 SGFを検査し、印刷用のPDF・PNG・JPGをブラウザ内で作る静的Webアプリ。
-v1.3.0から棋譜機能を引き継ぎ、GASへの依存を取り除いた版です。
+v1.3.0から棋譜機能を引き継いだ、サイト本体はGASに依存しない静的版です。利用統計は任意のApps Script受信口へ送れます。
 **GitHubにアップロードできるファイル一式であり、公開済みのWebサイトではありません。**
 
 ## 公開するには
 
-GitHubリポジトリの直下に `index.html`、`js/`、`css/`、`assets/`、`.nojekyll` を置き、
+GitHubリポジトリの直下に `index.html`、`privacy.html`、`js/`、`css/`、`assets/`、`.nojekyll` を置き、
 **Settings → Pages → Deploy from a branch → main / (root) → Save** を選びます。
 ZIPそのものではなく、展開した中身をアップロードしてください。
 GitHub Freeで公開する基本手順はPublicリポジトリを前提にしています。
 
 通常の公開にNode.js、npm install、ビルド、Googleアカウント認証、APIキーは不要です。
-`Code.gs`・`appsscript.json` は使いません。公開後のURLはGitHubのPages設定画面で確認します。
+利用統計を有効にする場合だけ、管理者が所有するGoogleスプレッドシートとApps Script受信口を別途設定します。
+統計の導入方法は [管理者向け統計設定](docs/ANALYTICS_SETUP.md) を参照してね。
 
 詳しい操作は [公開手順](docs/DEPLOY.md)、GASからの移行は [移行メモ](docs/MIGRATION.md) を参照してください。
 
@@ -76,7 +77,8 @@ node scripts/serve.mjs --port 8080 --base /KifuPrintWeb/
 
 ## データと制限
 
-SGF・対局情報・所感・生成物を送信するAPIや、広告・アクセス解析のコードはありません。
+SGF・対局情報・所感・生成物を送るAPIや、広告SDKはありません。設定された場合は匿名の利用統計だけをApps Scriptへ送ります。
+送る項目と送らない項目は [利用統計とプライバシー](privacy.html) にまとめています。
 サイト本体と画像を取得する通常のHTTP通信は行います。運営者が行書体を設定した場合は、その取得も行います。
 ホスティング事業者によるアクセスログまで無いという意味ではありません。
 

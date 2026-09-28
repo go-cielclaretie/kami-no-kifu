@@ -7,6 +7,8 @@
   'use strict';
   root.KifuConfig = Object.freeze({
     version: '2.0.0',
+    // 空欄なら利用統計を送らない。公開URLなので秘密情報は入れない。
+    analyticsEndpoint: 'https://script.google.com/macros/s/AKfycbzndF93q8pmBPti9UlEtRXkjfH6-Mu0FxcLGYQYSCP4rerVmcwNHYP5nQLlo1e7hnZSJA/exec',
     localGyoshoNames: Object.freeze([
       '衡山毛筆フォント行書', 'KouzanGyousho', 'HGP行書体', 'HGS行書体', 'HG行書体'
     ]),

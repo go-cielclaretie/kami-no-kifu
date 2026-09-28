@@ -6,9 +6,9 @@
   <meta name="referrer" content="no-referrer">
   <title>紙の棋譜 | Kami no Kifu v2.0.0</title>
   <meta name="description" content="SGFから印刷用の棋譜PDF・PNG・JPGを作成。棋譜の解析と出力はブラウザ内で完結。">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-3/X7JNEemm9rssjkxce07AHkVN9WBzfY3UdZkeRv38k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-3/X7JNEemm9rssjkxce07AHkVN9WBzfY3UdZkeRv38k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'self'; form-action 'none'">
   <script>if(location.protocol==='file:'&&!/\/standalone\/index\.html$/i.test(location.pathname))location.replace(new URL('./standalone/index.html',location.href));</script>
-  <link rel="stylesheet" href="./css/styles.css?v=2.0.0">
+  <link rel="stylesheet" href="./css/styles.css?v=2.0.1">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
@@ -34,7 +34,7 @@
         </div></details>
         <fieldset id="settingsFields" disabled><div id="settingsForm"></div></fieldset>
         <button id="resetSettings" type="button" class="text-button" disabled>表示設定を初期値に戻す</button>
-        <p class="privacy-note">SGF・対局情報・所感・作成画像は、このブラウザ内で処理するよ。棋譜内容のサーバー送信なし。ログイン不要。</p>
+        <p class="privacy-note">SGF・対局情報・所感・作成画像は、このブラウザ内で処理するよ。受信先が設定されている場合は、設定値などの利用統計を匿名で送る。<a href="./privacy.html">送る情報と送らない情報</a> · ログイン不要。</p>
       </div>
       <div id="settingsSaveBar" class="settings-save-bar">
         <button id="saveSettings" type="button" class="primary">表示設定を保存</button>
@@ -62,14 +62,15 @@
     </aside>
   </div>
   <noscript><p>このページはJavaScriptを有効にして使用してください。</p></noscript>
-  <script src="./js/config.js?v=2.0.0" defer></script>
+  <script src="./js/config.js?v=2.0.1" defer></script>
   <script src="./js/platform.js?v=2.0.0" defer></script>
   <script src="./js/core.js?v=2.0.0" defer></script>
   <script src="./js/assets.js?v=2.0.0" defer></script>
   <script src="./js/render.js?v=2.0.0" defer></script>
   <script src="./js/preferences.js?v=2.0.0" defer></script>
+  <script src="./js/analytics.js?v=2.0.1" defer></script>
   <script src="./js/font-loader.js?v=2.0.0" defer></script>
   <script src="./js/export.js?v=2.0.0" defer></script>
-  <script src="./js/ui.js?v=2.0.0" defer></script>
+  <script src="./js/ui.js?v=2.0.1" defer></script>
 </body>
 </html>

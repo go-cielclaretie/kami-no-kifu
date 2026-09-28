@@ -1,14 +1,14 @@
 # GitHub Pages公開手順 — v2.0.0
 
 この説明は2026-09-19に確認したGitHub公式資料に基づきます。
-この配布物自体は未デプロイです。GASプロジェクトの更新やGoogleの権限設定は不要です。
+この配布物自体は未デプロイです。利用統計を使う場合は、先に「管理者向け統計設定」を完了してね。
 
 ## 方法A：ブラウザから公開する（ビルド不要）
 
 1. GitHubにログインし、新しいリポジトリを作成します。例：`KifuPrintWeb`。
    GitHub Freeでの基本手順は **Public** を選びます。名前は任意です。
 2. 公開用ZIPを展開します。GitHubの **Add file → Upload files** から、
-   `index.html`、`js`、`css`、`assets`、`.nojekyll` をアップロードし、mainへコミットします。
+   `index.html`、`privacy.html`、`js`、`css`、`assets`、`.nojekyll` をアップロードし、mainへコミットします。
    ZIPを1ファイルとして置いたり、外側の `KifuPrintWeb_v2.0.0` フォルダごと入れたりしないでください。
 3. **Settings → Pages** を開きます。
 4. **Build and deployment → Source → Deploy from a branch** を選びます。
@@ -31,13 +31,14 @@ GitHubのプラン・組織ポリシーによって使えるリポジトリの�
 ```text
 （リポジトリの直下）
   index.html
+  privacy.html
   .nojekyll
   js/
   css/
   assets/
 ```
 
-`Index.html`ではなく **`index.html`** です。コード全体をGASに貼る方式ではありません。
+`Index.html`ではなく **`index.html`** です。サイト画面全体をGASへ貼る方式ではなく、利用統計を有効にするときだけ受信側の `Code.gs` を別に設定します。
 ブラウザのアップロード操作で隠しファイルが落ちた場合は、Add file → Create new fileで
 `.nojekyll` を追加します。内容は空、または改行だけで構いません。
 
@@ -73,6 +74,19 @@ URLを変えない限り、v2の設定保存キーは更新後も同じです。
 ファイル名末尾の `?v=2.0.0` はキャッシュ更新のための印です。次版へ変更する場合は
 `index.html`のCSS/JS参照、`js/assets.js`の素材参照も更新してください。
 Service Workerは導入していません。旧画面のままなら、公開処理の完了を確認したうえでページを再読み込みします。
+
+## 利用統計を有効にする
+
+利用統計は初期状態では無効。管理者が専用の受信先URLを設定して再公開した場合だけ送信する。
+受信先に統計の読み出し機能はなく、集計結果は非公開スプレッドシートで確認する。
+シートとApps Scriptの準備は [管理者向け統計設定](ANALYTICS_SETUP.md) を参照してね。
+
+1. [管理者向け統計設定](ANALYTICS_SETUP.md) に従って `go.ciel.claretie@gmail.com` で非公開シートとApps Scriptを作り、ウェブアプリURLを発行する。
+2. `js/config.js` の `analyticsEndpoint` に `/exec` で終わるURLを設定する。URLは公開ページから見えるので、秘密情報を含めない。
+3. 方法Aなら `index.html`、`privacy.html`、`js`、`css`、`assets`、`.nojekyll` を更新する。方法Bなら `npm run build` 後の `dist/` を公開する。
+4. 公開ページを開いて利用統計の案内を確認する。スプレッドシートは管理者だけに共有し、公開リンクを作らない。
+
+Google Workspaceの組織ポリシーで匿名のウェブアプリ公開が許可されない場合は、受信先を空欄のままにすると計測は無効のままになる。
 
 ## よくある問題
 

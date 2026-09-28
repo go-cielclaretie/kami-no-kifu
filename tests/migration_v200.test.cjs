@@ -104,11 +104,17 @@ test('v200 cancellation prevents font request', async () => {
   const { F, calls } = fontContext(), c = new AbortController(); c.abort();
   await assert.rejects(F.loadAutomatic(c.signal), { name: 'AbortError' }); assert.equal(calls.length, 0);
 });
-test('v200 root site has no inline scripts, GAS bootstrap, or templates', () => {
+test('v200 root site keeps only the hash-protected file redirect and analytics receiver', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.ok(!/<base|google\.script|\/\*__\w+__\*\//.test(html));
-  assert.equal((html.match(/<script src=/g) || []).length, 9);
-  assert.ok(!/<script>/.test(html)); assert.ok(html.includes("object-src 'none'"));
+  assert.equal((html.match(/<script src=/g) || []).length, 10);
+  assert.ok(html.includes('./js/analytics.js?v=2.0.1'));
+  assert.ok(html.includes('https://script.google.com'));
+  assert.ok(html.includes('./privacy.html'));
+  const inline = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(match => match[1]);
+  assert.equal(inline.length, 1);
+  assert.match(inline[0], /location\.replace\(new URL\('\.\/standalone\/index\.html'/);
+  assert.ok(html.includes("object-src 'none'"));
 });
 test('v200 release uses new version throughout live code', () => {
   for (const file of ['js/config.js', 'js/export.js', 'js/ui.js', 'index.html']) {

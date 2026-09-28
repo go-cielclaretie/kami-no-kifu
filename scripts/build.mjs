@@ -7,6 +7,7 @@ import { resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { root, checkSite } from './check-site.mjs';
 await checkSite();
+const crlf = text => text.replace(/\r\n?/g, '\n').replace(/\n/g, '\r\n');
 async function rejectLinks(path) {
   const stat = await lstat(path);
   if (stat.isSymbolicLink()) throw new Error('Symbolic links are not copied: ' + path);
@@ -14,14 +15,16 @@ async function rejectLinks(path) {
 }
 const dist = resolve(root, 'dist');
 await rm(dist, { recursive: true, force: true }); await mkdir(dist, { recursive: true });
-for (const name of ['index.html', '.nojekyll', 'js', 'css', 'assets', 'fonts', 'suggested_layout']) {
+for (const name of ['index.html', 'privacy.html', '.nojekyll', 'js', 'css', 'assets', 'fonts', 'suggested_layout']) {
   await rejectLinks(resolve(root, name));
   await cp(resolve(root, name), resolve(dist, name), { recursive: true });
 }
 let html = await readFile(resolve(root, 'index.html'), 'utf8');
 const css = await readFile(resolve(root, 'css/styles.css'), 'utf8');
+let privacy = await readFile(resolve(root, 'privacy.html'), 'utf8');
 html = html.replace(/<link rel="stylesheet"[^>]+>/, () => '<style>' + css + '</style>');
 html = html.replace(/<link rel="icon"[^>]+>/, '');
+privacy = privacy.replace(/<link rel="stylesheet"[^>]+>/, () => '<style>' + css + '</style>');
 const texture = (await readFile(resolve(root, 'assets/itame-grain.png'))).toString('base64');
 const configSource = await readFile(resolve(root, 'js/config.js'), 'utf8');
 const defaultFontId = /defaultKanjiFontAsset:\s*'([^']+)'/.exec(configSource)?.[1];
@@ -50,5 +53,6 @@ for (const match of [...html.matchAll(/<script src="\.\/js\/([^"?]+)\?v=[^"]+" d
 const hashes = scripts.map(s => "'sha256-" + createHash('sha256').update(s).digest('base64') + "'").join(' ');
 html = html.replace("script-src 'self'", 'script-src ' + hashes);
 await mkdir(resolve(root, 'standalone'), { recursive: true });
-await writeFile(resolve(root, 'standalone/index.html'), html);
+await writeFile(resolve(root, 'standalone/index.html'), crlf(html));
+await writeFile(resolve(root, 'standalone/privacy.html'), crlf(privacy));
 console.log('Built dist/ (GitHub Pages) and standalone/index.html (optional local preview).');
