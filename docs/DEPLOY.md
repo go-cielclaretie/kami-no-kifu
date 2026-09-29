@@ -8,7 +8,7 @@
 1. GitHubにログインし、新しいリポジトリを作成します。例：`KifuPrintWeb`。
    GitHub Freeでの基本手順は **Public** を選びます。名前は任意です。
 2. 公開用ZIPを展開します。GitHubの **Add file → Upload files** から、
-   `index.html`、`privacy.html`、`js`、`css`、`assets`、`.nojekyll` をアップロードし、mainへコミットします。
+   `index.html`、`privacy.html`、`robots.txt`、`sitemap.xml`、`js`、`css`、`assets`、`.nojekyll` をアップロードし、mainへコミットします。
    ZIPを1ファイルとして置いたり、外側の `KifuPrintWeb_v2.0.0` フォルダごと入れたりしないでください。
 3. **Settings → Pages** を開きます。
 4. **Build and deployment → Source → Deploy from a branch** を選びます。
@@ -32,6 +32,8 @@ GitHubのプラン・組織ポリシーによって使えるリポジトリの�
 （リポジトリの直下）
   index.html
   privacy.html
+  robots.txt
+  sitemap.xml
   .nojekyll
   js/
   css/
@@ -83,7 +85,7 @@ Service Workerは導入していません。旧画面のままなら、公開処
 
 1. [管理者向け統計設定](ANALYTICS_SETUP.md) に従って `go.ciel.claretie@gmail.com` で非公開シートとApps Scriptを作り、ウェブアプリURLを発行する。
 2. `js/config.js` の `analyticsEndpoint` に `/exec` で終わるURLを設定する。URLは公開ページから見えるので、秘密情報を含めない。
-3. 方法Aなら `index.html`、`privacy.html`、`js`、`css`、`assets`、`.nojekyll` を更新する。方法Bなら `npm run build` 後の `dist/` を公開する。
+3. 方法Aなら `index.html`、`privacy.html`、`robots.txt`、`sitemap.xml`、`js`、`css`、`assets`、`.nojekyll` を更新する。方法Bなら `npm run build` 後の `dist/` を公開する。
 4. 公開ページを開いて利用統計の案内を確認する。スプレッドシートは管理者だけに共有し、公開リンクを作らない。
 
 Google Workspaceの組織ポリシーで匿名のウェブアプリ公開が許可されない場合は、受信先を空欄のままにすると計測は無効のままになる。

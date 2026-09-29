@@ -15,7 +15,7 @@ async function rejectLinks(path) {
 }
 const dist = resolve(root, 'dist');
 await rm(dist, { recursive: true, force: true }); await mkdir(dist, { recursive: true });
-for (const name of ['index.html', 'privacy.html', '.nojekyll', 'js', 'css', 'assets', 'fonts', 'suggested_layout']) {
+for (const name of ['index.html', 'privacy.html', 'robots.txt', 'sitemap.xml', '.nojekyll', 'js', 'css', 'assets', 'fonts', 'suggested_layout']) {
   await rejectLinks(resolve(root, name));
   await cp(resolve(root, name), resolve(dist, name), { recursive: true });
 }
@@ -53,6 +53,6 @@ for (const match of [...html.matchAll(/<script src="\.\/js\/([^"?]+)\?v=[^"]+" d
 const hashes = scripts.map(s => "'sha256-" + createHash('sha256').update(s).digest('base64') + "'").join(' ');
 html = html.replace("script-src 'self'", 'script-src ' + hashes);
 await mkdir(resolve(root, 'standalone'), { recursive: true });
-await writeFile(resolve(root, 'standalone/index.html'), crlf(html));
+await writeFile(resolve(root, 'standalone/index.html'), crlf(html).replace(/^[ \t]+\r?$/gm, ''));
 await writeFile(resolve(root, 'standalone/privacy.html'), crlf(privacy));
 console.log('Built dist/ (GitHub Pages) and standalone/index.html (optional local preview).');

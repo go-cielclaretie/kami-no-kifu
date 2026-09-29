@@ -6,7 +6,7 @@ v1.3.0から棋譜機能を引き継いだ、サイト本体はGASに依存し�
 
 ## 公開するには
 
-GitHubリポジトリの直下に `index.html`、`privacy.html`、`js/`、`css/`、`assets/`、`.nojekyll` を置き、
+GitHubリポジトリの直下に `index.html`、`privacy.html`、`robots.txt`、`sitemap.xml`、`js/`、`css/`、`assets/`、`.nojekyll` を置き、
 **Settings → Pages → Deploy from a branch → main / (root) → Save** を選びます。
 ZIPそのものではなく、展開した中身をアップロードしてください。
 GitHub Freeで公開する基本手順はPublicリポジトリを前提にしています。

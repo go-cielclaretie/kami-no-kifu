@@ -6,7 +6,7 @@
 【公開】
 1. ZIPを展開する（ZIPのままアップロードしない）。
 2. GitHubでPublicリポジトリを作成する。
-3. index.html、js/、css/、assets/、.nojekyllをリポジトリの直下へ置く。
+3. index.html、privacy.html、robots.txt、sitemap.xml、js/、css/、assets/、.nojekyllをリポジトリの直下へ置く。
    外側のフォルダごと入れない。index.htmlは小文字。
 4. Settings > Pages > Deploy from a branch > main / (root) > Save。
 5. Pagesの設定画面に表示されたURLを開く。

@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="referrer" content="no-referrer">
-  <title>紙の棋譜 | Kami no Kifu v2.0.0</title>
-  <meta name="description" content="SGFから印刷用の棋譜PDF・PNG・JPGを作成。棋譜の解析と出力はブラウザ内で完結。">
+  <title>囲碁棋譜をSGFからPDF作成 | 紙の棋譜</title>
+  <meta name="description" content="囲碁のSGF棋譜から印刷用PDF・PNG・JPGを作成。棋譜の確認、盤面や紙面の調整、出力までブラウザで完結するWebアプリ。">
+  <link rel="canonical" href="https://go-cielclaretie.github.io/kami-no-kifu/">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-S/9ceSUNKsZrfVlQBG9n+tQRuUC93WpOXwnBPOBKKZo=' 'sha256-kMezVuooeYAkcu8nVQZ9nRUdUVNA389/hkQB4Voo1wo=' 'sha256-jj9exESSkS60F7TjZI0K8SSJHienSnB0S1OygVnwLkw=' 'sha256-pW2ahSEpxFreupNpAAUkmPIe89MVy53/Mk6eLK8y8Gw=' 'sha256-JThmgiw9DK5t/ES55Viy1Imdcnx/vKyjE08Ur3uMQ+Y=' 'sha256-DAUt5Ik7ZWi7ZnQkUJWRWvj7I93wi0RZhEvSp/44uQM=' 'sha256-8do3Ixg3tD68iOVfZ2sWv/o/OCk2hEAEYTPLfOv4e8g=' 'sha256-Uxe/ksOK7IxaLsyY0xlx4Kg8tXqKFV0uYymUmVMiETM=' 'sha256-HlCCgjWJeBNUpWc9AsQf+qmlSSymnqvCnm+NfxdhA9E=' 'sha256-LIJ6e3UhUstOLCAuYCIeHkZOLQWktjH/euk7kgGH0YM=' 'sha256-3/X7JNEemm9rssjkxce07AHkVN9WBzfY3UdZkeRv38k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'self'; form-action 'none'">
   <script>if(location.protocol==='file:'&&!/\/standalone\/index\.html$/i.test(location.pathname))location.replace(new URL('./standalone/index.html',location.href));</script>
   <style>:root{color-scheme:light;--ink:#20312e;--muted:#71807c;--accent:#24594a;--accent-dark:#173c32;--line:#e0e5e2;--surface:#fff;--soft:#f5f7f5;--left:286px;--right:306px;--top:76px;font-family:Inter,"Noto Sans JP","Noto Sans CJK JP",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px}
@@ -24,10 +25,29 @@
 .format-controls{margin:12px 0;padding:11px;background:var(--soft);border-radius:6px}.format-controls>.check-line{margin-bottom:8px}.format-controls .help{margin-top:8px}.info-section .choice span[data-date-example]{font-size:10px;line-height:1.3;overflow-wrap:anywhere}
 .choice-grid.suggestion-choices{grid-template-columns:1fr}.suggestion-choices .choice{white-space:nowrap}
 .privacy-document{height:100%;overflow:auto;max-width:900px;margin:0 auto;padding:clamp(22px,5vw,56px);background:#fff;line-height:1.85;font-size:15px}.privacy-document h1{margin:4px 0 18px;font-size:clamp(25px,4vw,36px)}.privacy-document h2{margin:28px 0 8px;font-size:19px}.privacy-document p,.privacy-document li{margin:10px 0}.privacy-document ul{padding-left:1.4em}.privacy-document a{color:var(--accent);font-weight:600}
+
+html{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
+body.app-page{height:auto;min-height:100vh;overflow:visible}
+.seo-content{padding:clamp(42px,7vw,86px) 24px;background:#f7f9f7;border-top:1px solid #dce3dc}
+.seo-content-inner{max-width:980px;margin:0 auto;line-height:1.85}
+.seo-content h2{margin:6px 0 12px;font-size:clamp(22px,3vw,30px);font-weight:600;letter-spacing:.025em}
+.seo-lead{max-width:760px;color:#637168;font-size:15px}
+.seo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:26px}
+.seo-card{padding:22px 24px;background:#fff;border:1px solid var(--line);border-radius:10px}
+.seo-card h3,.seo-faq>h3{margin:0 0 12px;font-size:16px}
+.seo-card ol,.seo-card ul{margin:0;padding-left:1.5em;color:#53635a}
+.seo-card li+li{margin-top:7px}
+.seo-data-note{margin:19px 0 0;color:var(--muted);font-size:12px}
+.seo-content a{color:var(--accent);font-weight:600;text-underline-offset:3px}
+.seo-faq{margin-top:38px;padding-top:27px;border-top:1px solid #dce3dc}
+.seo-faq article{padding:15px 0;border-bottom:1px solid #e5eae5}
+.seo-faq h4{margin:0 0 5px;font-size:14px}
+.seo-faq article p{color:#637168;line-height:1.8}
+@media(max-width:700px){.seo-content{padding:38px 18px}.seo-grid{grid-template-columns:1fr;gap:11px}.seo-card{padding:18px}.seo-lead{font-size:13px}}
 </style>
-  
+
 </head>
-<body>
+<body class="app-page">
   <div id="bootNotice" class="boot-notice" role="status">アプリを読み込み中。表示が続く場合は、ファイルの配置と通信を確認して再読み込みしてね。</div>
   <header class="topbar">
     <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div><h1>紙の棋譜</h1><span class="brand-sub">KAMI NO KIFU · v2.0.0</span></div></div>
@@ -77,6 +97,40 @@
       <div id="infoBody" class="panel-body"><p class="intro">SGFから読み取った内容も、自由に編集できるよ。チェックを外した項目は印刷されない。</p><div id="missingFields" class="missing-fields" hidden></div><fieldset id="infoFields" disabled><div id="infoForm"></div></fieldset></div>
     </aside>
   </div>
+  <section class="seo-content" aria-labelledby="seo-title">
+    <div class="seo-content-inner">
+      <p class="eyebrow">ABOUT KAMI NO KIFU</p>
+      <h2 id="seo-title">囲碁の棋譜を、SGFから印刷用PDFへ</h2>
+      <p class="seo-lead">紙の棋譜は、SGFファイルから見やすい棋譜を作れるWebアプリ。棋譜を確認しながら紙面を整えて、PDFや画像として保存できるよ。</p>
+      <div class="seo-grid">
+        <article class="seo-card">
+          <h3>使い方</h3>
+          <ol>
+            <li>SGFファイルを選ぶか、画面へドロップする。</li>
+            <li>棋譜の検査結果を確認し、複数の対局や分岐があれば印刷する内容を選ぶ。</li>
+            <li>対局情報、盤面、文字やページの設定を調整してプレビューする。</li>
+            <li>PDF・PNG・JPGから形式を選んで保存する。</li>
+          </ol>
+        </article>
+        <article class="seo-card">
+          <h3>できること</h3>
+          <ul>
+            <li>9路・13路・19路など、さまざまな盤面サイズの棋譜に対応。</li>
+            <li>総譜や分割譜、着手番号、座標、変化図や注記を調整。</li>
+            <li>対局者や大会などの情報を編集し、紙面に載せる項目を選択。</li>
+            <li>A3・A4・A5・B5の用紙と縦・横向きを選んで出力。</li>
+          </ul>
+        </article>
+      </div>
+      <p class="seo-data-note">SGFや対局情報の解析・棋譜の作成はブラウザ内で行うよ。設定されている場合に限り、利用統計を匿名で送信することがある。<a href="./privacy.html">送信する情報とプライバシー</a>を確認してね。</p>
+      <section class="seo-faq" aria-labelledby="faq-title">
+        <h3 id="faq-title">よくある質問</h3>
+        <article><h4>どのSGFファイルを読み込める？</h4><p>拡張子が .sgf のファイルを読み込めるよ。最大5 MiBで、複数の対局を含むファイルにも対応している。</p></article>
+        <article><h4>作った棋譜はどの形式で保存できる？</h4><p>印刷向けのPDFに加えて、PNG・JPG画像でも保存できる。複数ページの画像はZIPにまとめて出力できるよ。</p></article>
+        <article><h4>SGFや対局者名がサイトに送信される？</h4><p>SGFの内容や対局情報はブラウザ内で処理し、利用統計にも含めないよ。統計の送信項目は<a href="./privacy.html">プライバシーの説明</a>で確認できる。</p></article>
+      </section>
+    </div>
+  </section>
   <noscript><p>このページはJavaScriptを有効にして使用してください。</p></noscript>
   <script>/** Static-site configuration. This file is public: never put secrets here.
  * Only the licensed font files listed below are served from this site.

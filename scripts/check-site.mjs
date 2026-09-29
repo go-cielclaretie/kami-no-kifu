@@ -15,6 +15,10 @@ export async function checkSite() {
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
   if (new Set(ids).size !== ids.length) throw new Error('Duplicate HTML id');
   if (!html.includes('v' + pkg.version)) throw new Error('HTML version does not match package.json');
+  if (!html.includes('<link rel="canonical" href="https://go-cielclaretie.github.io/kami-no-kifu/">'))
+    throw new Error('Homepage canonical URL is missing');
+  if (!html.includes('class="seo-content"') || !html.includes('よくある質問'))
+    throw new Error('Search-friendly explanatory content is missing');
   if (!html.includes('./js/analytics.js') || !html.includes('https://script.google.com') || !html.includes('./privacy.html'))
     throw new Error('Analytics entry point, CSP connection, or privacy link is missing');
   if (!privacy.includes('送る情報') || !privacy.includes('送らない情報')) throw new Error('Privacy disclosure is incomplete');
@@ -39,6 +43,15 @@ export async function checkSite() {
   if (!exp.includes(`Kifu Print Web ${pkg.version}`)) throw new Error('PDF producer version mismatch');
   await access(resolve(root, '.nojekyll'));
   await access(resolve(root, 'privacy.html'));
+  const robots = await readFile(resolve(root, 'robots.txt'), 'utf8');
+  const sitemap = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
+  if (!robots.includes('Sitemap: https://go-cielclaretie.github.io/kami-no-kifu/sitemap.xml'))
+    throw new Error('Robots sitemap declaration is missing');
+  if (!sitemap.includes('https://go-cielclaretie.github.io/kami-no-kifu/') ||
+      !sitemap.includes('https://go-cielclaretie.github.io/kami-no-kifu/privacy.html'))
+    throw new Error('Sitemap URLs are incomplete');
+  if (!privacy.includes('<link rel="canonical" href="https://go-cielclaretie.github.io/kami-no-kifu/privacy.html">'))
+    throw new Error('Privacy canonical URL is missing');
   await access(resolve(root, 'assets/itame-grain.png'));
   return { version: pkg.version, checkedResources: refs.length, scriptSyntax: true, gasRuntimeDependencies: false, optionalAnalyticsReceiver: true };
 }

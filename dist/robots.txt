@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://go-cielclaretie.github.io/kami-no-kifu/sitemap.xml
